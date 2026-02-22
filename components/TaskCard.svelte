@@ -108,10 +108,13 @@
     display: flex;
     justify-content: space-between;
     gap: 0.5rem;
+    align-items: flex-start;
+    min-width: 0;
   }
 
   .checkbox-row {
     display: flex;
+    flex: 1 1 auto;
     gap: 0.6rem;
     align-items: flex-start;
     font-weight: 600;
@@ -119,8 +122,12 @@
   }
 
   .checkbox-row .title {
+    display: block;
+    min-width: 0;
     line-height: 1.35;
-    word-break: break-word;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .done .title {
@@ -129,6 +136,7 @@
 
   .badges {
     display: flex;
+    flex: 0 0 auto;
     gap: 0.35rem;
     align-items: center;
   }
@@ -155,6 +163,13 @@
     color: var(--text-muted);
   }
 
+  .meta > span {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
   .editor {
     display: grid;
     gap: 0.5rem;
@@ -169,6 +184,10 @@
     color: inherit;
     border-radius: 0.55rem;
     padding: 0.45rem 0.6rem;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .grid2 {
@@ -200,5 +219,30 @@
 
   @media (max-width: 600px) {
     .grid2 { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 500px) {
+    .actions {
+      justify-content: flex-start;
+    }
+
+    .actions button {
+      flex: 1 1 calc(50% - 0.25rem);
+    }
+  }
+
+  @media (max-width: 400px) {
+    .top-row {
+      flex-wrap: wrap;
+    }
+
+    .badges {
+      width: 100%;
+      justify-content: flex-start;
+    }
+
+    .actions button {
+      flex-basis: 100%;
+    }
   }
 </style>

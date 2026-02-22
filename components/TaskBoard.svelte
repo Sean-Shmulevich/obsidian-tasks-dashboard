@@ -179,6 +179,10 @@
   h1 {
     margin: 0;
     font-size: clamp(1.2rem, 2.3vw, 1.7rem);
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .stats-grid {
@@ -210,6 +214,7 @@
     display: flex;
     gap: 0.5rem;
     margin-left: auto;
+    min-width: 0;
   }
 
   .header-actions button {
@@ -219,6 +224,10 @@
     border-radius: 0.65rem;
     padding: 0.45rem 0.75rem;
     font: inherit;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .header-actions button.active {
@@ -303,6 +312,13 @@
     font-size: 0.85rem;
   }
 
+  .uncategorized-list li,
+  .category-links button {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
   .uncategorized-list small {
     color: var(--text-muted);
   }
@@ -384,6 +400,7 @@
     border-radius: 0.45rem;
     padding: 0.35rem 0.45rem;
     cursor: pointer;
+    max-width: 100%;
   }
 
   .category-links button:hover {
@@ -391,7 +408,7 @@
     color: var(--text-normal);
   }
 
-  @media (max-width: 980px) {
+  @media (max-width: 700px) {
     .board-grid {
       grid-template-columns: 1fr;
     }
@@ -408,6 +425,53 @@
     }
     .header-actions button {
       flex: 1 1 0;
+    }
+  }
+
+  @media (max-width: 500px) {
+    .page-header {
+      gap: 0.7rem;
+    }
+
+    .stats-grid {
+      gap: 0.4rem;
+    }
+
+    .stats-grid > div {
+      padding: 0.45rem 0.55rem;
+      border-radius: 0.75rem;
+    }
+
+    .stats-grid span {
+      font-size: 1rem;
+    }
+
+    .stats-grid small {
+      font-size: 0.72rem;
+    }
+  }
+
+  @media (max-width: 400px) {
+    .page-header {
+      align-items: stretch;
+    }
+
+    .stats-grid > div {
+      padding: 0.35rem 0.45rem;
+      border-radius: 0.65rem;
+      gap: 0.05rem;
+    }
+
+    .stats-grid span {
+      font-size: 0.9rem;
+    }
+
+    .stats-grid small {
+      font-size: 0.65rem;
+    }
+
+    .header-actions {
+      gap: 0.35rem;
     }
   }
 </style>

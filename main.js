@@ -103,6 +103,19 @@ var IS_XHTML = (
 var TEXT_NODE = 3;
 var COMMENT_NODE = 8;
 
+// ../adhd-todo/node_modules/svelte/src/internal/shared/errors.js
+function lifecycle_outside_component(name) {
+  if (dev_fallback_default) {
+    const error = new Error(`lifecycle_outside_component
+\`${name}(...)\` can only be used during component initialisation
+https://svelte.dev/e/lifecycle_outside_component`);
+    error.name = "Svelte error";
+    throw error;
+  } else {
+    throw new Error(`https://svelte.dev/e/lifecycle_outside_component`);
+  }
+}
+
 // ../adhd-todo/node_modules/svelte/src/internal/client/errors.js
 function async_derived_orphan() {
   if (dev_fallback_default) {
@@ -5116,6 +5129,37 @@ function to_number(value) {
   return value === "" ? null : +value;
 }
 
+// ../adhd-todo/node_modules/svelte/src/internal/client/dom/elements/bindings/this.js
+function is_bound_this(bound_value, element_or_component) {
+  return bound_value === element_or_component || bound_value?.[STATE_SYMBOL] === element_or_component;
+}
+function bind_this(element_or_component = {}, update2, get_value, get_parts) {
+  effect(() => {
+    var old_parts;
+    var parts;
+    render_effect(() => {
+      old_parts = parts;
+      parts = get_parts?.() || [];
+      untrack(() => {
+        if (element_or_component !== get_value(...parts)) {
+          update2(element_or_component, ...parts);
+          if (old_parts && is_bound_this(get_value(...old_parts), element_or_component)) {
+            update2(null, ...old_parts);
+          }
+        }
+      });
+    });
+    return () => {
+      queue_micro_task(() => {
+        if (parts && is_bound_this(get_value(...parts), element_or_component)) {
+          update2(null, ...parts);
+        }
+      });
+    };
+  });
+  return element_or_component;
+}
+
 // ../adhd-todo/node_modules/svelte/src/internal/client/reactivity/store.js
 var is_store_binding = false;
 function capture_store_binding(fn) {
@@ -5592,6 +5636,29 @@ if (dev_fallback_default) {
   throw_rune_error("$inspect");
   throw_rune_error("$props");
   throw_rune_error("$bindable");
+}
+function onMount(fn) {
+  if (component_context === null) {
+    lifecycle_outside_component("onMount");
+  }
+  if (legacy_mode_flag && component_context.l !== null) {
+    init_update_callbacks(component_context).m.push(fn);
+  } else {
+    user_effect(() => {
+      const cleanup = untrack(fn);
+      if (typeof cleanup === "function") return (
+        /** @type {() => void} */
+        cleanup
+      );
+    });
+  }
+}
+function init_update_callbacks(context) {
+  var l = (
+    /** @type {ComponentContextLegacy} */
+    context.l
+  );
+  return l.u ??= { a: [], b: [], m: [] };
 }
 
 // ../adhd-todo/node_modules/svelte/src/version.js
@@ -6216,15 +6283,15 @@ async function openTaskInObsidian(taskId) {
 }
 
 // components/Sidebar.svelte
-var root_3 = from_html(`<button type="button"><span class="accent svelte-1b12cm3"></span> <span class="emoji"> </span> <span> </span></button>`);
+var root_3 = from_html(`<button type="button"><span class="accent svelte-1b12cm3"></span> <span class="emoji svelte-1b12cm3"> </span> <span class="svelte-1b12cm3"> </span></button>`);
 var root_2 = from_html(`<div class="items svelte-1b12cm3"></div>`);
 var root_1 = from_html(`<div class="group-block svelte-1b12cm3"><div class="group-header-row svelte-1b12cm3"><button type="button" class="group-collapse svelte-1b12cm3"><span>\u25B8</span></button> <button type="button" class="group-label svelte-1b12cm3"> </button></div> <!></div>`);
-var root_5 = from_html(`<button type="button"><span class="accent svelte-1b12cm3"></span> <span class="emoji"> </span> <span> </span></button>`);
+var root_5 = from_html(`<button type="button"><span class="accent svelte-1b12cm3"></span> <span class="emoji svelte-1b12cm3"> </span> <span class="svelte-1b12cm3"> </span></button>`);
 var root_4 = from_html(`<div class="group-block svelte-1b12cm3"><div class="group-header-static svelte-1b12cm3">UNGROUPED</div> <div class="items svelte-1b12cm3"></div></div>`);
-var root = from_html(`<nav aria-label="Sidebar navigation"><div class="brand svelte-1b12cm3"><div class="logo svelte-1b12cm3">\u2713</div> <div><strong>ADHD Todo</strong> <small class="svelte-1b12cm3">Vault-backed task board</small></div></div> <button type="button">\u{1F3E1} Dashboard</button> <div class="group-list svelte-1b12cm3"><!> <!></div></nav>`);
+var root = from_html(`<nav aria-label="Sidebar navigation"><div class="brand svelte-1b12cm3"><div class="logo svelte-1b12cm3">\u2713</div> <div><strong class="svelte-1b12cm3">ADHD Todo</strong> <small class="svelte-1b12cm3">Vault-backed task board</small></div></div> <button type="button">\u{1F3E1} Dashboard</button> <div class="group-list svelte-1b12cm3"><!> <!></div></nav>`);
 var $$css = {
   hash: "svelte-1b12cm3",
-  code: ".sidebar.svelte-1b12cm3 {display:grid;grid-template-rows:auto auto auto 1fr;gap:0.35rem;height:100%;min-height:0;padding:0.5rem;background:var(--sidebar-bg);color:var(--sidebar-text);border-right:1px solid var(--sidebar-border);}.brand.svelte-1b12cm3 {display:flex;gap:0.5rem;align-items:center;padding:0.25rem 0.25rem 0.35rem;}.logo.svelte-1b12cm3 {width:2rem;height:2rem;display:grid;place-items:center;border-radius:0.6rem;background:color-mix(in srgb, var(--accent) 20%, transparent);border:1px solid color-mix(in srgb, var(--accent) 50%, var(--sidebar-border));font-weight:800;}.brand.svelte-1b12cm3 small:where(.svelte-1b12cm3) {color:var(--sidebar-muted);}.sidebar.svelte-1b12cm3 button:where(.svelte-1b12cm3) {text-align:left;background:transparent;border:1px solid transparent;color:inherit;border-radius:0.5rem;padding:0.35rem 0.5rem;font:inherit;}.sidebar.svelte-1b12cm3 > button.active:where(.svelte-1b12cm3) {background:var(--sidebar-active-bg);border-color:var(--sidebar-border);}.group-list.svelte-1b12cm3 {overflow:auto;display:grid;gap:0.2rem;align-content:start;padding:0.1rem 0.15rem 0.2rem 0.1rem;}.group-block.svelte-1b12cm3 {display:grid;gap:0.2rem;margin-bottom:0.875rem;}.group-header-row.svelte-1b12cm3 {display:flex;gap:0.25rem;align-items:center;padding-inline:0.3rem;}.group-block.svelte-1b12cm3 + .group-block:where(.svelte-1b12cm3) .group-header-row:where(.svelte-1b12cm3),\n  .group-block.svelte-1b12cm3 + .group-block:where(.svelte-1b12cm3) .group-header-static:where(.svelte-1b12cm3) {margin-top:0.3rem;}.group-collapse.svelte-1b12cm3 {border:0;color:var(--sidebar-muted);padding:0.05rem 0.2rem;}.group-collapse.svelte-1b12cm3 span:where(.svelte-1b12cm3) {display:inline-block;transition:transform 120ms ease;}.group-collapse.svelte-1b12cm3 span.rotated:where(.svelte-1b12cm3) {transform:rotate(90deg);}.group-label.svelte-1b12cm3,\n  .group-header-static.svelte-1b12cm3 {color:var(--sidebar-muted);font-size:0.72rem;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:0.15rem 0.5rem;}.group-header-static.svelte-1b12cm3 {padding:0.15rem 0.65rem;}.items.svelte-1b12cm3 {display:grid;gap:0.12rem;padding-left:1.15rem;}.category-item.svelte-1b12cm3 {display:grid;grid-template-columns:3px 1.1rem 1fr;gap:0.5rem;align-items:center;padding:0.4rem 0.95rem 0.4rem 0.95rem;border-radius:0.4rem;border:1px solid transparent;font-size:0.85rem;}.category-item.svelte-1b12cm3 .accent:where(.svelte-1b12cm3) {width:3px;height:1.2rem;border-radius:999px;opacity:0.7;}.category-item.active.svelte-1b12cm3 {background:var(--sidebar-active-bg);border-color:var(--sidebar-border);}.category-item.active.svelte-1b12cm3 .accent:where(.svelte-1b12cm3) {opacity:1;}"
+  code: ".sidebar.svelte-1b12cm3 {display:grid;grid-template-rows:auto auto auto 1fr;gap:0.35rem;height:100%;min-height:0;padding:0.5rem;background:var(--sidebar-bg);color:var(--sidebar-text);border-right:1px solid var(--sidebar-border);}.brand.svelte-1b12cm3 {display:flex;gap:0.5rem;align-items:center;padding:0.25rem 0.25rem 0.35rem;min-width:0;}.logo.svelte-1b12cm3 {width:2rem;height:2rem;display:grid;place-items:center;border-radius:0.6rem;background:color-mix(in srgb, var(--accent) 20%, transparent);border:1px solid color-mix(in srgb, var(--accent) 50%, var(--sidebar-border));font-weight:800;}.brand.svelte-1b12cm3 small:where(.svelte-1b12cm3) {color:var(--sidebar-muted);}.brand.svelte-1b12cm3 strong:where(.svelte-1b12cm3),\n  .brand.svelte-1b12cm3 small:where(.svelte-1b12cm3) {display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}.sidebar.svelte-1b12cm3 button:where(.svelte-1b12cm3) {text-align:left;background:transparent;border:1px solid transparent;color:inherit;border-radius:0.5rem;padding:0.35rem 0.5rem;font:inherit;}.sidebar.svelte-1b12cm3 > button.active:where(.svelte-1b12cm3) {background:var(--sidebar-active-bg);border-color:var(--sidebar-border);}.group-list.svelte-1b12cm3 {overflow-x:hidden;overflow-y:auto;display:grid;gap:0.2rem;align-content:start;padding:0.1rem 0.15rem 0.2rem 0.1rem;}.group-block.svelte-1b12cm3 {display:grid;gap:0.2rem;margin-bottom:0.875rem;}.group-header-row.svelte-1b12cm3 {display:flex;gap:0.25rem;align-items:center;padding-inline:0.3rem;}.group-block.svelte-1b12cm3 + .group-block:where(.svelte-1b12cm3) .group-header-row:where(.svelte-1b12cm3),\n  .group-block.svelte-1b12cm3 + .group-block:where(.svelte-1b12cm3) .group-header-static:where(.svelte-1b12cm3) {margin-top:0.3rem;}.group-collapse.svelte-1b12cm3 {border:0;color:var(--sidebar-muted);padding:0.05rem 0.2rem;}.group-collapse.svelte-1b12cm3 span:where(.svelte-1b12cm3) {display:inline-block;transition:transform 120ms ease;}.group-collapse.svelte-1b12cm3 span.rotated:where(.svelte-1b12cm3) {transform:rotate(90deg);}.group-label.svelte-1b12cm3,\n  .group-header-static.svelte-1b12cm3 {color:var(--sidebar-muted);font-size:0.72rem;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:0.15rem 0.5rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}.group-header-static.svelte-1b12cm3 {padding:0.15rem 0.65rem;}.items.svelte-1b12cm3 {display:grid;gap:0.12rem;padding-left:1.15rem;}.category-item.svelte-1b12cm3 {display:grid;grid-template-columns:3px 1.1rem 1fr;gap:0.5rem;align-items:center;padding:0.4rem 0.95rem 0.4rem 0.95rem;border-radius:0.4rem;border:1px solid transparent;font-size:0.85rem;min-width:0;}.category-item.svelte-1b12cm3 .accent:where(.svelte-1b12cm3) {width:3px;height:1.2rem;border-radius:999px;opacity:0.7;}.category-item.svelte-1b12cm3 .emoji:where(.svelte-1b12cm3) + span:where(.svelte-1b12cm3) {overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}.category-item.active.svelte-1b12cm3 {background:var(--sidebar-active-bg);border-color:var(--sidebar-border);}.category-item.active.svelte-1b12cm3 .accent:where(.svelte-1b12cm3) {opacity:1;}"
 };
 function Sidebar($$anchor, $$props) {
   push($$props, true);
@@ -6353,7 +6420,7 @@ var root_12 = from_html(`<option> </option>`);
 var root2 = from_html(`<section class="quick-capture svelte-149ph0u"><div class="header svelte-149ph0u"><h2 class="svelte-149ph0u">Quick Capture</h2> <p class="svelte-149ph0u">Fast task entry into your vault inbox file.</p></div> <form class="svelte-149ph0u"><input type="text" placeholder="What needs to happen next?" maxlength="140" class="svelte-149ph0u"/> <div class="row svelte-149ph0u"><label class="svelte-149ph0u"><span>Priority</span> <select class="svelte-149ph0u"><option>Low</option><option>Medium</option><option>High</option></select></label> <label class="svelte-149ph0u"><span>Category</span> <select class="svelte-149ph0u"><option>Uncategorized (uses #todo)</option><!></select></label> <button type="submit" class="svelte-149ph0u"> </button></div></form></section>`);
 var $$css2 = {
   hash: "svelte-149ph0u",
-  code: ".quick-capture.svelte-149ph0u {display:grid;gap:0.75rem;padding:1rem;border-radius:1rem;border:1px solid var(--border-color);background:var(--surface-1);}.header.svelte-149ph0u h2:where(.svelte-149ph0u) {margin:0;font-size:1.05rem;}.header.svelte-149ph0u p:where(.svelte-149ph0u) {margin:0.2rem 0 0;font-size:0.85rem;color:var(--text-muted);}form.svelte-149ph0u {display:grid;gap:0.75rem;}input[type='text'].svelte-149ph0u {width:100%;background:var(--surface-2);border:1px solid var(--border-color);border-radius:0.7rem;padding:0.7rem 0.85rem;color:inherit;}.row.svelte-149ph0u {display:flex;flex-wrap:wrap;gap:0.75rem;align-items:end;}label.svelte-149ph0u {display:grid;gap:0.25rem;font-size:0.8rem;}select.svelte-149ph0u,\n  button.svelte-149ph0u {background:var(--surface-2);border:1px solid var(--border-color);color:inherit;border-radius:0.6rem;padding:0.5rem 0.65rem;}button[type='submit'].svelte-149ph0u {background:var(--accent);border-color:var(--accent);color:white;font-weight:700;}\n\n  @media (max-width: 700px) {.row.svelte-149ph0u > :where(.svelte-149ph0u) {flex:1 1 100%;}\n  }"
+  code: ".quick-capture.svelte-149ph0u {display:grid;gap:0.75rem;padding:1rem;border-radius:1rem;border:1px solid var(--border-color);background:var(--surface-1);}.header.svelte-149ph0u h2:where(.svelte-149ph0u) {margin:0;font-size:1.05rem;}.header.svelte-149ph0u p:where(.svelte-149ph0u) {margin:0.2rem 0 0;font-size:0.85rem;color:var(--text-muted);}form.svelte-149ph0u {display:grid;gap:0.75rem;}input[type='text'].svelte-149ph0u {width:100%;background:var(--surface-2);border:1px solid var(--border-color);border-radius:0.7rem;padding:0.7rem 0.85rem;color:inherit;min-width:0;}.row.svelte-149ph0u {display:flex;flex-wrap:wrap;gap:0.75rem;align-items:end;}label.svelte-149ph0u {display:grid;gap:0.25rem;font-size:0.8rem;}select.svelte-149ph0u,\n  button.svelte-149ph0u {background:var(--surface-2);border:1px solid var(--border-color);color:inherit;border-radius:0.6rem;padding:0.5rem 0.65rem;max-width:100%;}button[type='submit'].svelte-149ph0u {background:var(--accent);border-color:var(--accent);color:white;font-weight:700;}\n\n  @media (max-width: 500px) {.row.svelte-149ph0u > :where(.svelte-149ph0u) {flex:1 1 100%;}\n  }\n\n  @media (max-width: 400px) {.quick-capture.svelte-149ph0u {padding:0.8rem;gap:0.6rem;}form.svelte-149ph0u {gap:0.6rem;}input[type='text'].svelte-149ph0u {padding:0.6rem 0.7rem;}select.svelte-149ph0u,\n    button.svelte-149ph0u {padding:0.45rem 0.55rem;}\n  }"
 };
 function QuickCapture($$anchor, $$props) {
   push($$props, true);
@@ -6437,14 +6504,14 @@ function QuickCapture($$anchor, $$props) {
 }
 
 // components/TaskCard.svelte
-var root_13 = from_html(`<span> </span>`);
+var root_13 = from_html(`<span class="svelte-1j8piq"> </span>`);
 var root_32 = from_html(`<option> </option>`);
 var root_22 = from_html(`<div class="editor svelte-1j8piq"><input type="text" maxlength="140" class="svelte-1j8piq"/> <div class="grid2 svelte-1j8piq"><select class="svelte-1j8piq"><option>Low</option><option>Medium</option><option>High</option></select> <select disabled="" class="svelte-1j8piq"><option>Vault category (read from tags)</option><!></select></div> <div class="actions svelte-1j8piq"><button type="button" class="svelte-1j8piq">Save</button> <button type="button" class="ghost svelte-1j8piq">Cancel</button></div> <p class="note svelte-1j8piq">Only title and completion state are written back to vault in Phase 1 migration.</p></div>`);
 var root_42 = from_html(`<div class="actions svelte-1j8piq"><button type="button" class="ghost svelte-1j8piq">Open in Obsidian</button> <button type="button" class="ghost svelte-1j8piq">Edit</button> <button type="button" class="danger svelte-1j8piq">Delete</button></div>`);
-var root3 = from_html(`<article draggable="true"><div class="row top-row svelte-1j8piq"><label class="checkbox-row svelte-1j8piq"><input type="checkbox"/> <span class="title svelte-1j8piq"> </span></label> <div class="badges svelte-1j8piq"><span> </span></div></div> <div class="meta svelte-1j8piq"><span> </span> <!></div> <!></article>`);
+var root3 = from_html(`<article draggable="true"><div class="row top-row svelte-1j8piq"><label class="checkbox-row svelte-1j8piq"><input type="checkbox"/> <span class="title svelte-1j8piq"> </span></label> <div class="badges svelte-1j8piq"><span> </span></div></div> <div class="meta svelte-1j8piq"><span class="svelte-1j8piq"> </span> <!></div> <!></article>`);
 var $$css3 = {
   hash: "svelte-1j8piq",
-  code: ".task-card.svelte-1j8piq {display:grid;gap:0.6rem;padding:0.85rem;border-radius:0.9rem;border:1px solid var(--border-color);background:var(--surface-1);}.task-card.done.svelte-1j8piq {opacity:0.72;}.top-row.svelte-1j8piq {display:flex;justify-content:space-between;gap:0.5rem;}.checkbox-row.svelte-1j8piq {display:flex;gap:0.6rem;align-items:flex-start;font-weight:600;min-width:0;}.checkbox-row.svelte-1j8piq .title:where(.svelte-1j8piq) {line-height:1.35;word-break:break-word;}.done.svelte-1j8piq .title:where(.svelte-1j8piq) {text-decoration:line-through;}.badges.svelte-1j8piq {display:flex;gap:0.35rem;align-items:center;}.badge.svelte-1j8piq {padding:0.2rem 0.5rem;border-radius:999px;font-size:0.7rem;font-weight:700;text-transform:uppercase;border:1px solid var(--border-color);background:var(--surface-2);}.badge.low.svelte-1j8piq {background:color-mix(in srgb, #58d68d 16%, var(--surface-2));}.badge.medium.svelte-1j8piq {background:color-mix(in srgb, #f4d03f 18%, var(--surface-2));}.badge.high.svelte-1j8piq,\n  .badge.urgent.svelte-1j8piq {background:color-mix(in srgb, #ff6b6b 16%, var(--surface-2));}.meta.svelte-1j8piq {display:flex;flex-wrap:wrap;gap:0.5rem 0.8rem;font-size:0.78rem;color:var(--text-muted);}.editor.svelte-1j8piq {display:grid;gap:0.5rem;padding-top:0.25rem;}.editor.svelte-1j8piq input:where(.svelte-1j8piq),\n  .editor.svelte-1j8piq select:where(.svelte-1j8piq),\n  .actions.svelte-1j8piq button:where(.svelte-1j8piq) {background:var(--surface-2);border:1px solid var(--border-color);color:inherit;border-radius:0.55rem;padding:0.45rem 0.6rem;}.grid2.svelte-1j8piq {display:grid;gap:0.5rem;grid-template-columns:repeat(2, minmax(0, 1fr));}.actions.svelte-1j8piq {display:flex;gap:0.5rem;justify-content:flex-end;flex-wrap:wrap;}.actions.svelte-1j8piq .ghost:where(.svelte-1j8piq) {background:transparent;}.actions.svelte-1j8piq .danger:where(.svelte-1j8piq) {border-color:color-mix(in srgb, #ff6b6b 55%, var(--border-color));}.note.svelte-1j8piq {margin:0;color:var(--text-muted);font-size:0.75rem;}\n\n  @media (max-width: 600px) {.grid2.svelte-1j8piq {grid-template-columns:1fr;}\n  }"
+  code: ".task-card.svelte-1j8piq {display:grid;gap:0.6rem;padding:0.85rem;border-radius:0.9rem;border:1px solid var(--border-color);background:var(--surface-1);}.task-card.done.svelte-1j8piq {opacity:0.72;}.top-row.svelte-1j8piq {display:flex;justify-content:space-between;gap:0.5rem;align-items:flex-start;min-width:0;}.checkbox-row.svelte-1j8piq {display:flex;flex:1 1 auto;gap:0.6rem;align-items:flex-start;font-weight:600;min-width:0;}.checkbox-row.svelte-1j8piq .title:where(.svelte-1j8piq) {display:block;min-width:0;line-height:1.35;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}.done.svelte-1j8piq .title:where(.svelte-1j8piq) {text-decoration:line-through;}.badges.svelte-1j8piq {display:flex;flex:0 0 auto;gap:0.35rem;align-items:center;}.badge.svelte-1j8piq {padding:0.2rem 0.5rem;border-radius:999px;font-size:0.7rem;font-weight:700;text-transform:uppercase;border:1px solid var(--border-color);background:var(--surface-2);}.badge.low.svelte-1j8piq {background:color-mix(in srgb, #58d68d 16%, var(--surface-2));}.badge.medium.svelte-1j8piq {background:color-mix(in srgb, #f4d03f 18%, var(--surface-2));}.badge.high.svelte-1j8piq,\n  .badge.urgent.svelte-1j8piq {background:color-mix(in srgb, #ff6b6b 16%, var(--surface-2));}.meta.svelte-1j8piq {display:flex;flex-wrap:wrap;gap:0.5rem 0.8rem;font-size:0.78rem;color:var(--text-muted);}.meta.svelte-1j8piq > span:where(.svelte-1j8piq) {max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}.editor.svelte-1j8piq {display:grid;gap:0.5rem;padding-top:0.25rem;}.editor.svelte-1j8piq input:where(.svelte-1j8piq),\n  .editor.svelte-1j8piq select:where(.svelte-1j8piq),\n  .actions.svelte-1j8piq button:where(.svelte-1j8piq) {background:var(--surface-2);border:1px solid var(--border-color);color:inherit;border-radius:0.55rem;padding:0.45rem 0.6rem;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}.grid2.svelte-1j8piq {display:grid;gap:0.5rem;grid-template-columns:repeat(2, minmax(0, 1fr));}.actions.svelte-1j8piq {display:flex;gap:0.5rem;justify-content:flex-end;flex-wrap:wrap;}.actions.svelte-1j8piq .ghost:where(.svelte-1j8piq) {background:transparent;}.actions.svelte-1j8piq .danger:where(.svelte-1j8piq) {border-color:color-mix(in srgb, #ff6b6b 55%, var(--border-color));}.note.svelte-1j8piq {margin:0;color:var(--text-muted);font-size:0.75rem;}\n\n  @media (max-width: 600px) {.grid2.svelte-1j8piq {grid-template-columns:1fr;}\n  }\n\n  @media (max-width: 500px) {.actions.svelte-1j8piq {justify-content:flex-start;}.actions.svelte-1j8piq button:where(.svelte-1j8piq) {flex:1 1 calc(50% - 0.25rem);}\n  }\n\n  @media (max-width: 400px) {.top-row.svelte-1j8piq {flex-wrap:wrap;}.badges.svelte-1j8piq {width:100%;justify-content:flex-start;}.actions.svelte-1j8piq button:where(.svelte-1j8piq) {flex-basis:100%;}\n  }"
 };
 function TaskCard($$anchor, $$props) {
   push($$props, true);
@@ -6586,7 +6653,7 @@ delegate(["change", "click"]);
 
 // components/TaskBoard.svelte
 var root_23 = from_html(`<div class="empty-state compact svelte-q5ccww">No uncategorized tasks.</div>`);
-var root_43 = from_html(`<li> </li>`);
+var root_43 = from_html(`<li class="svelte-q5ccww"> </li>`);
 var root_52 = from_html(`<small class="svelte-q5ccww"> </small>`);
 var root_33 = from_html(`<button type="button" class="uncategorized-list svelte-q5ccww"><span class="uncategorized-count svelte-q5ccww"> </span> <ul class="svelte-q5ccww"></ul> <!></button>`);
 var root_14 = from_html(`<section class="uncategorized-panel svelte-q5ccww"><div class="section-head svelte-q5ccww"><h2 class="svelte-q5ccww">Uncategorized</h2> <button type="button" class="ghost svelte-q5ccww">View only</button></div> <!></section>`);
@@ -6600,7 +6667,7 @@ var root_15 = from_html(`<aside class="side-column svelte-q5ccww"><section class
 var root4 = from_html(`<section class="task-board svelte-q5ccww"><header class="page-header svelte-q5ccww"><h1 class="svelte-q5ccww"> </h1> <div class="stats-grid svelte-q5ccww"><div class="svelte-q5ccww"><span class="svelte-q5ccww"> </span><small class="svelte-q5ccww">Open</small></div> <div class="svelte-q5ccww"><span class="svelte-q5ccww"> </span><small class="svelte-q5ccww">Done</small></div></div> <div class="header-actions svelte-q5ccww"><button type="button">Board</button> <button type="button" class="svelte-q5ccww"> </button></div></header> <div><div class="main-column svelte-q5ccww"><!> <!> <section class="task-list svelte-q5ccww"><div class="task-list-header svelte-q5ccww"><h2 class="svelte-q5ccww">Tasks</h2> <p class="svelte-q5ccww">Drag cards is visual-only for now; file order is preserved from vault sources.</p></div> <!></section></div> <!></div></section>`);
 var $$css4 = {
   hash: "svelte-q5ccww",
-  code: ".task-board.svelte-q5ccww {display:grid;gap:1rem;}.page-header.svelte-q5ccww {display:flex;justify-content:space-between;gap:1rem;align-items:center;flex-wrap:wrap;}h1.svelte-q5ccww {margin:0;font-size:clamp(1.2rem, 2.3vw, 1.7rem);}.stats-grid.svelte-q5ccww {display:grid;grid-template-columns:repeat(2, minmax(0, 1fr));gap:0.5rem;min-width:min(14rem, 100%);}.stats-grid.svelte-q5ccww > div:where(.svelte-q5ccww) {background:var(--surface-1);border:1px solid var(--border-color);border-radius:0.9rem;padding:0.6rem 0.75rem;display:grid;gap:0.15rem;}.stats-grid.svelte-q5ccww span:where(.svelte-q5ccww) {font-size:1.15rem;font-weight:800;}.stats-grid.svelte-q5ccww small:where(.svelte-q5ccww) {color:var(--text-muted);}.header-actions.svelte-q5ccww {display:flex;gap:0.5rem;margin-left:auto;}.header-actions.svelte-q5ccww button:where(.svelte-q5ccww) {background:var(--surface-1);border:1px solid var(--border-color);color:inherit;border-radius:0.65rem;padding:0.45rem 0.75rem;font:inherit;}.header-actions.svelte-q5ccww button.active:where(.svelte-q5ccww) {background:var(--surface-2);}.board-grid.svelte-q5ccww {display:grid;grid-template-columns:minmax(0, 1fr) minmax(240px, 320px);gap:1rem;}.board-grid.single-column.svelte-q5ccww {grid-template-columns:minmax(0, 1fr);}.main-column.svelte-q5ccww,\n  .side-column.svelte-q5ccww {display:grid;gap:1rem;align-content:start;}.task-list.svelte-q5ccww {display:grid;gap:0.75rem;padding:1rem;border:1px solid var(--border-color);border-radius:1rem;background:var(--surface-1);}.uncategorized-panel.svelte-q5ccww {display:grid;gap:0.6rem;padding:1rem;border:1px solid var(--border-color);border-radius:1rem;background:var(--surface-1);}.section-head.svelte-q5ccww {display:flex;align-items:center;justify-content:space-between;gap:0.5rem;}.section-head.svelte-q5ccww h2:where(.svelte-q5ccww) {margin:0;font-size:1rem;}.section-head.svelte-q5ccww .ghost:where(.svelte-q5ccww) {background:transparent;border:1px solid var(--border-color);color:inherit;border-radius:0.55rem;padding:0.35rem 0.55rem;font:inherit;}.uncategorized-list.svelte-q5ccww {text-align:left;display:grid;gap:0.35rem;width:100%;background:var(--surface-2);border:1px solid var(--border-color);color:inherit;border-radius:0.8rem;padding:0.7rem 0.8rem;cursor:pointer;}.uncategorized-list.svelte-q5ccww ul:where(.svelte-q5ccww) {margin:0;padding-left:1rem;display:grid;gap:0.15rem;color:var(--text-muted);font-size:0.85rem;}.uncategorized-list.svelte-q5ccww small:where(.svelte-q5ccww) {color:var(--text-muted);}.uncategorized-count.svelte-q5ccww {font-weight:700;}.empty-state.compact.svelte-q5ccww {padding:0.7rem 0.8rem;}.task-list-header.svelte-q5ccww h2:where(.svelte-q5ccww),\n  .panel.svelte-q5ccww h3:where(.svelte-q5ccww) {margin:0;font-size:1rem;}.task-list-header.svelte-q5ccww p:where(.svelte-q5ccww) {margin:0.15rem 0 0;color:var(--text-muted);font-size:0.8rem;}.cards.svelte-q5ccww {display:grid;gap:0.7rem;}.subtag-group.svelte-q5ccww {display:grid;gap:0.55rem;margin-top:0.4rem;}.subtag-header.svelte-q5ccww {padding:0.35rem 0.55rem;border-radius:0.6rem;border:1px solid var(--border-color);background:var(--surface-2);font-size:0.8rem;font-weight:800;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-muted);}.empty-state.svelte-q5ccww {padding:1rem;border:1px dashed var(--border-color);border-radius:0.8rem;color:var(--text-muted);}.panel.svelte-q5ccww {padding:1rem;border:1px solid var(--border-color);border-radius:1rem;background:var(--surface-1);}.panel.svelte-q5ccww ul:where(.svelte-q5ccww) {list-style:none;margin:0.6rem 0 0;padding:0;display:grid;gap:0.45rem;color:var(--text-muted);font-size:0.9rem;}.category-links.svelte-q5ccww button:where(.svelte-q5ccww) {width:100%;text-align:left;font:inherit;color:inherit;background:transparent;border:1px solid transparent;border-radius:0.45rem;padding:0.35rem 0.45rem;cursor:pointer;}.category-links.svelte-q5ccww button:where(.svelte-q5ccww):hover {background:var(--surface-2);color:var(--text-normal);}\n\n  @media (max-width: 980px) {.board-grid.svelte-q5ccww {grid-template-columns:1fr;}\n  }\n\n  @media (max-width: 700px) {.stats-grid.svelte-q5ccww {width:100%;min-width:0;}.header-actions.svelte-q5ccww {width:100%;margin-left:0;}.header-actions.svelte-q5ccww button:where(.svelte-q5ccww) {flex:1 1 0;}\n  }"
+  code: ".task-board.svelte-q5ccww {display:grid;gap:1rem;}.page-header.svelte-q5ccww {display:flex;justify-content:space-between;gap:1rem;align-items:center;flex-wrap:wrap;}h1.svelte-q5ccww {margin:0;font-size:clamp(1.2rem, 2.3vw, 1.7rem);max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}.stats-grid.svelte-q5ccww {display:grid;grid-template-columns:repeat(2, minmax(0, 1fr));gap:0.5rem;min-width:min(14rem, 100%);}.stats-grid.svelte-q5ccww > div:where(.svelte-q5ccww) {background:var(--surface-1);border:1px solid var(--border-color);border-radius:0.9rem;padding:0.6rem 0.75rem;display:grid;gap:0.15rem;}.stats-grid.svelte-q5ccww span:where(.svelte-q5ccww) {font-size:1.15rem;font-weight:800;}.stats-grid.svelte-q5ccww small:where(.svelte-q5ccww) {color:var(--text-muted);}.header-actions.svelte-q5ccww {display:flex;gap:0.5rem;margin-left:auto;min-width:0;}.header-actions.svelte-q5ccww button:where(.svelte-q5ccww) {background:var(--surface-1);border:1px solid var(--border-color);color:inherit;border-radius:0.65rem;padding:0.45rem 0.75rem;font:inherit;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}.header-actions.svelte-q5ccww button.active:where(.svelte-q5ccww) {background:var(--surface-2);}.board-grid.svelte-q5ccww {display:grid;grid-template-columns:minmax(0, 1fr) minmax(240px, 320px);gap:1rem;}.board-grid.single-column.svelte-q5ccww {grid-template-columns:minmax(0, 1fr);}.main-column.svelte-q5ccww,\n  .side-column.svelte-q5ccww {display:grid;gap:1rem;align-content:start;}.task-list.svelte-q5ccww {display:grid;gap:0.75rem;padding:1rem;border:1px solid var(--border-color);border-radius:1rem;background:var(--surface-1);}.uncategorized-panel.svelte-q5ccww {display:grid;gap:0.6rem;padding:1rem;border:1px solid var(--border-color);border-radius:1rem;background:var(--surface-1);}.section-head.svelte-q5ccww {display:flex;align-items:center;justify-content:space-between;gap:0.5rem;}.section-head.svelte-q5ccww h2:where(.svelte-q5ccww) {margin:0;font-size:1rem;}.section-head.svelte-q5ccww .ghost:where(.svelte-q5ccww) {background:transparent;border:1px solid var(--border-color);color:inherit;border-radius:0.55rem;padding:0.35rem 0.55rem;font:inherit;}.uncategorized-list.svelte-q5ccww {text-align:left;display:grid;gap:0.35rem;width:100%;background:var(--surface-2);border:1px solid var(--border-color);color:inherit;border-radius:0.8rem;padding:0.7rem 0.8rem;cursor:pointer;}.uncategorized-list.svelte-q5ccww ul:where(.svelte-q5ccww) {margin:0;padding-left:1rem;display:grid;gap:0.15rem;color:var(--text-muted);font-size:0.85rem;}.uncategorized-list.svelte-q5ccww li:where(.svelte-q5ccww),\n  .category-links.svelte-q5ccww button:where(.svelte-q5ccww) {overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}.uncategorized-list.svelte-q5ccww small:where(.svelte-q5ccww) {color:var(--text-muted);}.uncategorized-count.svelte-q5ccww {font-weight:700;}.empty-state.compact.svelte-q5ccww {padding:0.7rem 0.8rem;}.task-list-header.svelte-q5ccww h2:where(.svelte-q5ccww),\n  .panel.svelte-q5ccww h3:where(.svelte-q5ccww) {margin:0;font-size:1rem;}.task-list-header.svelte-q5ccww p:where(.svelte-q5ccww) {margin:0.15rem 0 0;color:var(--text-muted);font-size:0.8rem;}.cards.svelte-q5ccww {display:grid;gap:0.7rem;}.subtag-group.svelte-q5ccww {display:grid;gap:0.55rem;margin-top:0.4rem;}.subtag-header.svelte-q5ccww {padding:0.35rem 0.55rem;border-radius:0.6rem;border:1px solid var(--border-color);background:var(--surface-2);font-size:0.8rem;font-weight:800;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-muted);}.empty-state.svelte-q5ccww {padding:1rem;border:1px dashed var(--border-color);border-radius:0.8rem;color:var(--text-muted);}.panel.svelte-q5ccww {padding:1rem;border:1px solid var(--border-color);border-radius:1rem;background:var(--surface-1);}.panel.svelte-q5ccww ul:where(.svelte-q5ccww) {list-style:none;margin:0.6rem 0 0;padding:0;display:grid;gap:0.45rem;color:var(--text-muted);font-size:0.9rem;}.category-links.svelte-q5ccww button:where(.svelte-q5ccww) {width:100%;text-align:left;font:inherit;color:inherit;background:transparent;border:1px solid transparent;border-radius:0.45rem;padding:0.35rem 0.45rem;cursor:pointer;max-width:100%;}.category-links.svelte-q5ccww button:where(.svelte-q5ccww):hover {background:var(--surface-2);color:var(--text-normal);}\n\n  @media (max-width: 700px) {.board-grid.svelte-q5ccww {grid-template-columns:1fr;}\n  }\n\n  @media (max-width: 700px) {.stats-grid.svelte-q5ccww {width:100%;min-width:0;}.header-actions.svelte-q5ccww {width:100%;margin-left:0;}.header-actions.svelte-q5ccww button:where(.svelte-q5ccww) {flex:1 1 0;}\n  }\n\n  @media (max-width: 500px) {.page-header.svelte-q5ccww {gap:0.7rem;}.stats-grid.svelte-q5ccww {gap:0.4rem;}.stats-grid.svelte-q5ccww > div:where(.svelte-q5ccww) {padding:0.45rem 0.55rem;border-radius:0.75rem;}.stats-grid.svelte-q5ccww span:where(.svelte-q5ccww) {font-size:1rem;}.stats-grid.svelte-q5ccww small:where(.svelte-q5ccww) {font-size:0.72rem;}\n  }\n\n  @media (max-width: 400px) {.page-header.svelte-q5ccww {align-items:stretch;}.stats-grid.svelte-q5ccww > div:where(.svelte-q5ccww) {padding:0.35rem 0.45rem;border-radius:0.65rem;gap:0.05rem;}.stats-grid.svelte-q5ccww span:where(.svelte-q5ccww) {font-size:0.9rem;}.stats-grid.svelte-q5ccww small:where(.svelte-q5ccww) {font-size:0.65rem;}.header-actions.svelte-q5ccww {gap:0.35rem;}\n  }"
 };
 function TaskBoard($$anchor, $$props) {
   push($$props, true);
@@ -6855,10 +6922,14 @@ function TaskBoard($$anchor, $$props) {
 delegate(["click"]);
 
 // components/App.svelte
-var root_17 = from_html(`<div class="error-banner"> </div>`);
-var root5 = from_html(`<div class="adhd-todo-container"><aside class="adhd-todo-sidebar-pane"><!></aside> <main class="adhd-todo-main"><!> <!></main></div>`);
+var root_17 = from_html(`<button type="button" class="adhd-todo-sidebar-backdrop" aria-label="Close sidebar"></button>`);
+var root_24 = from_html(`<div class="error-banner"> </div>`);
+var root5 = from_html(`<div><aside class="adhd-todo-sidebar-pane" id="adhd-todo-sidebar"><!></aside> <!> <main class="adhd-todo-main"><button type="button" class="adhd-todo-sidebar-toggle" aria-controls="adhd-todo-sidebar">\u2630 Menu</button> <!> <!></main></div>`);
 function App($$anchor, $$props) {
   push($$props, true);
+  let containerEl = state(null);
+  let isNarrowViewport = state(false);
+  let sidebarOpen = state(true);
   user_effect(() => {
     initializeTodoState($$props.plugin);
   });
@@ -6866,27 +6937,69 @@ function App($$anchor, $$props) {
   const activeCategory = user_derived(() => nav.categoryId ? getCategory(nav.categoryId) : void 0);
   const isDashboardView = user_derived(() => !nav.groupId && !nav.categoryId && !nav.uncategorizedOnly);
   const pageTitle = user_derived(() => get(activeCategory) ? `${get(activeCategory).emoji ? `${get(activeCategory).emoji} ` : ""}${get(activeCategory).name}` : nav.uncategorizedOnly ? "Uncategorized / Group-level" : get(activeGroup) ? get(activeGroup).name : "Dashboard");
+  function applyResponsiveLayout(width) {
+    const nextIsNarrow = (width ?? get(containerEl)?.clientWidth ?? 0) <= 700;
+    if (nextIsNarrow !== get(isNarrowViewport)) {
+      set(isNarrowViewport, nextIsNarrow);
+      set(sidebarOpen, !nextIsNarrow);
+    }
+  }
+  function toggleSidebar() {
+    set(sidebarOpen, !get(sidebarOpen));
+  }
+  function closeSidebarOnMobileNavigate() {
+    if (get(isNarrowViewport)) set(sidebarOpen, false);
+  }
+  onMount(() => {
+    if (!get(containerEl)) return;
+    applyResponsiveLayout(get(containerEl).clientWidth);
+    const observer = new ResizeObserver((entries) => {
+      const entry = entries[0];
+      if (!entry) return;
+      applyResponsiveLayout(entry.contentRect.width);
+    });
+    observer.observe(get(containerEl));
+    return () => observer.disconnect();
+  });
   var div = root5();
+  let classes;
   var aside = child(div);
   var node = child(aside);
-  Sidebar(node, {});
+  Sidebar(node, {
+    get mobile() {
+      return get(isNarrowViewport);
+    },
+    onNavigate: closeSidebarOnMobileNavigate
+  });
   reset(aside);
-  var main = sibling(aside, 2);
-  var node_1 = child(main);
+  var node_1 = sibling(aside, 2);
   {
     var consequent = ($$anchor2) => {
-      var div_1 = root_17();
+      var button = root_17();
+      delegated("click", button, () => set(sidebarOpen, false));
+      append($$anchor2, button);
+    };
+    if_block(node_1, ($$render) => {
+      if (get(isNarrowViewport) && get(sidebarOpen)) $$render(consequent);
+    });
+  }
+  var main = sibling(node_1, 2);
+  var button_1 = child(main);
+  var node_2 = sibling(button_1, 2);
+  {
+    var consequent_1 = ($$anchor2) => {
+      var div_1 = root_24();
       var text2 = child(div_1);
       reset(div_1);
       template_effect(() => set_text(text2, `Scan failed: ${ui.errorMessage ?? ""}`));
       append($$anchor2, div_1);
     };
-    if_block(node_1, ($$render) => {
-      if (ui.errorMessage) $$render(consequent);
+    if_block(node_2, ($$render) => {
+      if (ui.errorMessage) $$render(consequent_1);
     });
   }
-  var node_2 = sibling(node_1, 2);
-  TaskBoard(node_2, {
+  var node_3 = sibling(node_2, 2);
+  TaskBoard(node_3, {
     get title() {
       return get(pageTitle);
     },
@@ -6919,9 +7032,19 @@ function App($$anchor, $$props) {
   });
   reset(main);
   reset(div);
+  bind_this(div, ($$value) => set(containerEl, $$value), () => get(containerEl));
+  template_effect(() => {
+    classes = set_class(div, 1, "adhd-todo-container", null, classes, {
+      "is-narrow": get(isNarrowViewport),
+      "sidebar-open": get(sidebarOpen)
+    });
+    set_attribute2(button_1, "aria-expanded", get(sidebarOpen));
+  });
+  delegated("click", button_1, toggleSidebar);
   append($$anchor, div);
   pop();
 }
+delegate(["click"]);
 
 // TodoView.ts
 var VIEW_TYPE_TODO = "adhd-todo-view";

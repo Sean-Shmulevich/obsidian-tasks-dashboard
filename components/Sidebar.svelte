@@ -113,6 +113,7 @@
     gap: 0.5rem;
     align-items: center;
     padding: 0.25rem 0.25rem 0.35rem;
+    min-width: 0;
   }
 
   .logo {
@@ -128,6 +129,14 @@
 
   .brand small {
     color: var(--sidebar-muted);
+  }
+
+  .brand strong,
+  .brand small {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .sidebar button {
@@ -146,7 +155,8 @@
   }
 
   .group-list {
-    overflow: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
     display: grid;
     gap: 0.2rem;
     align-content: start;
@@ -194,6 +204,9 @@
     letter-spacing: 0.08em;
     text-transform: uppercase;
     padding: 0.15rem 0.5rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .group-header-static {
@@ -215,6 +228,7 @@
     border-radius: 0.4rem;
     border: 1px solid transparent;
     font-size: 0.85rem;
+    min-width: 0;
   }
 
   .category-item .accent {
@@ -222,6 +236,12 @@
     height: 1.2rem;
     border-radius: 999px;
     opacity: 0.7;
+  }
+
+  .category-item .emoji + span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .category-item.active {

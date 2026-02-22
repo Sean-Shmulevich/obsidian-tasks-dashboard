@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import type ADHDTodoPlugin from '../main';
   import {
     categoryGroups,
@@ -15,6 +16,9 @@
   import TaskBoard from './TaskBoard.svelte';
 
   let { plugin }: { plugin: ADHDTodoPlugin } = $props();
+  let containerEl = $state<HTMLDivElement | null>(null);
+  let isNarrowViewport = $state(false);
+  let sidebarOpen = $state(true);
 
   $effect(() => {
     initializeTodoState(plugin);
@@ -32,14 +36,67 @@
           ? activeGroup.name
           : 'Dashboard'
   );
+
+  function applyResponsiveLayout(width?: number) {
+    const nextIsNarrow = (width ?? containerEl?.clientWidth ?? 0) <= 700;
+    if (nextIsNarrow !== isNarrowViewport) {
+      isNarrowViewport = nextIsNarrow;
+      sidebarOpen = !nextIsNarrow;
+    }
+  }
+
+  function toggleSidebar() {
+    sidebarOpen = !sidebarOpen;
+  }
+
+  function closeSidebarOnMobileNavigate() {
+    if (isNarrowViewport) sidebarOpen = false;
+  }
+
+  onMount(() => {
+    if (!containerEl) return;
+    applyResponsiveLayout(containerEl.clientWidth);
+
+    const observer = new ResizeObserver((entries) => {
+      const entry = entries[0];
+      if (!entry) return;
+      applyResponsiveLayout(entry.contentRect.width);
+    });
+    observer.observe(containerEl);
+    return () => observer.disconnect();
+  });
 </script>
 
-<div class="adhd-todo-container">
-  <aside class="adhd-todo-sidebar-pane">
-    <Sidebar />
+<div
+  class="adhd-todo-container"
+  class:is-narrow={isNarrowViewport}
+  class:sidebar-open={sidebarOpen}
+  bind:this={containerEl}
+>
+  <aside class="adhd-todo-sidebar-pane" id="adhd-todo-sidebar">
+    <Sidebar mobile={isNarrowViewport} onNavigate={closeSidebarOnMobileNavigate} />
   </aside>
 
+  {#if isNarrowViewport && sidebarOpen}
+    <button
+      type="button"
+      class="adhd-todo-sidebar-backdrop"
+      aria-label="Close sidebar"
+      onclick={() => (sidebarOpen = false)}
+    ></button>
+  {/if}
+
   <main class="adhd-todo-main">
+    <button
+      type="button"
+      class="adhd-todo-sidebar-toggle"
+      aria-controls="adhd-todo-sidebar"
+      aria-expanded={sidebarOpen}
+      onclick={toggleSidebar}
+    >
+      ☰ Menu
+    </button>
+
     {#if ui.errorMessage}
       <div class="error-banner">Scan failed: {ui.errorMessage}</div>
     {/if}

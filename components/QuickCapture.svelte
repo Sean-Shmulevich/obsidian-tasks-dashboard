@@ -99,6 +99,7 @@
     border-radius: 0.7rem;
     padding: 0.7rem 0.85rem;
     color: inherit;
+    min-width: 0;
   }
 
   .row {
@@ -121,6 +122,7 @@
     color: inherit;
     border-radius: 0.6rem;
     padding: 0.5rem 0.65rem;
+    max-width: 100%;
   }
 
   button[type='submit'] {
@@ -130,9 +132,29 @@
     font-weight: 700;
   }
 
-  @media (max-width: 700px) {
+  @media (max-width: 500px) {
     .row > * {
       flex: 1 1 100%;
+    }
+  }
+
+  @media (max-width: 400px) {
+    .quick-capture {
+      padding: 0.8rem;
+      gap: 0.6rem;
+    }
+
+    form {
+      gap: 0.6rem;
+    }
+
+    input[type='text'] {
+      padding: 0.6rem 0.7rem;
+    }
+
+    select,
+    button {
+      padding: 0.45rem 0.55rem;
     }
   }
 </style>
