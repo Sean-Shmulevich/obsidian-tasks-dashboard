@@ -6737,19 +6737,18 @@ var root_7 = from_html(`<section class="task-section svelte-q5ccww"><div class="
 var root_10 = from_html(`<div class="empty-state compact svelte-q5ccww">No finished tasks.</div>`);
 var root_11 = from_html(`<div class="cards svelte-q5ccww"></div>`);
 var root_24 = from_html(`<!> <!> <!> <section class="task-section finished-block svelte-q5ccww"><button type="button" class="finished-toggle svelte-q5ccww"><span> </span> <span>\u25BE</span></button> <!></section>`, 1);
-var root_142 = from_html(`<div class="empty-state compact svelte-q5ccww">No incomplete tasks.</div>`);
-var root_16 = from_html(`<div class="cards svelte-q5ccww"></div>`);
-var root_18 = from_html(`<section class="subtag-group svelte-q5ccww"><div class="subtag-header svelte-q5ccww"> </div> <div class="cards svelte-q5ccww"></div></section>`);
-var root_15 = from_html(`<!> <!>`, 1);
-var root_20 = from_html(`<div class="cards svelte-q5ccww"></div>`);
-var root_232 = from_html(`<div class="empty-state compact svelte-q5ccww">No finished tasks.</div>`);
-var root_25 = from_html(`<div class="cards svelte-q5ccww"></div>`);
-var root_27 = from_html(`<section class="subtag-group svelte-q5ccww"><div class="subtag-header svelte-q5ccww"> </div> <div class="cards svelte-q5ccww"></div></section>`);
-var root_242 = from_html(`<!> <!>`, 1);
-var root_29 = from_html(`<div class="cards svelte-q5ccww"></div>`);
+var root_15 = from_html(`<div class="cards svelte-q5ccww"></div>`);
+var root_17 = from_html(`<section class="subtag-group svelte-q5ccww"><div class="subtag-header svelte-q5ccww"> </div> <div class="cards svelte-q5ccww"></div></section>`);
+var root_142 = from_html(`<!> <!>`, 1);
+var root_19 = from_html(`<div class="cards svelte-q5ccww"></div>`);
+var root_222 = from_html(`<div class="empty-state compact svelte-q5ccww">No finished tasks.</div>`);
+var root_242 = from_html(`<div class="cards svelte-q5ccww"></div>`);
+var root_26 = from_html(`<section class="subtag-group svelte-q5ccww"><div class="subtag-header svelte-q5ccww"> </div> <div class="cards svelte-q5ccww"></div></section>`);
+var root_232 = from_html(`<!> <!>`, 1);
+var root_28 = from_html(`<div class="cards svelte-q5ccww"></div>`);
 var root_132 = from_html(`<section class="task-section svelte-q5ccww"><div class="task-section-head svelte-q5ccww"><h3 class="svelte-q5ccww">Tasks</h3> <small class="svelte-q5ccww"> </small></div> <!></section> <section class="task-section finished-block svelte-q5ccww"><button type="button" class="finished-toggle svelte-q5ccww"><span> </span> <span>\u25BE</span></button> <!></section>`, 1);
-var root_322 = from_html(`<li><button type="button" class="svelte-q5ccww"> </button></li>`);
-var root_31 = from_html(`<aside class="side-column svelte-q5ccww"><section class="panel svelte-q5ccww"><h3 class="svelte-q5ccww">Categories</h3> <ul class="category-links svelte-q5ccww"><!> <li><button type="button" class="svelte-q5ccww">Uncategorized / group-level</button></li></ul></section></aside>`);
+var root_31 = from_html(`<li><button type="button" class="svelte-q5ccww"> </button></li>`);
+var root_30 = from_html(`<aside class="side-column svelte-q5ccww"><section class="panel svelte-q5ccww"><h3 class="svelte-q5ccww">Categories</h3> <ul class="category-links svelte-q5ccww"><!> <li><button type="button" class="svelte-q5ccww">Uncategorized / group-level</button></li></ul></section></aside>`);
 var root4 = from_html(`<section class="task-board svelte-q5ccww"><header class="page-header svelte-q5ccww"><h1 class="svelte-q5ccww"> </h1> <div class="stats-grid svelte-q5ccww"><div class="svelte-q5ccww"><span class="svelte-q5ccww"> </span><small class="svelte-q5ccww">Open</small></div> <div class="svelte-q5ccww"><span class="svelte-q5ccww"> </span><small class="svelte-q5ccww">Done</small></div></div> <div class="header-actions svelte-q5ccww"><button type="button">Board</button> <button type="button" class="svelte-q5ccww"> </button></div></header> <div><div class="main-column svelte-q5ccww"><!> <section class="task-list svelte-q5ccww"><!></section></div> <!></div></section>`);
 var $$css4 = {
   hash: "svelte-q5ccww",
@@ -7021,16 +7020,14 @@ function TaskBoard($$anchor, $$props) {
       var node_7 = sibling(div_15, 2);
       {
         var consequent_7 = ($$anchor3) => {
-          var div_16 = root_142();
-          append($$anchor3, div_16);
         };
         var consequent_9 = ($$anchor3) => {
-          var fragment_7 = root_15();
+          var fragment_7 = root_142();
           var node_8 = first_child(fragment_7);
           {
             var consequent_8 = ($$anchor4) => {
-              var div_17 = root_16();
-              each(div_17, 21, () => get(openUntaggedCategoryTasks), (task) => task.id, ($$anchor5, task) => {
+              var div_16 = root_15();
+              each(div_16, 21, () => get(openUntaggedCategoryTasks), (task) => task.id, ($$anchor5, task) => {
                 TaskCard($$anchor5, {
                   get task() {
                     return get(task);
@@ -7039,8 +7036,8 @@ function TaskBoard($$anchor, $$props) {
                   onDropOn: (id) => onDropOn(id, "")
                 });
               });
-              reset(div_17);
-              append($$anchor4, div_17);
+              reset(div_16);
+              append($$anchor4, div_16);
             };
             if_block(node_8, ($$render) => {
               if (get(openUntaggedCategoryTasks).length) $$render(consequent_8);
@@ -7048,12 +7045,12 @@ function TaskBoard($$anchor, $$props) {
           }
           var node_9 = sibling(node_8, 2);
           each(node_9, 17, () => get(openSubtagGroups), (group) => group.subTag, ($$anchor4, group) => {
-            var section_7 = root_18();
-            var div_18 = child(section_7);
-            var text_9 = child(div_18, true);
-            reset(div_18);
-            var div_19 = sibling(div_18, 2);
-            each(div_19, 21, () => get(group).tasks, (task) => task.id, ($$anchor5, task) => {
+            var section_7 = root_17();
+            var div_17 = child(section_7);
+            var text_9 = child(div_17, true);
+            reset(div_17);
+            var div_18 = sibling(div_17, 2);
+            each(div_18, 21, () => get(group).tasks, (task) => task.id, ($$anchor5, task) => {
               TaskCard($$anchor5, {
                 get task() {
                   return get(task);
@@ -7062,7 +7059,7 @@ function TaskBoard($$anchor, $$props) {
                 onDropOn: (id) => onDropOn(id, get(group).subTag)
               });
             });
-            reset(div_19);
+            reset(div_18);
             reset(section_7);
             template_effect(() => set_text(text_9, get(group).subTag));
             append($$anchor4, section_7);
@@ -7070,8 +7067,8 @@ function TaskBoard($$anchor, $$props) {
           append($$anchor3, fragment_7);
         };
         var alternate_1 = ($$anchor3) => {
-          var div_20 = root_20();
-          each(div_20, 21, () => get(incompleteTasks), (task) => task.id, ($$anchor4, task) => {
+          var div_19 = root_19();
+          each(div_19, 21, () => get(incompleteTasks), (task) => task.id, ($$anchor4, task) => {
             TaskCard($$anchor4, {
               get task() {
                 return get(task);
@@ -7080,8 +7077,8 @@ function TaskBoard($$anchor, $$props) {
               onDropOn
             });
           });
-          reset(div_20);
-          append($$anchor3, div_20);
+          reset(div_19);
+          append($$anchor3, div_19);
         };
         if_block(node_7, ($$render) => {
           if (get(openCount) === 0) $$render(consequent_7);
@@ -7105,16 +7102,16 @@ function TaskBoard($$anchor, $$props) {
           var node_11 = first_child(fragment_11);
           {
             var consequent_10 = ($$anchor4) => {
-              var div_21 = root_232();
-              append($$anchor4, div_21);
+              var div_20 = root_222();
+              append($$anchor4, div_20);
             };
             var consequent_12 = ($$anchor4) => {
-              var fragment_12 = root_242();
+              var fragment_12 = root_232();
               var node_12 = first_child(fragment_12);
               {
                 var consequent_11 = ($$anchor5) => {
-                  var div_22 = root_25();
-                  each(div_22, 21, () => get(finishedUntaggedCategoryTasks), (task) => task.id, ($$anchor6, task) => {
+                  var div_21 = root_242();
+                  each(div_21, 21, () => get(finishedUntaggedCategoryTasks), (task) => task.id, ($$anchor6, task) => {
                     TaskCard($$anchor6, {
                       get task() {
                         return get(task);
@@ -7123,8 +7120,8 @@ function TaskBoard($$anchor, $$props) {
                       onDropOn: (id) => onDropOn(id, "")
                     });
                   });
-                  reset(div_22);
-                  append($$anchor5, div_22);
+                  reset(div_21);
+                  append($$anchor5, div_21);
                 };
                 if_block(node_12, ($$render) => {
                   if (get(finishedUntaggedCategoryTasks).length) $$render(consequent_11);
@@ -7132,12 +7129,12 @@ function TaskBoard($$anchor, $$props) {
               }
               var node_13 = sibling(node_12, 2);
               each(node_13, 17, () => get(finishedSubtagGroups), (group) => group.subTag, ($$anchor5, group) => {
-                var section_9 = root_27();
-                var div_23 = child(section_9);
-                var text_11 = child(div_23, true);
-                reset(div_23);
-                var div_24 = sibling(div_23, 2);
-                each(div_24, 21, () => get(group).tasks, (task) => task.id, ($$anchor6, task) => {
+                var section_9 = root_26();
+                var div_22 = child(section_9);
+                var text_11 = child(div_22, true);
+                reset(div_22);
+                var div_23 = sibling(div_22, 2);
+                each(div_23, 21, () => get(group).tasks, (task) => task.id, ($$anchor6, task) => {
                   TaskCard($$anchor6, {
                     get task() {
                       return get(task);
@@ -7146,7 +7143,7 @@ function TaskBoard($$anchor, $$props) {
                     onDropOn: (id) => onDropOn(id, get(group).subTag)
                   });
                 });
-                reset(div_24);
+                reset(div_23);
                 reset(section_9);
                 template_effect(() => set_text(text_11, get(group).subTag));
                 append($$anchor5, section_9);
@@ -7154,8 +7151,8 @@ function TaskBoard($$anchor, $$props) {
               append($$anchor4, fragment_12);
             };
             var alternate_2 = ($$anchor4) => {
-              var div_25 = root_29();
-              each(div_25, 21, () => get(finishedTasks), (task) => task.id, ($$anchor5, task) => {
+              var div_24 = root_28();
+              each(div_24, 21, () => get(finishedTasks), (task) => task.id, ($$anchor5, task) => {
                 TaskCard($$anchor5, {
                   get task() {
                     return get(task);
@@ -7164,8 +7161,8 @@ function TaskBoard($$anchor, $$props) {
                   onDropOn
                 });
               });
-              reset(div_25);
-              append($$anchor4, div_25);
+              reset(div_24);
+              append($$anchor4, div_24);
             };
             if_block(node_11, ($$render) => {
               if (get(doneCount) === 0) $$render(consequent_10);
@@ -7200,12 +7197,12 @@ function TaskBoard($$anchor, $$props) {
   var node_14 = sibling(div_5, 2);
   {
     var consequent_14 = ($$anchor2) => {
-      var aside = root_31();
+      var aside = root_30();
       var section_10 = child(aside);
       var ul = sibling(child(section_10), 2);
       var node_15 = child(ul);
       each(node_15, 17, () => get(sortedCategories), index, ($$anchor3, category) => {
-        var li = root_322();
+        var li = root_31();
         var button_4 = child(li);
         var text_12 = child(button_4);
         reset(button_4);
@@ -7246,8 +7243,8 @@ function TaskBoard($$anchor, $$props) {
 delegate(["click"]);
 
 // components/App.svelte
-var root_17 = from_html(`<button type="button" class="adhd-todo-sidebar-backdrop" aria-label="Close sidebar"></button>`);
-var root_26 = from_html(`<div class="error-banner"> </div>`);
+var root_16 = from_html(`<button type="button" class="adhd-todo-sidebar-backdrop" aria-label="Close sidebar"></button>`);
+var root_25 = from_html(`<div class="error-banner"> </div>`);
 var root5 = from_html(`<div><aside class="adhd-todo-sidebar-pane" id="adhd-todo-sidebar"><!></aside> <!> <main class="adhd-todo-main"><button type="button" class="adhd-todo-sidebar-toggle" aria-controls="adhd-todo-sidebar">\u2630 Menu</button> <!> <!></main></div>`);
 function App($$anchor, $$props) {
   push($$props, true);
@@ -7299,7 +7296,7 @@ function App($$anchor, $$props) {
   var node_1 = sibling(aside, 2);
   {
     var consequent = ($$anchor2) => {
-      var button = root_17();
+      var button = root_16();
       delegated("click", button, () => set(sidebarOpen, false));
       append($$anchor2, button);
     };
@@ -7312,7 +7309,7 @@ function App($$anchor, $$props) {
   var node_2 = sibling(button_1, 2);
   {
     var consequent_1 = ($$anchor2) => {
-      var div_1 = root_26();
+      var div_1 = root_25();
       var text2 = child(div_1);
       reset(div_1);
       template_effect(() => set_text(text2, `Scan failed: ${ui.errorMessage ?? ""}`));

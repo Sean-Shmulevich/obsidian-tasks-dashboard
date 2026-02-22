@@ -203,7 +203,7 @@
               <small>{openCount}</small>
             </div>
             {#if openCount === 0}
-              <div class="empty-state compact">No incomplete tasks.</div>
+              <!-- nothing to show -->
             {:else if showSubtagSections}
               {#if openUntaggedCategoryTasks.length}
                 <div class="cards">
