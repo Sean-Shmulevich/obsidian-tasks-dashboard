@@ -36,6 +36,17 @@
   const sortedTasks = $derived([...visibleTasks()].sort((a, b) => a.sortOrder - b.sortOrder));
   const incompleteTasks = $derived(sortedTasks.filter((task) => !task.completed));
   const finishedTasks = $derived(sortedTasks.filter((task) => task.completed));
+
+  // Dashboard time-based sections
+  const now = Date.now();
+  const oneWeekAgo = now - 7 * 24 * 60 * 60 * 1000;
+  const oneMonthAgo = now - 30 * 24 * 60 * 60 * 1000;
+  const thisWeekTasks = $derived(incompleteTasks.filter(t => new Date(t.createdAt).getTime() >= oneWeekAgo));
+  const thisMonthTasks = $derived(incompleteTasks.filter(t => {
+    const created = new Date(t.createdAt).getTime();
+    return created >= oneMonthAgo && created < oneWeekAgo;
+  }));
+  const olderTasks = $derived(incompleteTasks.filter(t => new Date(t.createdAt).getTime() < oneMonthAgo));
   const openCount = $derived(sortedTasks.filter((task) => !task.completed).length);
   const doneCount = $derived(sortedTasks.filter((task) => task.completed).length);
   const sortedCategories = $derived([...categories].sort((a, b) => a.sortOrder - b.sortOrder));
@@ -118,13 +129,74 @@
     <div class="main-column">
       <QuickCapture defaultCategoryId={filterCategoryId} locked={!!filterCategoryId} />
       <section class="task-list">
-        <div class="task-list-header">
-          <h2>Task List</h2>
-          <p>Drag cards is visual-only for now; file order is preserved from vault sources.</p>
-        </div>
         {#if sortedTasks.length === 0}
           <div class="empty-state">No tasks here yet.</div>
+        {:else if showCategoriesCard}
+          <!-- Dashboard: time-based sections -->
+          {#if thisWeekTasks.length > 0}
+            <section class="task-section">
+              <div class="task-section-head">
+                <h3>This Week</h3>
+                <small>{thisWeekTasks.length}</small>
+              </div>
+              <div class="cards">
+                {#each thisWeekTasks as task (task.id)}
+                  <TaskCard {task} onDragStart={(id) => (draggingTaskId = id)} onDropOn={(id) => onDropOn(id)} />
+                {/each}
+              </div>
+            </section>
+          {/if}
+          {#if thisMonthTasks.length > 0}
+            <section class="task-section">
+              <div class="task-section-head">
+                <h3>This Month</h3>
+                <small>{thisMonthTasks.length}</small>
+              </div>
+              <div class="cards">
+                {#each thisMonthTasks as task (task.id)}
+                  <TaskCard {task} onDragStart={(id) => (draggingTaskId = id)} onDropOn={(id) => onDropOn(id)} />
+                {/each}
+              </div>
+            </section>
+          {/if}
+          {#if olderTasks.length > 0}
+            <section class="task-section">
+              <div class="task-section-head">
+                <h3>All Tasks</h3>
+                <small>{olderTasks.length}</small>
+              </div>
+              <div class="cards">
+                {#each olderTasks as task (task.id)}
+                  <TaskCard {task} onDragStart={(id) => (draggingTaskId = id)} onDropOn={(id) => onDropOn(id)} />
+                {/each}
+              </div>
+            </section>
+          {/if}
+
+          <section class="task-section finished-block">
+            <button
+              type="button"
+              class="finished-toggle"
+              aria-expanded={finishedExpanded}
+              onclick={() => (finishedExpanded = !finishedExpanded)}
+            >
+              <span>Finished Tasks ({doneCount})</span>
+              <span class="chevron" class:expanded={finishedExpanded}>▾</span>
+            </button>
+            {#if finishedExpanded}
+              {#if doneCount === 0}
+                <div class="empty-state compact">No finished tasks.</div>
+              {:else}
+                <div class="cards">
+                  {#each finishedTasks as task (task.id)}
+                    <TaskCard {task} onDragStart={(id) => (draggingTaskId = id)} onDropOn={(id) => onDropOn(id)} />
+                  {/each}
+                </div>
+              {/if}
+            {/if}
+          </section>
         {:else}
+          <!-- Category/group view -->
           <section class="task-section">
             <div class="task-section-head">
               <h3>Tasks</h3>
