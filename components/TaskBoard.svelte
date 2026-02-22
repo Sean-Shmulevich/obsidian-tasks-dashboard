@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { Task } from '../types';
-  import { categories, visibleTasks } from '../state.svelte.ts';
+  import { categories, changeTaskSubTag, moveTask, visibleTasks } from '../state.svelte.ts';
   import QuickCapture from './QuickCapture.svelte';
   import TaskCard from './TaskCard.svelte';
 
@@ -72,7 +72,24 @@
     return [...groups.entries()].map(([subTag, tasks]) => ({ subTag, tasks }));
   }
 
-  function onDropOn(_targetTaskId: string) {
+  function onDropOn(targetTaskId: string, targetSubTag?: string) {
+    if (!draggingTaskId || draggingTaskId === targetTaskId) {
+      draggingTaskId = null;
+      return;
+    }
+
+    // If dropping into a different subtag section, change the tag in the vault
+    if (showSubtagSections && targetSubTag !== undefined) {
+      const draggedTask = sortedTasks.find(t => t.id === draggingTaskId);
+      const currentSubTag = draggedTask?.subTag ?? '';
+      if (currentSubTag !== targetSubTag) {
+        void changeTaskSubTag(draggingTaskId, targetSubTag || undefined);
+        draggingTaskId = null;
+        return;
+      }
+    }
+
+    moveTask(draggingTaskId, targetTaskId);
     draggingTaskId = null;
   }
 </script>
@@ -94,7 +111,7 @@
 
   <div class="board-grid" class:single-column={!showCategoriesCard}>
     <div class="main-column">
-      <QuickCapture defaultCategoryId={filterCategoryId} />
+      <QuickCapture defaultCategoryId={filterCategoryId} locked={!!filterCategoryId} />
       <section class="task-list">
         <div class="task-list-header">
           <h2>Task List</h2>
@@ -114,7 +131,7 @@
               {#if openUntaggedCategoryTasks.length}
                 <div class="cards">
                   {#each openUntaggedCategoryTasks as task (task.id)}
-                    <TaskCard {task} onDragStart={(id) => (draggingTaskId = id)} {onDropOn} />
+                    <TaskCard {task} onDragStart={(id) => (draggingTaskId = id)} onDropOn={(id) => onDropOn(id, '')} />
                   {/each}
                 </div>
               {/if}
@@ -123,7 +140,7 @@
                   <div class="subtag-header">{group.subTag}</div>
                   <div class="cards">
                     {#each group.tasks as task (task.id)}
-                      <TaskCard {task} onDragStart={(id) => (draggingTaskId = id)} {onDropOn} />
+                      <TaskCard {task} onDragStart={(id) => (draggingTaskId = id)} onDropOn={(id) => onDropOn(id, group.subTag)} />
                     {/each}
                   </div>
                 </section>
@@ -155,7 +172,7 @@
                 {#if finishedUntaggedCategoryTasks.length}
                   <div class="cards">
                     {#each finishedUntaggedCategoryTasks as task (task.id)}
-                      <TaskCard {task} onDragStart={(id) => (draggingTaskId = id)} {onDropOn} />
+                      <TaskCard {task} onDragStart={(id) => (draggingTaskId = id)} onDropOn={(id) => onDropOn(id, '')} />
                     {/each}
                   </div>
                 {/if}
@@ -164,7 +181,7 @@
                     <div class="subtag-header">{group.subTag}</div>
                     <div class="cards">
                       {#each group.tasks as task (task.id)}
-                        <TaskCard {task} onDragStart={(id) => (draggingTaskId = id)} {onDropOn} />
+                        <TaskCard {task} onDragStart={(id) => (draggingTaskId = id)} onDropOn={(id) => onDropOn(id, group.subTag)} />
                       {/each}
                     </div>
                   </section>

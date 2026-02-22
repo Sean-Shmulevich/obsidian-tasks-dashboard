@@ -103,19 +103,34 @@ export class VaultTodoWriter {
     });
   }
 
-  async addTask(input: { title: string; categoryId?: string; priority?: string }) {
+  async addTask(input: { title: string; categoryId?: string; priority?: string; subTag?: string }) {
     const title = input.title.trim();
     if (!title) return false;
 
     const file = await getFileOrCreate(this.app, this.settings.inboxFile);
     const content = await this.app.vault.cachedRead(file);
     const lines = splitLines(content);
-    const tag = buildTagForCategory(input.categoryId, this.getCategories(), this.settings.tagPrefix);
+    let tag = buildTagForCategory(input.categoryId, this.getCategories(), this.settings.tagPrefix);
+    if (input.subTag) tag = `${tag}/${input.subTag.replace(/\s+/g, '-').toLowerCase()}`;
     const priorityMarker = input.priority === 'high' ? ' 🔼' : input.priority === 'low' ? ' 🔽' : '';
     const line = `- [ ] ${tag} ${title}${priorityMarker}`.trim();
     lines.push(line);
     await this.app.vault.modify(file, joinLines(lines.filter((_, i) => !(lines.length === 1 && lines[0] === ''))));
     return true;
+  }
+
+  /** Change a task's subtag within its category. e.g., blog → ebook rewrites #todo/personal/social/blog → #todo/personal/social/ebook */
+  async changeSubTag(task: Task, newSubTag: string | undefined) {
+    return this.updateLine(task, (line) => {
+      const tagMatch = line.match(/#todo(?:\/[\w-]+)*/);
+      if (!tagMatch) return line;
+      const oldTag = tagMatch[0];
+      const parts = oldTag.replace(this.settings.tagPrefix, '').split('/').filter(Boolean);
+      // parts[0] = group, parts[1] = category, parts[2+] = subtag
+      const base = parts.length >= 2 ? `${this.settings.tagPrefix}/${parts[0]}/${parts[1]}` : oldTag;
+      const newTag = newSubTag ? `${base}/${newSubTag}` : base;
+      return line.replace(oldTag, newTag);
+    });
   }
 
   private async updateLine(task: Task, transform: (line: string) => string) {

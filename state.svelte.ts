@@ -256,11 +256,13 @@ function reconcileTasks(nextTasks: Task[]) {
     const key = `${task.sourceFile ?? ''}:${task.sourceLine ?? ''}:${task.title.toLowerCase()}`;
     const prev = prevByKey.get(key);
     const sourceKey = taskCategorySourceKey(task);
+    const sortKey = task.sourceFile && task.sourceLine != null ? `${task.sourceFile}:${task.sourceLine}` : undefined;
+    const customSort = sortKey && pluginRef ? pluginRef.customSortOrders[sortKey] : undefined;
     return {
       ...task,
       id: prev?.id ?? task.id ?? makeId(),
       categoryId: sourceKey ? categoryIdBySourceKey.get(sourceKey) : undefined,
-      sortOrder: idx
+      sortOrder: customSort ?? idx
     } satisfies Task;
   });
 
@@ -319,7 +321,7 @@ export function toggleGroupCollapsed(groupId: string) {
   group.collapsed = !group.collapsed;
 }
 
-export async function addTask(input: { title: string; categoryId?: string; priority?: Task['priority'] }) {
+export async function addTask(input: { title: string; categoryId?: string; priority?: Task['priority']; subTag?: string }) {
   if (!writerRef) return;
   await writerRef.addTask(input);
   await refreshVaultState();
@@ -354,8 +356,49 @@ export async function updateTask(taskId: string, patch: Partial<Task>) {
   await refreshVaultState();
 }
 
-export function moveTask(_taskId: string, _targetTaskId: string) {
-  // Ordering is source-file based in this plugin; drag UI is kept but does not persist ordering yet.
+/** Reorder: move draggedTaskId to the position of targetTaskId within the current visible list */
+export function moveTask(draggedTaskId: string, targetTaskId: string) {
+  if (draggedTaskId === targetTaskId || !pluginRef) return;
+
+  const visible = visibleTasksValue;
+  const dragIdx = visible.findIndex(t => t.id === draggedTaskId);
+  const targetIdx = visible.findIndex(t => t.id === targetTaskId);
+  if (dragIdx === -1 || targetIdx === -1) return;
+
+  // Build new sort order for all visible tasks
+  const reordered = [...visible];
+  const [moved] = reordered.splice(dragIdx, 1);
+  reordered.splice(targetIdx, 0, moved);
+
+  // Persist custom sort orders keyed by sourceFile:sourceLine
+  for (let i = 0; i < reordered.length; i++) {
+    const t = reordered[i];
+    const key = taskSortKey(t);
+    if (key) {
+      pluginRef.customSortOrders[key] = i;
+    }
+    // Also update the in-memory sortOrder for immediate reactivity
+    const real = tasks.find(rt => rt.id === t.id);
+    if (real) real.sortOrder = i;
+  }
+
+  void pluginRef.saveSortOrders();
+}
+
+function taskSortKey(task: Task): string | undefined {
+  if (task.sourceFile && task.sourceLine != null) {
+    return `${task.sourceFile}:${task.sourceLine}`;
+  }
+  return undefined;
+}
+
+/** Move a task to a different subtag within its category (rewrites the #todo tag in vault) */
+export async function changeTaskSubTag(taskId: string, newSubTag: string | undefined) {
+  if (!writerRef) return;
+  const task = tasks.find(t => t.id === taskId);
+  if (!task) return;
+  await writerRef.changeSubTag(task, newSubTag);
+  await refreshVaultState();
 }
 
 export async function openTaskInObsidian(taskId: string) {

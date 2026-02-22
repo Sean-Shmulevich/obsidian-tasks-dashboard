@@ -2,11 +2,12 @@
   import { addTask, categories } from '../state.svelte.ts';
   import type { Priority } from '../types';
 
-  let { defaultCategoryId }: { defaultCategoryId?: string } = $props();
+  let { defaultCategoryId, locked = false }: { defaultCategoryId?: string; locked?: boolean } = $props();
 
   let title = $state('');
   let priority = $state<Priority>('medium');
   let categoryId = $state<string>('');
+  let subTag = $state('');
   let submitting = $state(false);
 
   $effect(() => {
@@ -17,8 +18,9 @@
     if (!title.trim() || submitting) return;
     submitting = true;
     try {
-      await addTask({ title, priority, categoryId: categoryId || undefined });
+      await addTask({ title, priority, categoryId: categoryId || undefined, subTag: subTag.trim() || undefined });
       title = '';
+      subTag = '';
       priority = 'medium';
     } finally {
       submitting = false;
@@ -54,15 +56,23 @@
           <option value="high">High</option>
         </select>
       </label>
-      <label>
-        <span>Category</span>
-        <select bind:value={categoryId}>
-          <option value="">Uncategorized (uses #todo)</option>
-          {#each [...categories].sort((a, b) => a.sortOrder - b.sortOrder) as category}
-            <option value={category.id}>{category.emoji ? `${category.emoji} ` : ''}{category.name}</option>
-          {/each}
-        </select>
-      </label>
+      {#if locked}
+        <label>
+          <span>Subtag (optional)</span>
+          <input type="text" bind:value={subTag} placeholder="e.g. blog, ebook" maxlength="40"
+            onkeydown={(e) => e.stopPropagation()} />
+        </label>
+      {:else}
+        <label>
+          <span>Category</span>
+          <select bind:value={categoryId}>
+            <option value="">Uncategorized (uses #todo)</option>
+            {#each [...categories].sort((a, b) => a.sortOrder - b.sortOrder) as category}
+              <option value={category.id}>{category.emoji ? `${category.emoji} ` : ''}{category.name}</option>
+            {/each}
+          </select>
+        </label>
+      {/if}
       <button type="submit" disabled={submitting}>{submitting ? 'Adding…' : 'Add Task'}</button>
     </div>
   </form>

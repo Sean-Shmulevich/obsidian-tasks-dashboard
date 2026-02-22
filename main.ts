@@ -3,11 +3,20 @@ import { TodoView, VIEW_TYPE_TODO } from './TodoView';
 import { DEFAULT_SETTINGS, TodoSettingTab, type TodoSettings } from './settings';
 import { initializeTodoState, refreshVaultState } from './state.svelte.ts';
 
+// taskKey → sortOrder number. Keys are "sourceFile:sourceLine" to survive re-scans.
+export type SortOrderMap = Record<string, number>;
+
+export interface PluginData {
+  settings: TodoSettings;
+  customSortOrders: SortOrderMap;
+}
+
 export default class ADHDTodoPlugin extends Plugin {
   settings: TodoSettings = DEFAULT_SETTINGS;
+  customSortOrders: SortOrderMap = {};
 
   async onload() {
-    await this.loadSettings();
+    await this.loadPluginData();
 
     this.registerView(VIEW_TYPE_TODO, (leaf: WorkspaceLeaf) => new TodoView(leaf, this));
 
@@ -55,12 +64,22 @@ export default class ADHDTodoPlugin extends Plugin {
     workspace.revealLeaf(leaf);
   }
 
-  async loadSettings() {
-    this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+  async loadPluginData() {
+    const data = (await this.loadData()) as Partial<PluginData> | null;
+    this.settings = Object.assign({}, DEFAULT_SETTINGS, data?.settings ?? data ?? {});
+    this.customSortOrders = data?.customSortOrders ?? {};
+  }
+
+  async savePluginData() {
+    await this.saveData({ settings: this.settings, customSortOrders: this.customSortOrders } satisfies PluginData);
   }
 
   async saveSettings() {
-    await this.saveData(this.settings);
+    await this.savePluginData();
+  }
+
+  async saveSortOrders() {
+    await this.savePluginData();
   }
 
   async refreshTodoState() {

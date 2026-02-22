@@ -5952,12 +5952,25 @@ var VaultTodoWriter = class {
     const file = await getFileOrCreate(this.app, this.settings.inboxFile);
     const content = await this.app.vault.cachedRead(file);
     const lines = splitLines(content);
-    const tag2 = buildTagForCategory(input.categoryId, this.getCategories(), this.settings.tagPrefix);
+    let tag2 = buildTagForCategory(input.categoryId, this.getCategories(), this.settings.tagPrefix);
+    if (input.subTag) tag2 = `${tag2}/${input.subTag.replace(/\s+/g, "-").toLowerCase()}`;
     const priorityMarker = input.priority === "high" ? " \u{1F53C}" : input.priority === "low" ? " \u{1F53D}" : "";
     const line = `- [ ] ${tag2} ${title}${priorityMarker}`.trim();
     lines.push(line);
     await this.app.vault.modify(file, joinLines(lines.filter((_, i) => !(lines.length === 1 && lines[0] === ""))));
     return true;
+  }
+  /** Change a task's subtag within its category. e.g., blog → ebook rewrites #todo/personal/social/blog → #todo/personal/social/ebook */
+  async changeSubTag(task, newSubTag) {
+    return this.updateLine(task, (line) => {
+      const tagMatch = line.match(/#todo(?:\/[\w-]+)*/);
+      if (!tagMatch) return line;
+      const oldTag = tagMatch[0];
+      const parts = oldTag.replace(this.settings.tagPrefix, "").split("/").filter(Boolean);
+      const base = parts.length >= 2 ? `${this.settings.tagPrefix}/${parts[0]}/${parts[1]}` : oldTag;
+      const newTag = newSubTag ? `${base}/${newSubTag}` : base;
+      return line.replace(oldTag, newTag);
+    });
   }
   async updateLine(task, transform) {
     if (!task.sourceFile || !task.sourceLine) return false;
@@ -6191,11 +6204,13 @@ function reconcileTasks(nextTasks) {
     const key2 = `${task.sourceFile ?? ""}:${task.sourceLine ?? ""}:${task.title.toLowerCase()}`;
     const prev = prevByKey.get(key2);
     const sourceKey = taskCategorySourceKey(task);
+    const sortKey = task.sourceFile && task.sourceLine != null ? `${task.sourceFile}:${task.sourceLine}` : void 0;
+    const customSort = sortKey && pluginRef ? pluginRef.customSortOrders[sortKey] : void 0;
     return {
       ...task,
       id: prev?.id ?? task.id ?? makeId2(),
       categoryId: sourceKey ? categoryIdBySourceKey.get(sourceKey) : void 0,
-      sortOrder: idx
+      sortOrder: customSort ?? idx
     };
   });
   tasks.splice(0, tasks.length, ...merged);
@@ -6270,6 +6285,39 @@ async function updateTask(taskId, patch) {
   if (typeof patch.completed === "boolean" && patch.completed !== task.completed) {
     await writerRef.toggleComplete(task, patch.completed);
   }
+  await refreshVaultState();
+}
+function moveTask(draggedTaskId, targetTaskId) {
+  if (draggedTaskId === targetTaskId || !pluginRef) return;
+  const visible = get(visibleTasksValue);
+  const dragIdx = visible.findIndex((t) => t.id === draggedTaskId);
+  const targetIdx = visible.findIndex((t) => t.id === targetTaskId);
+  if (dragIdx === -1 || targetIdx === -1) return;
+  const reordered = [...visible];
+  const [moved] = reordered.splice(dragIdx, 1);
+  reordered.splice(targetIdx, 0, moved);
+  for (let i = 0; i < reordered.length; i++) {
+    const t = reordered[i];
+    const key2 = taskSortKey(t);
+    if (key2) {
+      pluginRef.customSortOrders[key2] = i;
+    }
+    const real = tasks.find((rt) => rt.id === t.id);
+    if (real) real.sortOrder = i;
+  }
+  void pluginRef.saveSortOrders();
+}
+function taskSortKey(task) {
+  if (task.sourceFile && task.sourceLine != null) {
+    return `${task.sourceFile}:${task.sourceLine}`;
+  }
+  return void 0;
+}
+async function changeTaskSubTag(taskId, newSubTag) {
+  if (!writerRef) return;
+  const task = tasks.find((t) => t.id === taskId);
+  if (!task) return;
+  await writerRef.changeSubTag(task, newSubTag);
   await refreshVaultState();
 }
 async function openTaskInObsidian(taskId) {
@@ -6423,8 +6471,10 @@ function Sidebar($$anchor, $$props) {
 delegate(["click"]);
 
 // components/QuickCapture.svelte
-var root_12 = from_html(`<option> </option>`);
-var root2 = from_html(`<section class="quick-capture svelte-149ph0u"><div class="header svelte-149ph0u"><h2 class="svelte-149ph0u">Quick Capture</h2> <p class="svelte-149ph0u">Fast task entry into your vault inbox file.</p></div> <form class="svelte-149ph0u"><input type="text" placeholder="What needs to happen next?" maxlength="140" class="svelte-149ph0u"/> <div class="row svelte-149ph0u"><label class="svelte-149ph0u"><span>Priority</span> <select class="svelte-149ph0u"><option>Low</option><option>Medium</option><option>High</option></select></label> <label class="svelte-149ph0u"><span>Category</span> <select class="svelte-149ph0u"><option>Uncategorized (uses #todo)</option><!></select></label> <button type="submit" class="svelte-149ph0u"> </button></div></form></section>`);
+var root_12 = from_html(`<label class="svelte-149ph0u"><span>Subtag (optional)</span> <input type="text" placeholder="e.g. blog, ebook" maxlength="40" class="svelte-149ph0u"/></label>`);
+var root_32 = from_html(`<option> </option>`);
+var root_22 = from_html(`<label class="svelte-149ph0u"><span>Category</span> <select class="svelte-149ph0u"><option>Uncategorized (uses #todo)</option><!></select></label>`);
+var root2 = from_html(`<section class="quick-capture svelte-149ph0u"><div class="header svelte-149ph0u"><h2 class="svelte-149ph0u">Quick Capture</h2> <p class="svelte-149ph0u">Fast task entry into your vault inbox file.</p></div> <form class="svelte-149ph0u"><input type="text" placeholder="What needs to happen next?" maxlength="140" class="svelte-149ph0u"/> <div class="row svelte-149ph0u"><label class="svelte-149ph0u"><span>Priority</span> <select class="svelte-149ph0u"><option>Low</option><option>Medium</option><option>High</option></select></label> <!> <button type="submit" class="svelte-149ph0u"> </button></div></form></section>`);
 var $$css2 = {
   hash: "svelte-149ph0u",
   code: ".quick-capture.svelte-149ph0u {display:grid;gap:0.75rem;padding:1rem;border-radius:1rem;border:1px solid var(--border-color);background:var(--surface-1);}.header.svelte-149ph0u h2:where(.svelte-149ph0u) {margin:0;font-size:1.05rem;}.header.svelte-149ph0u p:where(.svelte-149ph0u) {margin:0.2rem 0 0;font-size:0.85rem;color:var(--text-muted);}form.svelte-149ph0u {display:grid;gap:0.75rem;}input[type='text'].svelte-149ph0u {width:100%;background:var(--surface-2);border:1px solid var(--border-color);border-radius:0.7rem;padding:0.7rem 0.85rem;color:inherit;min-width:0;}.row.svelte-149ph0u {display:flex;flex-wrap:wrap;gap:0.75rem;align-items:end;}label.svelte-149ph0u {display:grid;gap:0.25rem;font-size:0.8rem;}select.svelte-149ph0u,\n  button.svelte-149ph0u {background:var(--surface-2);border:1px solid var(--border-color);color:inherit;border-radius:0.6rem;padding:0.5rem 0.65rem;max-width:100%;}button[type='submit'].svelte-149ph0u {background:var(--accent);border-color:var(--accent);color:white;font-weight:700;}\n\n  @media (max-width: 500px) {.row.svelte-149ph0u > :where(.svelte-149ph0u) {flex:1 1 100%;}\n  }\n\n  @media (max-width: 400px) {.quick-capture.svelte-149ph0u {padding:0.8rem;gap:0.6rem;}form.svelte-149ph0u {gap:0.6rem;}input[type='text'].svelte-149ph0u {padding:0.6rem 0.7rem;}select.svelte-149ph0u,\n    button.svelte-149ph0u {padding:0.45rem 0.55rem;}\n  }"
@@ -6432,9 +6482,11 @@ var $$css2 = {
 function QuickCapture($$anchor, $$props) {
   push($$props, true);
   append_styles($$anchor, $$css2);
+  let locked = prop($$props, "locked", 3, false);
   let title = state("");
   let priority = state("medium");
   let categoryId = state("");
+  let subTag = state("");
   let submitting = state(false);
   user_effect(() => {
     set(categoryId, $$props.defaultCategoryId ?? "", true);
@@ -6446,9 +6498,11 @@ function QuickCapture($$anchor, $$props) {
       await addTask({
         title: get(title),
         priority: get(priority),
-        categoryId: get(categoryId) || void 0
+        categoryId: get(categoryId) || void 0,
+        subTag: get(subTag).trim() || void 0
       });
       set(title, "");
+      set(subTag, "");
       set(priority, "medium");
     } finally {
       set(submitting, false);
@@ -6469,27 +6523,47 @@ function QuickCapture($$anchor, $$props) {
   option_2.value = option_2.__value = "high";
   reset(select);
   reset(label);
-  var label_1 = sibling(label, 2);
-  var select_1 = sibling(child(label_1), 2);
-  var option_3 = child(select_1);
-  option_3.value = option_3.__value = "";
-  var node = sibling(option_3);
-  each(node, 17, () => [...categories].sort((a, b) => a.sortOrder - b.sortOrder), index, ($$anchor2, category) => {
-    var option_4 = root_12();
-    var text2 = child(option_4);
-    reset(option_4);
-    var option_4_value = {};
-    template_effect(() => {
-      set_text(text2, `${get(category).emoji ? `${get(category).emoji} ` : ""}${get(category).name ?? ""}`);
-      if (option_4_value !== (option_4_value = get(category).id)) {
-        option_4.value = (option_4.__value = get(category).id) ?? "";
-      }
+  var node = sibling(label, 2);
+  {
+    var consequent = ($$anchor2) => {
+      var label_1 = root_12();
+      var input_1 = sibling(child(label_1), 2);
+      remove_input_defaults(input_1);
+      reset(label_1);
+      delegated("keydown", input_1, (e) => e.stopPropagation());
+      bind_value(input_1, () => get(subTag), ($$value) => set(subTag, $$value));
+      append($$anchor2, label_1);
+    };
+    var alternate = ($$anchor2) => {
+      var label_2 = root_22();
+      var select_1 = sibling(child(label_2), 2);
+      var option_3 = child(select_1);
+      option_3.value = option_3.__value = "";
+      var node_1 = sibling(option_3);
+      each(node_1, 17, () => [...categories].sort((a, b) => a.sortOrder - b.sortOrder), index, ($$anchor3, category) => {
+        var option_4 = root_32();
+        var text2 = child(option_4);
+        reset(option_4);
+        var option_4_value = {};
+        template_effect(() => {
+          set_text(text2, `${get(category).emoji ? `${get(category).emoji} ` : ""}${get(category).name ?? ""}`);
+          if (option_4_value !== (option_4_value = get(category).id)) {
+            option_4.value = (option_4.__value = get(category).id) ?? "";
+          }
+        });
+        append($$anchor3, option_4);
+      });
+      reset(select_1);
+      reset(label_2);
+      bind_select_value(select_1, () => get(categoryId), ($$value) => set(categoryId, $$value));
+      append($$anchor2, label_2);
+    };
+    if_block(node, ($$render) => {
+      if (locked()) $$render(consequent);
+      else $$render(alternate, false);
     });
-    append($$anchor2, option_4);
-  });
-  reset(select_1);
-  reset(label_1);
-  var button = sibling(label_1, 2);
+  }
+  var button = sibling(node, 2);
   var text_1 = child(button, true);
   reset(button);
   reset(div);
@@ -6507,7 +6581,6 @@ function QuickCapture($$anchor, $$props) {
   event("focus", input, (e) => e.stopPropagation());
   bind_value(input, () => get(title), ($$value) => set(title, $$value));
   bind_select_value(select, () => get(priority), ($$value) => set(priority, $$value));
-  bind_select_value(select_1, () => get(categoryId), ($$value) => set(categoryId, $$value));
   append($$anchor, section);
   pop();
 }
@@ -6515,8 +6588,8 @@ delegate(["keydown"]);
 
 // components/TaskCard.svelte
 var root_13 = from_html(`<button type="button" class="ghost icon-btn svelte-1j8piq" title="Open in Obsidian">\u2197</button> <button type="button" class="ghost icon-btn svelte-1j8piq" title="Edit">\u270E</button> <button type="button" class="danger icon-btn svelte-1j8piq" title="Delete">\u{1F5D1}</button>`, 1);
-var root_32 = from_html(`<option> </option>`);
-var root_22 = from_html(`<div class="editor svelte-1j8piq"><input type="text" maxlength="140" class="svelte-1j8piq"/> <div class="grid2 svelte-1j8piq"><select class="svelte-1j8piq"><option>Low</option><option>Medium</option><option>High</option></select> <select disabled="" class="svelte-1j8piq"><option>Vault category (read from tags)</option><!></select></div> <div class="actions svelte-1j8piq"><button type="button" class="svelte-1j8piq">Save</button> <button type="button" class="ghost svelte-1j8piq">Cancel</button></div></div>`);
+var root_33 = from_html(`<option> </option>`);
+var root_23 = from_html(`<div class="editor svelte-1j8piq"><input type="text" maxlength="140" class="svelte-1j8piq"/> <div class="grid2 svelte-1j8piq"><select class="svelte-1j8piq"><option>Low</option><option>Medium</option><option>High</option></select> <select disabled="" class="svelte-1j8piq"><option>Vault category (read from tags)</option><!></select></div> <div class="actions svelte-1j8piq"><button type="button" class="svelte-1j8piq">Save</button> <button type="button" class="ghost svelte-1j8piq">Cancel</button></div></div>`);
 var root3 = from_html(`<article draggable="true"><div class="row top-row svelte-1j8piq"><label class="checkbox-row svelte-1j8piq"><input type="checkbox" class="svelte-1j8piq"/> <span class="title svelte-1j8piq"> </span></label> <div class="right-controls svelte-1j8piq"><span> </span> <!></div></div> <!></article>`);
 var $$css3 = {
   hash: "svelte-1j8piq",
@@ -6577,7 +6650,7 @@ function TaskCard($$anchor, $$props) {
   var node_1 = sibling(div, 2);
   {
     var consequent_1 = ($$anchor2) => {
-      var div_2 = root_22();
+      var div_2 = root_23();
       var input_1 = child(div_2);
       remove_input_defaults(input_1);
       var div_3 = sibling(input_1, 2);
@@ -6594,7 +6667,7 @@ function TaskCard($$anchor, $$props) {
       option_3.value = option_3.__value = "";
       var node_2 = sibling(option_3);
       each(node_2, 17, () => [...categories].sort((a, b) => a.sortOrder - b.sortOrder), index, ($$anchor3, category) => {
-        var option_4 = root_32();
+        var option_4 = root_33();
         var text_2 = child(option_4);
         reset(option_4);
         var option_4_value = {};
@@ -6644,7 +6717,7 @@ delegate(["change", "click", "keydown"]);
 
 // components/TaskBoard.svelte
 var root_14 = from_html(`<div class="empty-state svelte-q5ccww">No tasks here yet.</div>`);
-var root_33 = from_html(`<div class="empty-state compact svelte-q5ccww">No incomplete tasks.</div>`);
+var root_34 = from_html(`<div class="empty-state compact svelte-q5ccww">No incomplete tasks.</div>`);
 var root_52 = from_html(`<div class="cards svelte-q5ccww"></div>`);
 var root_7 = from_html(`<section class="subtag-group svelte-q5ccww"><div class="subtag-header svelte-q5ccww"> </div> <div class="cards svelte-q5ccww"></div></section>`);
 var root_42 = from_html(`<!> <!>`, 1);
@@ -6654,7 +6727,7 @@ var root_142 = from_html(`<div class="cards svelte-q5ccww"></div>`);
 var root_16 = from_html(`<section class="subtag-group svelte-q5ccww"><div class="subtag-header svelte-q5ccww"> </div> <div class="cards svelte-q5ccww"></div></section>`);
 var root_132 = from_html(`<!> <!>`, 1);
 var root_18 = from_html(`<div class="cards svelte-q5ccww"></div>`);
-var root_23 = from_html(`<section class="task-section svelte-q5ccww"><div class="task-section-head svelte-q5ccww"><h3 class="svelte-q5ccww">Tasks</h3> <small class="svelte-q5ccww"> </small></div> <!></section> <section class="task-section finished-block svelte-q5ccww"><button type="button" class="finished-toggle svelte-q5ccww"><span> </span> <span>\u25BE</span></button> <!></section>`, 1);
+var root_24 = from_html(`<section class="task-section svelte-q5ccww"><div class="task-section-head svelte-q5ccww"><h3 class="svelte-q5ccww">Tasks</h3> <small class="svelte-q5ccww"> </small></div> <!></section> <section class="task-section finished-block svelte-q5ccww"><button type="button" class="finished-toggle svelte-q5ccww"><span> </span> <span>\u25BE</span></button> <!></section>`, 1);
 var root_21 = from_html(`<li><button type="button" class="svelte-q5ccww"> </button></li>`);
 var root_20 = from_html(`<aside class="side-column svelte-q5ccww"><section class="panel svelte-q5ccww"><h3 class="svelte-q5ccww">Categories</h3> <ul class="category-links svelte-q5ccww"><!> <li><button type="button" class="svelte-q5ccww">Uncategorized / group-level</button></li></ul></section></aside>`);
 var root4 = from_html(`<section class="task-board svelte-q5ccww"><header class="page-header svelte-q5ccww"><h1 class="svelte-q5ccww"> </h1> <div class="stats-grid svelte-q5ccww"><div class="svelte-q5ccww"><span class="svelte-q5ccww"> </span><small class="svelte-q5ccww">Open</small></div> <div class="svelte-q5ccww"><span class="svelte-q5ccww"> </span><small class="svelte-q5ccww">Done</small></div></div> <div class="header-actions svelte-q5ccww"><button type="button">Board</button> <button type="button" class="svelte-q5ccww"> </button></div></header> <div><div class="main-column svelte-q5ccww"><!> <section class="task-list svelte-q5ccww"><div class="task-list-header svelte-q5ccww"><h2 class="svelte-q5ccww">Task List</h2> <p class="svelte-q5ccww">Drag cards is visual-only for now; file order is preserved from vault sources.</p></div> <!></section></div> <!></div></section>`);
@@ -6700,7 +6773,21 @@ function TaskBoard($$anchor, $$props) {
     }
     return [...groups.entries()].map(([subTag, tasks2]) => ({ subTag, tasks: tasks2 }));
   }
-  function onDropOn(_targetTaskId) {
+  function onDropOn(targetTaskId, targetSubTag) {
+    if (!get(draggingTaskId) || get(draggingTaskId) === targetTaskId) {
+      set(draggingTaskId, null);
+      return;
+    }
+    if (get(showSubtagSections) && targetSubTag !== void 0) {
+      const draggedTask = get(sortedTasks).find((t) => t.id === get(draggingTaskId));
+      const currentSubTag = draggedTask?.subTag ?? "";
+      if (currentSubTag !== targetSubTag) {
+        void changeTaskSubTag(get(draggingTaskId), targetSubTag || void 0);
+        set(draggingTaskId, null);
+        return;
+      }
+    }
+    moveTask(get(draggingTaskId), targetTaskId);
     set(draggingTaskId, null);
   }
   var section = root4();
@@ -6734,11 +6821,17 @@ function TaskBoard($$anchor, $$props) {
   let classes_1;
   var div_5 = child(div_4);
   var node = child(div_5);
-  QuickCapture(node, {
-    get defaultCategoryId() {
-      return $$props.filterCategoryId;
-    }
-  });
+  {
+    let $0 = user_derived(() => !!$$props.filterCategoryId);
+    QuickCapture(node, {
+      get defaultCategoryId() {
+        return $$props.filterCategoryId;
+      },
+      get locked() {
+        return get($0);
+      }
+    });
+  }
   var section_1 = sibling(node, 2);
   var node_1 = sibling(child(section_1), 2);
   {
@@ -6747,7 +6840,7 @@ function TaskBoard($$anchor, $$props) {
       append($$anchor2, div_6);
     };
     var alternate_2 = ($$anchor2) => {
-      var fragment = root_23();
+      var fragment = root_24();
       var section_2 = first_child(fragment);
       var div_7 = child(section_2);
       var small = sibling(child(div_7), 2);
@@ -6757,7 +6850,7 @@ function TaskBoard($$anchor, $$props) {
       var node_2 = sibling(div_7, 2);
       {
         var consequent_1 = ($$anchor3) => {
-          var div_8 = root_33();
+          var div_8 = root_34();
           append($$anchor3, div_8);
         };
         var consequent_3 = ($$anchor3) => {
@@ -6772,7 +6865,7 @@ function TaskBoard($$anchor, $$props) {
                     return get(task);
                   },
                   onDragStart: (id) => set(draggingTaskId, id, true),
-                  onDropOn
+                  onDropOn: (id) => onDropOn(id, "")
                 });
               });
               reset(div_9);
@@ -6795,7 +6888,7 @@ function TaskBoard($$anchor, $$props) {
                   return get(task);
                 },
                 onDragStart: (id) => set(draggingTaskId, id, true),
-                onDropOn
+                onDropOn: (id) => onDropOn(id, get(group).subTag)
               });
             });
             reset(div_11);
@@ -6856,7 +6949,7 @@ function TaskBoard($$anchor, $$props) {
                         return get(task);
                       },
                       onDragStart: (id) => set(draggingTaskId, id, true),
-                      onDropOn
+                      onDropOn: (id) => onDropOn(id, "")
                     });
                   });
                   reset(div_14);
@@ -6879,7 +6972,7 @@ function TaskBoard($$anchor, $$props) {
                       return get(task);
                     },
                     onDragStart: (id) => set(draggingTaskId, id, true),
-                    onDropOn
+                    onDropOn: (id) => onDropOn(id, get(group).subTag)
                   });
                 });
                 reset(div_16);
@@ -6982,7 +7075,7 @@ delegate(["click"]);
 
 // components/App.svelte
 var root_15 = from_html(`<button type="button" class="adhd-todo-sidebar-backdrop" aria-label="Close sidebar"></button>`);
-var root_24 = from_html(`<div class="error-banner"> </div>`);
+var root_25 = from_html(`<div class="error-banner"> </div>`);
 var root5 = from_html(`<div><aside class="adhd-todo-sidebar-pane" id="adhd-todo-sidebar"><!></aside> <!> <main class="adhd-todo-main"><button type="button" class="adhd-todo-sidebar-toggle" aria-controls="adhd-todo-sidebar">\u2630 Menu</button> <!> <!></main></div>`);
 function App($$anchor, $$props) {
   push($$props, true);
@@ -7047,7 +7140,7 @@ function App($$anchor, $$props) {
   var node_2 = sibling(button_1, 2);
   {
     var consequent_1 = ($$anchor2) => {
-      var div_1 = root_24();
+      var div_1 = root_25();
       var text2 = child(div_1);
       reset(div_1);
       template_effect(() => set_text(text2, `Scan failed: ${ui.errorMessage ?? ""}`));
@@ -7183,8 +7276,9 @@ var TodoSettingTab = class extends import_obsidian4.PluginSettingTab {
 // main.ts
 var ADHDTodoPlugin = class extends import_obsidian5.Plugin {
   settings = DEFAULT_SETTINGS;
+  customSortOrders = {};
   async onload() {
-    await this.loadSettings();
+    await this.loadPluginData();
     this.registerView(VIEW_TYPE_TODO, (leaf) => new TodoView(leaf, this));
     this.addRibbonIcon("check-square", "ADHD Todo", () => {
       void this.activateView();
@@ -7221,11 +7315,19 @@ var ADHDTodoPlugin = class extends import_obsidian5.Plugin {
     }
     workspace.revealLeaf(leaf);
   }
-  async loadSettings() {
-    this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+  async loadPluginData() {
+    const data = await this.loadData();
+    this.settings = Object.assign({}, DEFAULT_SETTINGS, data?.settings ?? data ?? {});
+    this.customSortOrders = data?.customSortOrders ?? {};
+  }
+  async savePluginData() {
+    await this.saveData({ settings: this.settings, customSortOrders: this.customSortOrders });
   }
   async saveSettings() {
-    await this.saveData(this.settings);
+    await this.savePluginData();
+  }
+  async saveSortOrders() {
+    await this.savePluginData();
   }
   async refreshTodoState() {
     await refreshVaultState();
