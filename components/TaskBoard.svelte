@@ -94,31 +94,6 @@
 
   <div class="board-grid" class:single-column={!showCategoriesCard}>
     <div class="main-column">
-      {#if showCategoriesCard}
-        <section class="uncategorized-panel">
-          <div class="section-head">
-            <h2>Uncategorized</h2>
-            <button type="button" class="ghost" onclick={() => onSelectUncategorized?.()}>
-              View only
-            </button>
-          </div>
-          {#if dashboardUncategorizedTasks.length === 0}
-            <div class="empty-state compact">No uncategorized tasks.</div>
-          {:else}
-            <button type="button" class="uncategorized-list" onclick={() => onSelectUncategorized?.()}>
-              <span class="uncategorized-count">{dashboardUncategorizedTasks.length} tasks</span>
-              <ul>
-                {#each dashboardUncategorizedTasks.slice(0, 5) as task (task.id)}
-                  <li>{task.title}</li>
-                {/each}
-              </ul>
-              {#if dashboardUncategorizedTasks.length > 5}
-                <small>+{dashboardUncategorizedTasks.length - 5} more</small>
-              {/if}
-            </button>
-          {/if}
-        </section>
-      {/if}
       <QuickCapture defaultCategoryId={filterCategoryId} />
       <section class="task-list">
         <div class="task-list-header">
