@@ -49,14 +49,14 @@
       <input type="checkbox" checked={task.completed} onchange={() => toggleTaskComplete(task.id)} />
       <span class="title">{task.title}</span>
     </label>
-    <div class="badges">
+    <div class="right-controls">
       <span class="badge {task.priority}">{task.priority}</span>
+      {#if !editing}
+        <button type="button" class="ghost icon-btn" title="Open in Obsidian" onclick={() => openTaskInObsidian(task.id)}>↗</button>
+        <button type="button" class="ghost icon-btn" title="Edit" onclick={() => (editing = true)}>✎</button>
+        <button type="button" class="danger icon-btn" title="Delete" onclick={() => deleteTask(task.id)}>🗑</button>
+      {/if}
     </div>
-  </div>
-
-  <div class="meta">
-    <span>{categoryLabel(task.categoryId)}</span>
-    {#if task.sourceFile}<span>{task.sourceFile}:{task.sourceLine}</span>{/if}
   </div>
 
   {#if editing}
@@ -79,37 +79,6 @@
         <button type="button" onclick={save}>Save</button>
         <button type="button" class="ghost" onclick={() => (editing = false)}>Cancel</button>
       </div>
-      <p class="note">Only title and completion state are written back to vault in Phase 1 migration.</p>
-    </div>
-  {:else}
-    <div class="actions">
-      <button
-        type="button"
-        class="ghost icon-btn"
-        title="Open in Obsidian"
-        aria-label="Open in Obsidian"
-        onclick={() => openTaskInObsidian(task.id)}
-      >
-        ↗
-      </button>
-      <button
-        type="button"
-        class="ghost icon-btn"
-        title="Edit task"
-        aria-label="Edit task"
-        onclick={() => (editing = true)}
-      >
-        ✎
-      </button>
-      <button
-        type="button"
-        class="danger icon-btn"
-        title="Delete task"
-        aria-label="Delete task"
-        onclick={() => deleteTask(task.id)}
-      >
-        🗑
-      </button>
     </div>
   {/if}
 </article>
@@ -117,8 +86,8 @@
 <style>
   .task-card {
     display: grid;
-    gap: 0.4rem;
-    padding: 0.5rem;
+    gap: 0.25rem;
+    padding: 0.4rem 0.5rem;
     border-radius: 0.75rem;
     border: 1px solid var(--border-color);
     background: var(--surface-1);
@@ -165,7 +134,7 @@
     text-decoration: line-through;
   }
 
-  .badges {
+  .right-controls {
     display: flex;
     flex: 0 0 auto;
     gap: 0.25rem;
@@ -187,21 +156,6 @@
   .badge.medium { background: color-mix(in srgb, #f4d03f 18%, var(--surface-2)); }
   .badge.high,
   .badge.urgent { background: color-mix(in srgb, #ff6b6b 16%, var(--surface-2)); }
-  .meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.3rem 0.6rem;
-    font-size: 0.72rem;
-    color: var(--text-muted);
-  }
-
-  .meta > span {
-    max-width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
   .editor {
     display: grid;
     gap: 0.5rem;
@@ -228,13 +182,6 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .actions {
-    display: flex;
-    gap: 0.35rem;
-    justify-content: flex-end;
-    flex-wrap: wrap;
-  }
-
   .icon-btn {
     display: grid;
     place-items: center;
@@ -250,7 +197,7 @@
     background: transparent;
   }
 
-  .actions .danger {
+  .danger {
     border-color: color-mix(in srgb, #ff6b6b 55%, var(--border-color));
   }
 

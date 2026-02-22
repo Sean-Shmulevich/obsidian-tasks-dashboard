@@ -6236,9 +6236,6 @@ function getCategory(categoryId) {
   if (!categoryId) return void 0;
   return categories.find((category) => category.id === categoryId);
 }
-function categoryLabel(categoryId) {
-  return getCategory(categoryId)?.name ?? "Uncategorized";
-}
 function toggleGroupCollapsed(groupId) {
   const group = categoryGroups.find((g) => g.id === groupId);
   if (!group) return;
@@ -6514,14 +6511,13 @@ function QuickCapture($$anchor, $$props) {
 }
 
 // components/TaskCard.svelte
-var root_13 = from_html(`<span class="svelte-1j8piq"> </span>`);
+var root_13 = from_html(`<button type="button" class="ghost icon-btn svelte-1j8piq" title="Open in Obsidian">\u2197</button> <button type="button" class="ghost icon-btn svelte-1j8piq" title="Edit">\u270E</button> <button type="button" class="danger icon-btn svelte-1j8piq" title="Delete">\u{1F5D1}</button>`, 1);
 var root_32 = from_html(`<option> </option>`);
-var root_22 = from_html(`<div class="editor svelte-1j8piq"><input type="text" maxlength="140" class="svelte-1j8piq"/> <div class="grid2 svelte-1j8piq"><select class="svelte-1j8piq"><option>Low</option><option>Medium</option><option>High</option></select> <select disabled="" class="svelte-1j8piq"><option>Vault category (read from tags)</option><!></select></div> <div class="actions svelte-1j8piq"><button type="button" class="svelte-1j8piq">Save</button> <button type="button" class="ghost svelte-1j8piq">Cancel</button></div> <p class="note svelte-1j8piq">Only title and completion state are written back to vault in Phase 1 migration.</p></div>`);
-var root_42 = from_html(`<div class="actions svelte-1j8piq"><button type="button" class="ghost icon-btn svelte-1j8piq" title="Open in Obsidian" aria-label="Open in Obsidian">\u2197</button> <button type="button" class="ghost icon-btn svelte-1j8piq" title="Edit task" aria-label="Edit task">\u270E</button> <button type="button" class="danger icon-btn svelte-1j8piq" title="Delete task" aria-label="Delete task">\u{1F5D1}</button></div>`);
-var root3 = from_html(`<article draggable="true"><div class="row top-row svelte-1j8piq"><label class="checkbox-row svelte-1j8piq"><input type="checkbox" class="svelte-1j8piq"/> <span class="title svelte-1j8piq"> </span></label> <div class="badges svelte-1j8piq"><span> </span></div></div> <div class="meta svelte-1j8piq"><span class="svelte-1j8piq"> </span> <!></div> <!></article>`);
+var root_22 = from_html(`<div class="editor svelte-1j8piq"><input type="text" maxlength="140" class="svelte-1j8piq"/> <div class="grid2 svelte-1j8piq"><select class="svelte-1j8piq"><option>Low</option><option>Medium</option><option>High</option></select> <select disabled="" class="svelte-1j8piq"><option>Vault category (read from tags)</option><!></select></div> <div class="actions svelte-1j8piq"><button type="button" class="svelte-1j8piq">Save</button> <button type="button" class="ghost svelte-1j8piq">Cancel</button></div></div>`);
+var root3 = from_html(`<article draggable="true"><div class="row top-row svelte-1j8piq"><label class="checkbox-row svelte-1j8piq"><input type="checkbox" class="svelte-1j8piq"/> <span class="title svelte-1j8piq"> </span></label> <div class="right-controls svelte-1j8piq"><span> </span> <!></div></div> <!></article>`);
 var $$css3 = {
   hash: "svelte-1j8piq",
-  code: ".task-card.svelte-1j8piq {display:grid;gap:0.4rem;padding:0.5rem;border-radius:0.75rem;border:1px solid var(--border-color);background:var(--surface-1);}.task-card.done.svelte-1j8piq {opacity:0.72;}.top-row.svelte-1j8piq {display:flex;justify-content:space-between;gap:0.35rem;align-items:flex-start;min-width:0;}.checkbox-row.svelte-1j8piq {display:flex;flex:1 1 auto;gap:0.45rem;align-items:flex-start;font-weight:600;min-width:0;}.checkbox-row.svelte-1j8piq .title:where(.svelte-1j8piq) {display:block;min-width:0;line-height:1.2;font-size:0.9rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}.checkbox-row.svelte-1j8piq input[type='checkbox']:where(.svelte-1j8piq) {margin-top:0.1rem;inline-size:0.95rem;block-size:0.95rem;}.done.svelte-1j8piq .title:where(.svelte-1j8piq) {text-decoration:line-through;}.badges.svelte-1j8piq {display:flex;flex:0 0 auto;gap:0.25rem;align-items:center;}.badge.svelte-1j8piq {padding:0.1rem 0.35rem;border-radius:999px;font-size:0.62rem;font-weight:600;text-transform:uppercase;border:1px solid var(--border-color);background:var(--surface-2);opacity:0.9;}.badge.low.svelte-1j8piq {background:color-mix(in srgb, #58d68d 16%, var(--surface-2));}.badge.medium.svelte-1j8piq {background:color-mix(in srgb, #f4d03f 18%, var(--surface-2));}.badge.high.svelte-1j8piq,\n  .badge.urgent.svelte-1j8piq {background:color-mix(in srgb, #ff6b6b 16%, var(--surface-2));}.meta.svelte-1j8piq {display:flex;flex-wrap:wrap;gap:0.3rem 0.6rem;font-size:0.72rem;color:var(--text-muted);}.meta.svelte-1j8piq > span:where(.svelte-1j8piq) {max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}.editor.svelte-1j8piq {display:grid;gap:0.5rem;padding-top:0.1rem;}.editor.svelte-1j8piq input:where(.svelte-1j8piq),\n  .editor.svelte-1j8piq select:where(.svelte-1j8piq),\n  .actions.svelte-1j8piq button:where(.svelte-1j8piq) {background:var(--surface-2);border:1px solid var(--border-color);color:inherit;border-radius:0.55rem;padding:0.45rem 0.6rem;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}.grid2.svelte-1j8piq {display:grid;gap:0.5rem;grid-template-columns:repeat(2, minmax(0, 1fr));}.actions.svelte-1j8piq {display:flex;gap:0.35rem;justify-content:flex-end;flex-wrap:wrap;}.icon-btn.svelte-1j8piq {display:grid;place-items:center;min-width:1.8rem;min-height:1.8rem;padding:0.2rem;line-height:1;font-size:0.8rem;border-radius:0.45rem;}.actions.svelte-1j8piq .ghost:where(.svelte-1j8piq) {background:transparent;}.actions.svelte-1j8piq .danger:where(.svelte-1j8piq) {border-color:color-mix(in srgb, #ff6b6b 55%, var(--border-color));}.note.svelte-1j8piq {margin:0;color:var(--text-muted);font-size:0.75rem;}\n\n  @media (max-width: 600px) {.grid2.svelte-1j8piq {grid-template-columns:1fr;}\n  }\n\n  @media (max-width: 500px) {.actions.svelte-1j8piq {justify-content:flex-start;}\n  }\n\n  @media (max-width: 400px) {.top-row.svelte-1j8piq {flex-wrap:wrap;}.badges.svelte-1j8piq {width:100%;justify-content:flex-start;}.icon-btn.svelte-1j8piq {min-width:1.65rem;min-height:1.65rem;}\n  }"
+  code: ".task-card.svelte-1j8piq {display:grid;gap:0.25rem;padding:0.4rem 0.5rem;border-radius:0.75rem;border:1px solid var(--border-color);background:var(--surface-1);}.task-card.done.svelte-1j8piq {opacity:0.72;}.top-row.svelte-1j8piq {display:flex;justify-content:space-between;gap:0.35rem;align-items:flex-start;min-width:0;}.checkbox-row.svelte-1j8piq {display:flex;flex:1 1 auto;gap:0.45rem;align-items:flex-start;font-weight:600;min-width:0;}.checkbox-row.svelte-1j8piq .title:where(.svelte-1j8piq) {display:block;min-width:0;line-height:1.2;font-size:0.9rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}.checkbox-row.svelte-1j8piq input[type='checkbox']:where(.svelte-1j8piq) {margin-top:0.1rem;inline-size:0.95rem;block-size:0.95rem;}.done.svelte-1j8piq .title:where(.svelte-1j8piq) {text-decoration:line-through;}.right-controls.svelte-1j8piq {display:flex;flex:0 0 auto;gap:0.25rem;align-items:center;}.badge.svelte-1j8piq {padding:0.1rem 0.35rem;border-radius:999px;font-size:0.62rem;font-weight:600;text-transform:uppercase;border:1px solid var(--border-color);background:var(--surface-2);opacity:0.9;}.badge.low.svelte-1j8piq {background:color-mix(in srgb, #58d68d 16%, var(--surface-2));}.badge.medium.svelte-1j8piq {background:color-mix(in srgb, #f4d03f 18%, var(--surface-2));}.badge.high.svelte-1j8piq,\n  .badge.urgent.svelte-1j8piq {background:color-mix(in srgb, #ff6b6b 16%, var(--surface-2));}.editor.svelte-1j8piq {display:grid;gap:0.5rem;padding-top:0.1rem;}.editor.svelte-1j8piq input:where(.svelte-1j8piq),\n  .editor.svelte-1j8piq select:where(.svelte-1j8piq),\n  .actions.svelte-1j8piq button:where(.svelte-1j8piq) {background:var(--surface-2);border:1px solid var(--border-color);color:inherit;border-radius:0.55rem;padding:0.45rem 0.6rem;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}.grid2.svelte-1j8piq {display:grid;gap:0.5rem;grid-template-columns:repeat(2, minmax(0, 1fr));}.icon-btn.svelte-1j8piq {display:grid;place-items:center;min-width:1.8rem;min-height:1.8rem;padding:0.2rem;line-height:1;font-size:0.8rem;border-radius:0.45rem;}.actions.svelte-1j8piq .ghost:where(.svelte-1j8piq) {background:transparent;}.danger.svelte-1j8piq {border-color:color-mix(in srgb, #ff6b6b 55%, var(--border-color));}.note.svelte-1j8piq {margin:0;color:var(--text-muted);font-size:0.75rem;}\n\n  @media (max-width: 600px) {.grid2.svelte-1j8piq {grid-template-columns:1fr;}\n  }\n\n  @media (max-width: 500px) {.actions.svelte-1j8piq {justify-content:flex-start;}\n  }\n\n  @media (max-width: 400px) {.top-row.svelte-1j8piq {flex-wrap:wrap;}.badges.svelte-1j8piq {width:100%;justify-content:flex-start;}.icon-btn.svelte-1j8piq {min-width:1.65rem;min-height:1.65rem;}\n  }"
 };
 function TaskCard($$anchor, $$props) {
   push($$props, true);
@@ -6557,34 +6553,32 @@ function TaskCard($$anchor, $$props) {
   var span_1 = child(div_1);
   var text_1 = child(span_1, true);
   reset(span_1);
-  reset(div_1);
-  reset(div);
-  var div_2 = sibling(div, 2);
-  var span_2 = child(div_2);
-  var text_2 = child(span_2, true);
-  reset(span_2);
-  var node = sibling(span_2, 2);
+  var node = sibling(span_1, 2);
   {
     var consequent = ($$anchor2) => {
-      var span_3 = root_13();
-      var text_3 = child(span_3);
-      reset(span_3);
-      template_effect(() => set_text(text_3, `${$$props.task.sourceFile ?? ""}:${$$props.task.sourceLine ?? ""}`));
-      append($$anchor2, span_3);
+      var fragment = root_13();
+      var button = first_child(fragment);
+      var button_1 = sibling(button, 2);
+      var button_2 = sibling(button_1, 2);
+      delegated("click", button, () => openTaskInObsidian($$props.task.id));
+      delegated("click", button_1, () => set(editing, true));
+      delegated("click", button_2, () => deleteTask($$props.task.id));
+      append($$anchor2, fragment);
     };
     if_block(node, ($$render) => {
-      if ($$props.task.sourceFile) $$render(consequent);
+      if (!get(editing)) $$render(consequent);
     });
   }
-  reset(div_2);
-  var node_1 = sibling(div_2, 2);
+  reset(div_1);
+  reset(div);
+  var node_1 = sibling(div, 2);
   {
     var consequent_1 = ($$anchor2) => {
-      var div_3 = root_22();
-      var input_1 = child(div_3);
+      var div_2 = root_22();
+      var input_1 = child(div_2);
       remove_input_defaults(input_1);
-      var div_4 = sibling(input_1, 2);
-      var select = child(div_4);
+      var div_3 = sibling(input_1, 2);
+      var select = child(div_3);
       var option = child(select);
       option.value = option.__value = "low";
       var option_1 = sibling(option);
@@ -6598,11 +6592,11 @@ function TaskCard($$anchor, $$props) {
       var node_2 = sibling(option_3);
       each(node_2, 17, () => [...categories].sort((a, b) => a.sortOrder - b.sortOrder), index, ($$anchor3, category) => {
         var option_4 = root_32();
-        var text_4 = child(option_4);
+        var text_2 = child(option_4);
         reset(option_4);
         var option_4_value = {};
         template_effect(() => {
-          set_text(text_4, `${get(category).emoji ? `${get(category).emoji} ` : ""}${get(category).name ?? ""}`);
+          set_text(text_2, `${get(category).emoji ? `${get(category).emoji} ` : ""}${get(category).name ?? ""}`);
           if (option_4_value !== (option_4_value = get(category).id)) {
             option_4.value = (option_4.__value = get(category).id) ?? "";
           }
@@ -6610,48 +6604,31 @@ function TaskCard($$anchor, $$props) {
         append($$anchor3, option_4);
       });
       reset(select_1);
-      reset(div_4);
-      var div_5 = sibling(div_4, 2);
-      var button = child(div_5);
-      var button_1 = sibling(button, 2);
-      reset(div_5);
-      next(2);
       reset(div_3);
+      var div_4 = sibling(div_3, 2);
+      var button_3 = child(div_4);
+      var button_4 = sibling(button_3, 2);
+      reset(div_4);
+      reset(div_2);
       bind_value(input_1, () => get(title), ($$value) => set(title, $$value));
       bind_select_value(select, () => get(priority), ($$value) => set(priority, $$value));
       bind_select_value(select_1, () => get(categoryId), ($$value) => set(categoryId, $$value));
-      delegated("click", button, save2);
-      delegated("click", button_1, () => set(editing, false));
-      append($$anchor2, div_3);
-    };
-    var alternate = ($$anchor2) => {
-      var div_6 = root_42();
-      var button_2 = child(div_6);
-      var button_3 = sibling(button_2, 2);
-      var button_4 = sibling(button_3, 2);
-      reset(div_6);
-      delegated("click", button_2, () => openTaskInObsidian($$props.task.id));
-      delegated("click", button_3, () => set(editing, true));
-      delegated("click", button_4, () => deleteTask($$props.task.id));
-      append($$anchor2, div_6);
+      delegated("click", button_3, save2);
+      delegated("click", button_4, () => set(editing, false));
+      append($$anchor2, div_2);
     };
     if_block(node_1, ($$render) => {
       if (get(editing)) $$render(consequent_1);
-      else $$render(alternate, false);
     });
   }
   reset(article);
-  template_effect(
-    ($0) => {
-      classes = set_class(article, 1, "task-card svelte-1j8piq", null, classes, { done: $$props.task.completed });
-      set_checked(input, $$props.task.completed);
-      set_text(text2, $$props.task.title);
-      set_class(span_1, 1, `badge ${$$props.task.priority ?? ""}`, "svelte-1j8piq");
-      set_text(text_1, $$props.task.priority);
-      set_text(text_2, $0);
-    },
-    [() => categoryLabel($$props.task.categoryId)]
-  );
+  template_effect(() => {
+    classes = set_class(article, 1, "task-card svelte-1j8piq", null, classes, { done: $$props.task.completed });
+    set_checked(input, $$props.task.completed);
+    set_text(text2, $$props.task.title);
+    set_class(span_1, 1, `badge ${$$props.task.priority ?? ""}`, "svelte-1j8piq");
+    set_text(text_1, $$props.task.priority);
+  });
   event("dragstart", article, () => $$props.onDragStart?.($$props.task.id));
   event("dragover", article, (event2) => event2.preventDefault());
   event("drop", article, () => $$props.onDropOn?.($$props.task.id));
@@ -6663,7 +6640,7 @@ delegate(["change", "click"]);
 
 // components/TaskBoard.svelte
 var root_23 = from_html(`<div class="empty-state compact svelte-q5ccww">No uncategorized tasks.</div>`);
-var root_43 = from_html(`<li class="svelte-q5ccww"> </li>`);
+var root_42 = from_html(`<li class="svelte-q5ccww"> </li>`);
 var root_52 = from_html(`<small class="svelte-q5ccww"> </small>`);
 var root_33 = from_html(`<button type="button" class="uncategorized-list svelte-q5ccww"><span class="uncategorized-count svelte-q5ccww"> </span> <ul class="svelte-q5ccww"></ul> <!></button>`);
 var root_14 = from_html(`<section class="uncategorized-panel svelte-q5ccww"><div class="section-head svelte-q5ccww"><h2 class="svelte-q5ccww">Uncategorized</h2> <button type="button" class="ghost svelte-q5ccww">View only</button></div> <!></section>`);
@@ -6777,7 +6754,7 @@ function TaskBoard($$anchor, $$props) {
           reset(span_2);
           var ul = sibling(span_2, 2);
           each(ul, 21, () => get(dashboardUncategorizedTasks).slice(0, 5), (task) => task.id, ($$anchor4, task) => {
-            var li = root_43();
+            var li = root_42();
             var text_5 = child(li, true);
             reset(li);
             template_effect(() => set_text(text_5, get(task).title));
