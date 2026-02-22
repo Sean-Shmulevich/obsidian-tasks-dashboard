@@ -812,8 +812,8 @@ var Batch = class _Batch {
     this.apply();
     var effects = [];
     var render_effects = [];
-    for (const root8 of root_effects) {
-      this.#traverse_effect_tree(root8, effects, render_effects);
+    for (const root7 of root_effects) {
+      this.#traverse_effect_tree(root7, effects, render_effects);
     }
     if (this.is_deferred()) {
       this.#defer_effects(render_effects);
@@ -843,9 +843,9 @@ var Batch = class _Batch {
    * @param {Effect[]} effects
    * @param {Effect[]} render_effects
    */
-  #traverse_effect_tree(root8, effects, render_effects) {
-    root8.f ^= CLEAN;
-    var effect2 = root8.first;
+  #traverse_effect_tree(root7, effects, render_effects) {
+    root7.f ^= CLEAN;
+    var effect2 = root7.first;
     var pending_boundary = null;
     while (effect2 !== null) {
       var flags2 = effect2.f;
@@ -971,8 +971,8 @@ var Batch = class _Batch {
           if (queued_root_effects.length > 0) {
             current_batch = batch;
             batch.apply();
-            for (const root8 of queued_root_effects) {
-              batch.#traverse_effect_tree(root8, [], []);
+            for (const root7 of queued_root_effects) {
+              batch.#traverse_effect_tree(root7, [], []);
             }
             batch.deactivate();
           }
@@ -3109,7 +3109,7 @@ function is_dirty(reaction) {
   }
   return false;
 }
-function schedule_possible_effect_self_invalidation(signal, effect2, root8 = true) {
+function schedule_possible_effect_self_invalidation(signal, effect2, root7 = true) {
   var reactions = signal.reactions;
   if (reactions === null) return;
   if (!async_mode_flag && current_sources !== null && includes.call(current_sources, signal)) {
@@ -3125,7 +3125,7 @@ function schedule_possible_effect_self_invalidation(signal, effect2, root8 = tru
         false
       );
     } else if (effect2 === reaction) {
-      if (root8) {
+      if (root7) {
         set_signal_status(reaction, DIRTY);
       } else if ((reaction.f & CLEAN) !== 0) {
         set_signal_status(reaction, MAYBE_DIRTY);
@@ -4630,16 +4630,16 @@ function validate_each_keys(array, key_fn) {
 // ../adhd-todo/node_modules/svelte/src/internal/client/dom/css.js
 function append_styles(anchor, css) {
   effect(() => {
-    var root8 = anchor.getRootNode();
+    var root7 = anchor.getRootNode();
     var target = (
       /** @type {ShadowRoot} */
-      root8.host ? (
+      root7.host ? (
         /** @type {ShadowRoot} */
-        root8
+        root7
       ) : (
         /** @type {Document} */
-        root8.head ?? /** @type {Document} */
-        root8.ownerDocument.head
+        root7.head ?? /** @type {Document} */
+        root7.ownerDocument.head
       )
     );
     if (!target.querySelector("#" + css.hash)) {
@@ -5972,7 +5972,9 @@ var ungroupedCategoriesValue = user_derived(() => {
 var visibleTasksValue = user_derived(() => {
   const showCompleted = pluginRef?.settings.showCompleted ?? true;
   let list = [...tasks].sort((a, b) => a.sortOrder - b.sortOrder);
-  if (nav.categoryId) list = list.filter((task) => task.categoryId === nav.categoryId);
+  if (nav.uncategorizedOnly) {
+    list = list.filter((task) => !task.categoryId);
+  } else if (nav.categoryId) list = list.filter((task) => task.categoryId === nav.categoryId);
   else if (nav.groupId) {
     const group = categoryGroups.find((g) => g.id === nav.groupId);
     const groupKey = group?.sourceGroupKey?.toLowerCase();
@@ -6170,21 +6172,25 @@ function setNavDashboard() {
   nav.view = "dashboard";
   nav.groupId = void 0;
   nav.categoryId = void 0;
-}
-function setNavFocus() {
-  nav.view = "focus";
-  nav.groupId = void 0;
-  nav.categoryId = void 0;
+  nav.uncategorizedOnly = void 0;
 }
 function setNavGroup(groupId) {
   nav.view = "dashboard";
   nav.groupId = groupId;
   nav.categoryId = void 0;
+  nav.uncategorizedOnly = void 0;
 }
 function setNavCategory(categoryId) {
   nav.view = "dashboard";
   nav.categoryId = categoryId;
   nav.groupId = void 0;
+  nav.uncategorizedOnly = void 0;
+}
+function setNavUncategorized() {
+  nav.view = "dashboard";
+  nav.categoryId = void 0;
+  nav.groupId = void 0;
+  nav.uncategorizedOnly = true;
 }
 function getCategory(categoryId) {
   if (!categoryId) return void 0;
@@ -6242,10 +6248,10 @@ var root_2 = from_html(`<div class="items svelte-1b12cm3"></div>`);
 var root_1 = from_html(`<div class="group-block svelte-1b12cm3"><div class="group-header-row svelte-1b12cm3"><button type="button" class="group-collapse svelte-1b12cm3"><span>\u25B8</span></button> <button type="button" class="group-label svelte-1b12cm3"> </button></div> <!></div>`);
 var root_5 = from_html(`<button type="button"><span class="accent svelte-1b12cm3"></span> <span class="emoji"> </span> <span> </span></button>`);
 var root_4 = from_html(`<div class="group-block svelte-1b12cm3"><div class="group-header-static svelte-1b12cm3">UNGROUPED</div> <div class="items svelte-1b12cm3"></div></div>`);
-var root = from_html(`<nav aria-label="Sidebar navigation"><div class="brand svelte-1b12cm3"><div class="logo svelte-1b12cm3">\u2713</div> <div><strong>ADHD Todo</strong> <small class="svelte-1b12cm3">Vault-backed task board</small></div></div> <button type="button">\u{1F3E1} Dashboard</button> <button type="button">\u{1F345} Focus Mode</button> <div class="group-list svelte-1b12cm3"><!> <!></div></nav>`);
+var root = from_html(`<nav aria-label="Sidebar navigation"><div class="brand svelte-1b12cm3"><div class="logo svelte-1b12cm3">\u2713</div> <div><strong>ADHD Todo</strong> <small class="svelte-1b12cm3">Vault-backed task board</small></div></div> <button type="button">\u{1F3E1} Dashboard</button> <div class="group-list svelte-1b12cm3"><!> <!></div></nav>`);
 var $$css = {
   hash: "svelte-1b12cm3",
-  code: ".sidebar.svelte-1b12cm3 {display:grid;grid-template-rows:auto auto auto 1fr;gap:0.35rem;height:100%;min-height:0;padding:0.5rem;background:var(--sidebar-bg);color:var(--sidebar-text);border-right:1px solid var(--sidebar-border);}.brand.svelte-1b12cm3 {display:flex;gap:0.5rem;align-items:center;padding:0.25rem 0.25rem 0.35rem;}.logo.svelte-1b12cm3 {width:2rem;height:2rem;display:grid;place-items:center;border-radius:0.6rem;background:color-mix(in srgb, var(--accent) 20%, transparent);border:1px solid color-mix(in srgb, var(--accent) 50%, var(--sidebar-border));font-weight:800;}.brand.svelte-1b12cm3 small:where(.svelte-1b12cm3) {color:var(--sidebar-muted);}.sidebar.svelte-1b12cm3 button:where(.svelte-1b12cm3) {text-align:left;background:transparent;border:1px solid transparent;color:inherit;border-radius:0.5rem;padding:0.35rem 0.5rem;font:inherit;}.sidebar.svelte-1b12cm3 > button.active:where(.svelte-1b12cm3) {background:var(--sidebar-active-bg);border-color:var(--sidebar-border);}.group-list.svelte-1b12cm3 {overflow:auto;display:grid;gap:0.75rem;align-content:start;padding:0.1rem 0.15rem 0.2rem 0.1rem;}.group-block.svelte-1b12cm3 {display:grid;gap:0.2rem;}.group-header-row.svelte-1b12cm3 {display:flex;gap:0.25rem;align-items:center;padding-inline:0.15rem;}.group-collapse.svelte-1b12cm3 {border:0;color:var(--sidebar-muted);padding:0.05rem 0.2rem;}.group-collapse.svelte-1b12cm3 span:where(.svelte-1b12cm3) {display:inline-block;transition:transform 120ms ease;}.group-collapse.svelte-1b12cm3 span.rotated:where(.svelte-1b12cm3) {transform:rotate(90deg);}.group-label.svelte-1b12cm3,\n  .group-header-static.svelte-1b12cm3 {color:var(--sidebar-muted);font-size:0.72rem;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:0.15rem 0.5rem;}.group-header-static.svelte-1b12cm3 {padding:0.15rem 0.65rem;}.items.svelte-1b12cm3 {display:grid;gap:0.12rem;padding-left:0.85rem;}.category-item.svelte-1b12cm3 {display:grid;grid-template-columns:3px 1.1rem 1fr;gap:0.5rem;align-items:center;padding:0.38rem 0.75rem 0.38rem 0.7rem;border-radius:0.4rem;border:1px solid transparent;font-size:0.85rem;}.category-item.svelte-1b12cm3 .accent:where(.svelte-1b12cm3) {width:3px;height:1.2rem;border-radius:999px;opacity:0.7;}.category-item.active.svelte-1b12cm3 {background:var(--sidebar-active-bg);border-color:var(--sidebar-border);}.category-item.active.svelte-1b12cm3 .accent:where(.svelte-1b12cm3) {opacity:1;}"
+  code: ".sidebar.svelte-1b12cm3 {display:grid;grid-template-rows:auto auto auto 1fr;gap:0.35rem;height:100%;min-height:0;padding:0.5rem;background:var(--sidebar-bg);color:var(--sidebar-text);border-right:1px solid var(--sidebar-border);}.brand.svelte-1b12cm3 {display:flex;gap:0.5rem;align-items:center;padding:0.25rem 0.25rem 0.35rem;}.logo.svelte-1b12cm3 {width:2rem;height:2rem;display:grid;place-items:center;border-radius:0.6rem;background:color-mix(in srgb, var(--accent) 20%, transparent);border:1px solid color-mix(in srgb, var(--accent) 50%, var(--sidebar-border));font-weight:800;}.brand.svelte-1b12cm3 small:where(.svelte-1b12cm3) {color:var(--sidebar-muted);}.sidebar.svelte-1b12cm3 button:where(.svelte-1b12cm3) {text-align:left;background:transparent;border:1px solid transparent;color:inherit;border-radius:0.5rem;padding:0.35rem 0.5rem;font:inherit;}.sidebar.svelte-1b12cm3 > button.active:where(.svelte-1b12cm3) {background:var(--sidebar-active-bg);border-color:var(--sidebar-border);}.group-list.svelte-1b12cm3 {overflow:auto;display:grid;gap:0.2rem;align-content:start;padding:0.1rem 0.15rem 0.2rem 0.1rem;}.group-block.svelte-1b12cm3 {display:grid;gap:0.2rem;margin-bottom:0.875rem;}.group-header-row.svelte-1b12cm3 {display:flex;gap:0.25rem;align-items:center;padding-inline:0.3rem;}.group-block.svelte-1b12cm3 + .group-block:where(.svelte-1b12cm3) .group-header-row:where(.svelte-1b12cm3),\n  .group-block.svelte-1b12cm3 + .group-block:where(.svelte-1b12cm3) .group-header-static:where(.svelte-1b12cm3) {margin-top:0.3rem;}.group-collapse.svelte-1b12cm3 {border:0;color:var(--sidebar-muted);padding:0.05rem 0.2rem;}.group-collapse.svelte-1b12cm3 span:where(.svelte-1b12cm3) {display:inline-block;transition:transform 120ms ease;}.group-collapse.svelte-1b12cm3 span.rotated:where(.svelte-1b12cm3) {transform:rotate(90deg);}.group-label.svelte-1b12cm3,\n  .group-header-static.svelte-1b12cm3 {color:var(--sidebar-muted);font-size:0.72rem;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:0.15rem 0.5rem;}.group-header-static.svelte-1b12cm3 {padding:0.15rem 0.65rem;}.items.svelte-1b12cm3 {display:grid;gap:0.12rem;padding-left:1.15rem;}.category-item.svelte-1b12cm3 {display:grid;grid-template-columns:3px 1.1rem 1fr;gap:0.5rem;align-items:center;padding:0.4rem 0.95rem 0.4rem 0.95rem;border-radius:0.4rem;border:1px solid transparent;font-size:0.85rem;}.category-item.svelte-1b12cm3 .accent:where(.svelte-1b12cm3) {width:3px;height:1.2rem;border-radius:999px;opacity:0.7;}.category-item.active.svelte-1b12cm3 {background:var(--sidebar-active-bg);border-color:var(--sidebar-border);}.category-item.active.svelte-1b12cm3 .accent:where(.svelte-1b12cm3) {opacity:1;}"
 };
 function Sidebar($$anchor, $$props) {
   push($$props, true);
@@ -6255,10 +6261,6 @@ function Sidebar($$anchor, $$props) {
   const looseCategories = user_derived(ungroupedCategories);
   function goDashboard() {
     setNavDashboard();
-    $$props.onNavigate?.();
-  }
-  function goFocus() {
-    setNavFocus();
     $$props.onNavigate?.();
   }
   function goGroup(id) {
@@ -6273,44 +6275,42 @@ function Sidebar($$anchor, $$props) {
   let classes;
   var button = sibling(child(nav_1), 2);
   let classes_1;
-  var button_1 = sibling(button, 2);
-  let classes_2;
-  var div = sibling(button_1, 2);
+  var div = sibling(button, 2);
   var node = child(div);
   each(node, 17, () => get(grouped), (section) => section.group.id, ($$anchor2, section) => {
     var div_1 = root_1();
     var div_2 = child(div_1);
-    var button_2 = child(div_2);
-    var span = child(button_2);
-    let classes_3;
+    var button_1 = child(div_2);
+    var span = child(button_1);
+    let classes_2;
+    reset(button_1);
+    var button_2 = sibling(button_1, 2);
+    var text2 = child(button_2, true);
     reset(button_2);
-    var button_3 = sibling(button_2, 2);
-    var text2 = child(button_3, true);
-    reset(button_3);
     reset(div_2);
     var node_1 = sibling(div_2, 2);
     {
       var consequent = ($$anchor3) => {
         var div_3 = root_2();
         each(div_3, 21, () => get(section).categories, (category) => category.id, ($$anchor4, category) => {
-          var button_4 = root_3();
-          let classes_4;
-          var span_1 = child(button_4);
+          var button_3 = root_3();
+          let classes_3;
+          var span_1 = child(button_3);
           var span_2 = sibling(span_1, 2);
           var text_1 = child(span_2, true);
           reset(span_2);
           var span_3 = sibling(span_2, 2);
           var text_2 = child(span_3, true);
           reset(span_3);
-          reset(button_4);
+          reset(button_3);
           template_effect(() => {
-            classes_4 = set_class(button_4, 1, "category-item svelte-1b12cm3", null, classes_4, { active: nav.categoryId === get(category).id });
+            classes_3 = set_class(button_3, 1, "category-item svelte-1b12cm3", null, classes_3, { active: nav.categoryId === get(category).id });
             set_style(span_1, `background:${get(category).color ?? "var(--accent)"}`);
             set_text(text_1, get(category).emoji ?? "\u2022");
             set_text(text_2, get(category).name);
           });
-          delegated("click", button_4, () => goCategory(get(category).id));
-          append($$anchor4, button_4);
+          delegated("click", button_3, () => goCategory(get(category).id));
+          append($$anchor4, button_3);
         });
         reset(div_3);
         append($$anchor3, div_3);
@@ -6321,11 +6321,11 @@ function Sidebar($$anchor, $$props) {
     }
     reset(div_1);
     template_effect(() => {
-      classes_3 = set_class(span, 1, "svelte-1b12cm3", null, classes_3, { rotated: get(section).group.collapsed });
+      classes_2 = set_class(span, 1, "svelte-1b12cm3", null, classes_2, { rotated: get(section).group.collapsed });
       set_text(text2, get(section).group.name);
     });
-    delegated("click", button_2, () => toggleGroupCollapsed(get(section).group.id));
-    delegated("click", button_3, () => goGroup(get(section).group.id));
+    delegated("click", button_1, () => toggleGroupCollapsed(get(section).group.id));
+    delegated("click", button_2, () => goGroup(get(section).group.id));
     append($$anchor2, div_1);
   });
   var node_2 = sibling(node, 2);
@@ -6334,24 +6334,24 @@ function Sidebar($$anchor, $$props) {
       var div_4 = root_4();
       var div_5 = sibling(child(div_4), 2);
       each(div_5, 21, () => get(looseCategories), (category) => category.id, ($$anchor3, category) => {
-        var button_5 = root_5();
-        let classes_5;
-        var span_4 = child(button_5);
+        var button_4 = root_5();
+        let classes_4;
+        var span_4 = child(button_4);
         var span_5 = sibling(span_4, 2);
         var text_3 = child(span_5, true);
         reset(span_5);
         var span_6 = sibling(span_5, 2);
         var text_4 = child(span_6, true);
         reset(span_6);
-        reset(button_5);
+        reset(button_4);
         template_effect(() => {
-          classes_5 = set_class(button_5, 1, "category-item svelte-1b12cm3", null, classes_5, { active: nav.categoryId === get(category).id });
+          classes_4 = set_class(button_4, 1, "category-item svelte-1b12cm3", null, classes_4, { active: nav.categoryId === get(category).id });
           set_style(span_4, `background:${get(category).color ?? "var(--accent)"}`);
           set_text(text_3, get(category).emoji ?? "\u2022");
           set_text(text_4, get(category).name);
         });
-        delegated("click", button_5, () => goCategory(get(category).id));
-        append($$anchor3, button_5);
+        delegated("click", button_4, () => goCategory(get(category).id));
+        append($$anchor3, button_4);
       });
       reset(div_5);
       reset(div_4);
@@ -6366,95 +6366,11 @@ function Sidebar($$anchor, $$props) {
   template_effect(() => {
     classes = set_class(nav_1, 1, "sidebar adhd-todo-sidebar svelte-1b12cm3", null, classes, { mobile: mobile() });
     classes_1 = set_class(button, 1, "svelte-1b12cm3", null, classes_1, {
-      active: nav.view !== "focus" && !nav.groupId && !nav.categoryId
+      active: !nav.groupId && !nav.categoryId && !nav.uncategorizedOnly
     });
-    classes_2 = set_class(button_1, 1, "svelte-1b12cm3", null, classes_2, { active: nav.view === "focus" });
   });
   delegated("click", button, goDashboard);
-  delegated("click", button_1, goFocus);
   append($$anchor, nav_1);
-  pop();
-}
-delegate(["click"]);
-
-// components/FocusMode.svelte
-var root2 = from_html(`<section aria-label="Focus Mode Pomodoro"><div><h3 class="svelte-1yoqyyg">Focus Mode</h3> <p class="svelte-1yoqyyg">Pomodoro timer for short, reliable bursts.</p></div> <div class="timer svelte-1yoqyyg"> </div> <div class="controls svelte-1yoqyyg"><label class="svelte-1yoqyyg"><span>Minutes</span> <input type="number" min="5" max="90" class="svelte-1yoqyyg"/></label> <button type="button" class="svelte-1yoqyyg"> </button> <button type="button" class="svelte-1yoqyyg">Reset</button></div></section>`);
-var $$css2 = {
-  hash: "svelte-1yoqyyg",
-  code: ".focus-mode.svelte-1yoqyyg {display:grid;gap:0.75rem;padding:1rem;border-radius:1rem;border:1px solid var(--border-color);background:linear-gradient(180deg, var(--surface-2), var(--surface-1));}.focus-mode.compact.svelte-1yoqyyg h3:where(.svelte-1yoqyyg) {font-size:0.95rem;}h3.svelte-1yoqyyg {margin:0;font-size:1rem;}p.svelte-1yoqyyg {margin:0.2rem 0 0;color:var(--text-muted);font-size:0.85rem;}.timer.svelte-1yoqyyg {font-size:2rem;font-weight:800;letter-spacing:0.08em;}.controls.svelte-1yoqyyg {display:flex;flex-wrap:wrap;gap:0.5rem;align-items:end;}label.svelte-1yoqyyg {display:grid;gap:0.2rem;font-size:0.8rem;}input.svelte-1yoqyyg,\n  button.svelte-1yoqyyg {background:var(--surface-1);border:1px solid var(--border-color);color:inherit;border-radius:0.6rem;padding:0.45rem 0.65rem;}input.svelte-1yoqyyg {width:4.75rem;}"
-};
-function FocusMode($$anchor, $$props) {
-  push($$props, true);
-  append_styles($$anchor, $$css2);
-  let initialMinutes = prop($$props, "initialMinutes", 3, 25), compact = prop($$props, "compact", 3, false);
-  let durationMinutes = state(25);
-  let secondsRemaining = state(25 * 60);
-  let running = state(false);
-  let seededFromProp = state(false);
-  const desiredInitialMinutes = user_derived(() => Math.max(1, initialMinutes()));
-  const mm = user_derived(() => String(Math.floor(get(secondsRemaining) / 60)).padStart(2, "0"));
-  const ss = user_derived(() => String(get(secondsRemaining) % 60).padStart(2, "0"));
-  function resetTimer() {
-    set(running, false);
-    set(secondsRemaining, get(durationMinutes) * 60);
-  }
-  function toggle() {
-    set(running, !get(running));
-  }
-  user_effect(() => {
-    if (!get(seededFromProp)) {
-      set(durationMinutes, get(desiredInitialMinutes), true);
-      set(secondsRemaining, get(desiredInitialMinutes) * 60);
-      set(seededFromProp, true);
-    }
-  });
-  user_effect(() => {
-    if (!get(running)) return;
-    const id = window.setInterval(
-      () => {
-        if (get(secondsRemaining) <= 1) {
-          set(secondsRemaining, 0);
-          set(running, false);
-          return;
-        }
-        set(secondsRemaining, get(secondsRemaining) - 1);
-      },
-      1e3
-    );
-    return () => clearInterval(id);
-  });
-  user_effect(() => {
-    if (get(running)) return;
-    if (get(secondsRemaining) === 0) {
-      set(secondsRemaining, get(durationMinutes) * 60);
-    }
-  });
-  var section = root2();
-  let classes;
-  var div = sibling(child(section), 2);
-  var text2 = child(div);
-  reset(div);
-  var div_1 = sibling(div, 2);
-  var label = child(div_1);
-  var input = sibling(child(label), 2);
-  remove_input_defaults(input);
-  reset(label);
-  var button = sibling(label, 2);
-  var text_1 = child(button, true);
-  reset(button);
-  var button_1 = sibling(button, 2);
-  reset(div_1);
-  reset(section);
-  template_effect(() => {
-    classes = set_class(section, 1, "focus-mode svelte-1yoqyyg", null, classes, { compact: compact() });
-    set_text(text2, `${get(mm) ?? ""}:${get(ss) ?? ""}`);
-    input.disabled = get(running);
-    set_text(text_1, get(running) ? "Pause" : "Start");
-  });
-  bind_value(input, () => get(durationMinutes), ($$value) => set(durationMinutes, $$value));
-  delegated("click", button, toggle);
-  delegated("click", button_1, resetTimer);
-  append($$anchor, section);
   pop();
 }
 delegate(["click"]);
@@ -6463,14 +6379,14 @@ delegate(["click"]);
 var root_32 = from_html(`<button type="button"> </button>`);
 var root_22 = from_html(`<div class="dow-row svelte-mcqnzv" aria-label="days of week"></div>`);
 var root_12 = from_html(`<div class="recurrence-fields svelte-mcqnzv"><select class="svelte-mcqnzv"><option>Daily</option><option>Weekly</option><option>Monthly</option></select> <label class="svelte-mcqnzv"><span>Every</span> <input type="number" min="1" class="svelte-mcqnzv"/> <span> </span></label></div> <!>`, 1);
-var root3 = from_html(`<div><label class="inline-toggle svelte-mcqnzv"><input type="checkbox"/> <span>Recurring</span></label> <!></div>`);
-var $$css3 = {
+var root2 = from_html(`<div><label class="inline-toggle svelte-mcqnzv"><input type="checkbox"/> <span>Recurring</span></label> <!></div>`);
+var $$css2 = {
   hash: "svelte-mcqnzv",
   code: ".recurrence-picker.svelte-mcqnzv {display:grid;gap:0.5rem;padding:0.5rem;border:1px solid var(--border-color);border-radius:0.65rem;background:var(--surface-2);}.recurrence-picker.compact.svelte-mcqnzv {padding:0.4rem;gap:0.35rem;}.inline-toggle.svelte-mcqnzv {display:inline-flex;align-items:center;gap:0.5rem;font-size:0.9rem;}.recurrence-fields.svelte-mcqnzv {display:flex;flex-wrap:wrap;gap:0.5rem;align-items:center;}.recurrence-fields.svelte-mcqnzv label:where(.svelte-mcqnzv) {display:inline-flex;gap:0.35rem;align-items:center;font-size:0.85rem;}select.svelte-mcqnzv,\n  input[type='number'].svelte-mcqnzv {background:var(--surface-1);border:1px solid var(--border-color);color:inherit;border-radius:0.45rem;padding:0.35rem 0.5rem;}input[type='number'].svelte-mcqnzv {width:4rem;}.dow-row.svelte-mcqnzv {display:flex;gap:0.35rem;}.dow-row.svelte-mcqnzv button:where(.svelte-mcqnzv) {width:1.9rem;height:1.9rem;border-radius:999px;border:1px solid var(--border-color);background:var(--surface-1);color:inherit;}.dow-row.svelte-mcqnzv button.selected:where(.svelte-mcqnzv) {background:var(--accent);border-color:var(--accent);color:white;}"
 };
 function RecurrencePicker($$anchor, $$props) {
   push($$props, true);
-  append_styles($$anchor, $$css3);
+  append_styles($$anchor, $$css2);
   let compact = prop($$props, "compact", 3, false);
   let enabled = state(false);
   let type = state("daily");
@@ -6501,7 +6417,7 @@ function RecurrencePicker($$anchor, $$props) {
     );
     emit();
   }
-  var div = root3();
+  var div = root2();
   let classes;
   var label_1 = child(div);
   var input = child(label_1);
@@ -6582,14 +6498,14 @@ delegate(["change", "click"]);
 
 // components/QuickCapture.svelte
 var root_13 = from_html(`<option> </option>`);
-var root4 = from_html(`<section class="quick-capture svelte-149ph0u"><div class="header svelte-149ph0u"><h2 class="svelte-149ph0u">Quick Capture</h2> <p class="svelte-149ph0u">Fast task entry into your vault inbox file.</p></div> <form class="svelte-149ph0u"><input type="text" placeholder="What needs to happen next?" maxlength="140" class="svelte-149ph0u"/> <div class="row svelte-149ph0u"><label class="svelte-149ph0u"><span>Priority</span> <select class="svelte-149ph0u"><option>Low</option><option>Medium</option><option>High</option></select></label> <label class="svelte-149ph0u"><span>Category</span> <select class="svelte-149ph0u"><option>Uncategorized (uses #todo)</option><!></select></label> <button type="submit" class="svelte-149ph0u"> </button></div> <!> <p class="note svelte-149ph0u">Recurrence is UI-only for now; vault writeback stores title, category tag, and priority marker.</p></form></section>`);
-var $$css4 = {
+var root3 = from_html(`<section class="quick-capture svelte-149ph0u"><div class="header svelte-149ph0u"><h2 class="svelte-149ph0u">Quick Capture</h2> <p class="svelte-149ph0u">Fast task entry into your vault inbox file.</p></div> <form class="svelte-149ph0u"><input type="text" placeholder="What needs to happen next?" maxlength="140" class="svelte-149ph0u"/> <div class="row svelte-149ph0u"><label class="svelte-149ph0u"><span>Priority</span> <select class="svelte-149ph0u"><option>Low</option><option>Medium</option><option>High</option></select></label> <label class="svelte-149ph0u"><span>Category</span> <select class="svelte-149ph0u"><option>Uncategorized (uses #todo)</option><!></select></label> <button type="submit" class="svelte-149ph0u"> </button></div> <!> <p class="note svelte-149ph0u">Recurrence is UI-only for now; vault writeback stores title, category tag, and priority marker.</p></form></section>`);
+var $$css3 = {
   hash: "svelte-149ph0u",
   code: ".quick-capture.svelte-149ph0u {display:grid;gap:0.75rem;padding:1rem;border-radius:1rem;border:1px solid var(--border-color);background:var(--surface-1);}.header.svelte-149ph0u h2:where(.svelte-149ph0u) {margin:0;font-size:1.05rem;}.header.svelte-149ph0u p:where(.svelte-149ph0u) {margin:0.2rem 0 0;font-size:0.85rem;color:var(--text-muted);}form.svelte-149ph0u {display:grid;gap:0.75rem;}input[type='text'].svelte-149ph0u {width:100%;background:var(--surface-2);border:1px solid var(--border-color);border-radius:0.7rem;padding:0.7rem 0.85rem;color:inherit;}.row.svelte-149ph0u {display:flex;flex-wrap:wrap;gap:0.75rem;align-items:end;}label.svelte-149ph0u {display:grid;gap:0.25rem;font-size:0.8rem;}select.svelte-149ph0u,\n  button.svelte-149ph0u {background:var(--surface-2);border:1px solid var(--border-color);color:inherit;border-radius:0.6rem;padding:0.5rem 0.65rem;}button[type='submit'].svelte-149ph0u {background:var(--accent);border-color:var(--accent);color:white;font-weight:700;}.note.svelte-149ph0u {margin:0;color:var(--text-muted);font-size:0.75rem;}\n\n  @media (max-width: 700px) {.row.svelte-149ph0u > :where(.svelte-149ph0u) {flex:1 1 100%;}\n  }"
 };
 function QuickCapture($$anchor, $$props) {
   push($$props, true);
-  append_styles($$anchor, $$css4);
+  append_styles($$anchor, $$css3);
   let title = state("");
   let priority = state("medium");
   let categoryId = state("");
@@ -6614,7 +6530,7 @@ function QuickCapture($$anchor, $$props) {
       set(submitting, false);
     }
   }
-  var section = root4();
+  var section = root3();
   var form = sibling(child(section), 2);
   var input = child(form);
   remove_input_defaults(input);
@@ -6685,14 +6601,14 @@ var root_33 = from_html(`<span> </span>`);
 var root_52 = from_html(`<option> </option>`);
 var root_42 = from_html(`<div class="editor svelte-1j8piq"><input type="text" maxlength="140" class="svelte-1j8piq"/> <div class="grid2 svelte-1j8piq"><select class="svelte-1j8piq"><option>Low</option><option>Medium</option><option>High</option></select> <select disabled="" class="svelte-1j8piq"><option>Vault category (read from tags)</option><!></select></div> <!> <div class="actions svelte-1j8piq"><button type="button" class="svelte-1j8piq">Save</button> <button type="button" class="ghost svelte-1j8piq">Cancel</button></div> <p class="note svelte-1j8piq">Only title and completion state are written back to vault in Phase 1 migration.</p></div>`);
 var root_6 = from_html(`<div class="actions svelte-1j8piq"><button type="button" class="ghost svelte-1j8piq">Open in Obsidian</button> <button type="button" class="ghost svelte-1j8piq">Edit</button> <button type="button" class="danger svelte-1j8piq">Delete</button></div>`);
-var root5 = from_html(`<article draggable="true"><div class="row top-row svelte-1j8piq"><label class="checkbox-row svelte-1j8piq"><input type="checkbox"/> <span class="title svelte-1j8piq"> </span></label> <div class="badges svelte-1j8piq"><!> <span> </span></div></div> <div class="meta svelte-1j8piq"><span> </span> <!> <!></div> <!></article>`);
-var $$css5 = {
+var root4 = from_html(`<article draggable="true"><div class="row top-row svelte-1j8piq"><label class="checkbox-row svelte-1j8piq"><input type="checkbox"/> <span class="title svelte-1j8piq"> </span></label> <div class="badges svelte-1j8piq"><!> <span> </span></div></div> <div class="meta svelte-1j8piq"><span> </span> <!> <!></div> <!></article>`);
+var $$css4 = {
   hash: "svelte-1j8piq",
   code: ".task-card.svelte-1j8piq {display:grid;gap:0.6rem;padding:0.85rem;border-radius:0.9rem;border:1px solid var(--border-color);background:var(--surface-1);}.task-card.done.svelte-1j8piq {opacity:0.72;}.top-row.svelte-1j8piq {display:flex;justify-content:space-between;gap:0.5rem;}.checkbox-row.svelte-1j8piq {display:flex;gap:0.6rem;align-items:flex-start;font-weight:600;min-width:0;}.checkbox-row.svelte-1j8piq .title:where(.svelte-1j8piq) {line-height:1.35;word-break:break-word;}.done.svelte-1j8piq .title:where(.svelte-1j8piq) {text-decoration:line-through;}.badges.svelte-1j8piq {display:flex;gap:0.35rem;align-items:center;}.badge.svelte-1j8piq {padding:0.2rem 0.5rem;border-radius:999px;font-size:0.7rem;font-weight:700;text-transform:uppercase;border:1px solid var(--border-color);background:var(--surface-2);}.badge.low.svelte-1j8piq {background:color-mix(in srgb, #58d68d 16%, var(--surface-2));}.badge.medium.svelte-1j8piq {background:color-mix(in srgb, #f4d03f 18%, var(--surface-2));}.badge.high.svelte-1j8piq,\n  .badge.urgent.svelte-1j8piq {background:color-mix(in srgb, #ff6b6b 16%, var(--surface-2));}.badge.recur.svelte-1j8piq {font-size:0.85rem;padding:0.1rem 0.35rem;}.meta.svelte-1j8piq {display:flex;flex-wrap:wrap;gap:0.5rem 0.8rem;font-size:0.78rem;color:var(--text-muted);}.editor.svelte-1j8piq {display:grid;gap:0.5rem;padding-top:0.25rem;}.editor.svelte-1j8piq input:where(.svelte-1j8piq),\n  .editor.svelte-1j8piq select:where(.svelte-1j8piq),\n  .actions.svelte-1j8piq button:where(.svelte-1j8piq) {background:var(--surface-2);border:1px solid var(--border-color);color:inherit;border-radius:0.55rem;padding:0.45rem 0.6rem;}.grid2.svelte-1j8piq {display:grid;gap:0.5rem;grid-template-columns:repeat(2, minmax(0, 1fr));}.actions.svelte-1j8piq {display:flex;gap:0.5rem;justify-content:flex-end;flex-wrap:wrap;}.actions.svelte-1j8piq .ghost:where(.svelte-1j8piq) {background:transparent;}.actions.svelte-1j8piq .danger:where(.svelte-1j8piq) {border-color:color-mix(in srgb, #ff6b6b 55%, var(--border-color));}.note.svelte-1j8piq {margin:0;color:var(--text-muted);font-size:0.75rem;}\n\n  @media (max-width: 600px) {.grid2.svelte-1j8piq {grid-template-columns:1fr;}\n  }"
 };
 function TaskCard($$anchor, $$props) {
   push($$props, true);
-  append_styles($$anchor, $$css5);
+  append_styles($$anchor, $$css4);
   let editing = state(false);
   let title = state("");
   let priority = state("medium");
@@ -6714,7 +6630,7 @@ function TaskCard($$anchor, $$props) {
     });
     set(editing, false);
   }
-  var article = root5();
+  var article = root4();
   let classes;
   var div = child(article);
   var label = child(div);
@@ -6864,28 +6780,30 @@ function TaskCard($$anchor, $$props) {
 delegate(["change", "click"]);
 
 // components/TaskBoard.svelte
-var root_43 = from_html(`<div class="empty-state svelte-q5ccww">No tasks here yet.</div>`);
-var root_53 = from_html(`<div class="cards svelte-q5ccww"></div>`);
-var root_7 = from_html(`<li> </li>`);
-var root6 = from_html(`<section class="task-board svelte-q5ccww"><header class="page-header svelte-q5ccww"><div><h1 class="svelte-q5ccww"> </h1> <p class="svelte-q5ccww"><!></p></div> <div class="stats-grid svelte-q5ccww"><div class="svelte-q5ccww"><span class="svelte-q5ccww"> </span><small class="svelte-q5ccww">Open</small></div> <div class="svelte-q5ccww"><span class="svelte-q5ccww"> </span><small class="svelte-q5ccww">Done</small></div> <div class="svelte-q5ccww"><span class="svelte-q5ccww"> </span><small class="svelte-q5ccww">Recurring</small></div></div></header> <div class="board-grid svelte-q5ccww"><div class="main-column svelte-q5ccww"><!> <section class="task-list svelte-q5ccww"><div class="task-list-header svelte-q5ccww"><h2 class="svelte-q5ccww">Tasks</h2> <p class="svelte-q5ccww">Drag cards is visual-only for now; file order is preserved from vault sources.</p></div> <!></section></div> <aside class="side-column svelte-q5ccww"><section class="panel svelte-q5ccww"><h3 class="svelte-q5ccww">Categories</h3> <ul class="svelte-q5ccww"><!> <li>Uncategorized / group-level</li></ul></section> <!></aside></div></section>`);
-var $$css6 = {
+var root_53 = from_html(`<div class="empty-state svelte-q5ccww">No tasks here yet.</div>`);
+var root_62 = from_html(`<div class="cards svelte-q5ccww"></div>`);
+var root_9 = from_html(`<li><button type="button" class="svelte-q5ccww"> </button></li>`);
+var root_8 = from_html(`<aside class="side-column svelte-q5ccww"><section class="panel svelte-q5ccww"><h3 class="svelte-q5ccww">Categories</h3> <ul class="category-links svelte-q5ccww"><!> <li><button type="button" class="svelte-q5ccww">Uncategorized / group-level</button></li></ul></section></aside>`);
+var root5 = from_html(`<section class="task-board svelte-q5ccww"><header class="page-header svelte-q5ccww"><div><h1 class="svelte-q5ccww"> </h1> <p class="svelte-q5ccww"><!></p></div> <div class="stats-grid svelte-q5ccww"><div class="svelte-q5ccww"><span class="svelte-q5ccww"> </span><small class="svelte-q5ccww">Open</small></div> <div class="svelte-q5ccww"><span class="svelte-q5ccww"> </span><small class="svelte-q5ccww">Done</small></div> <div class="svelte-q5ccww"><span class="svelte-q5ccww"> </span><small class="svelte-q5ccww">Recurring</small></div></div></header> <div><div class="main-column svelte-q5ccww"><!> <section class="task-list svelte-q5ccww"><div class="task-list-header svelte-q5ccww"><h2 class="svelte-q5ccww">Tasks</h2> <p class="svelte-q5ccww">Drag cards is visual-only for now; file order is preserved from vault sources.</p></div> <!></section></div> <!></div></section>`);
+var $$css5 = {
   hash: "svelte-q5ccww",
-  code: ".task-board.svelte-q5ccww {display:grid;gap:1rem;}.page-header.svelte-q5ccww {display:flex;justify-content:space-between;gap:1rem;align-items:start;}h1.svelte-q5ccww {margin:0;font-size:clamp(1.2rem, 2.3vw, 1.7rem);}.page-header.svelte-q5ccww p:where(.svelte-q5ccww) {margin:0.25rem 0 0;color:var(--text-muted);}.stats-grid.svelte-q5ccww {display:grid;grid-template-columns:repeat(3, minmax(0, 1fr));gap:0.5rem;min-width:min(20rem, 100%);}.stats-grid.svelte-q5ccww > div:where(.svelte-q5ccww) {background:var(--surface-1);border:1px solid var(--border-color);border-radius:0.9rem;padding:0.6rem 0.75rem;display:grid;gap:0.15rem;}.stats-grid.svelte-q5ccww span:where(.svelte-q5ccww) {font-size:1.15rem;font-weight:800;}.stats-grid.svelte-q5ccww small:where(.svelte-q5ccww) {color:var(--text-muted);}.board-grid.svelte-q5ccww {display:grid;grid-template-columns:minmax(0, 1fr) minmax(240px, 320px);gap:1rem;}.main-column.svelte-q5ccww,\n  .side-column.svelte-q5ccww {display:grid;gap:1rem;align-content:start;}.task-list.svelte-q5ccww {display:grid;gap:0.75rem;padding:1rem;border:1px solid var(--border-color);border-radius:1rem;background:var(--surface-1);}.task-list-header.svelte-q5ccww h2:where(.svelte-q5ccww),\n  .panel.svelte-q5ccww h3:where(.svelte-q5ccww) {margin:0;font-size:1rem;}.task-list-header.svelte-q5ccww p:where(.svelte-q5ccww) {margin:0.15rem 0 0;color:var(--text-muted);font-size:0.8rem;}.cards.svelte-q5ccww {display:grid;gap:0.7rem;}.empty-state.svelte-q5ccww {padding:1rem;border:1px dashed var(--border-color);border-radius:0.8rem;color:var(--text-muted);}.panel.svelte-q5ccww {padding:1rem;border:1px solid var(--border-color);border-radius:1rem;background:var(--surface-1);}.panel.svelte-q5ccww ul:where(.svelte-q5ccww) {list-style:none;margin:0.6rem 0 0;padding:0;display:grid;gap:0.45rem;color:var(--text-muted);font-size:0.9rem;}\n\n  @media (max-width: 980px) {.board-grid.svelte-q5ccww {grid-template-columns:1fr;}\n  }\n\n  @media (max-width: 700px) {.page-header.svelte-q5ccww {flex-direction:column;}.stats-grid.svelte-q5ccww {width:100%;min-width:0;}\n  }"
+  code: ".task-board.svelte-q5ccww {display:grid;gap:1rem;}.page-header.svelte-q5ccww {display:flex;justify-content:space-between;gap:1rem;align-items:start;}h1.svelte-q5ccww {margin:0;font-size:clamp(1.2rem, 2.3vw, 1.7rem);}.page-header.svelte-q5ccww p:where(.svelte-q5ccww) {margin:0.25rem 0 0;color:var(--text-muted);}.stats-grid.svelte-q5ccww {display:grid;grid-template-columns:repeat(3, minmax(0, 1fr));gap:0.5rem;min-width:min(20rem, 100%);}.stats-grid.svelte-q5ccww > div:where(.svelte-q5ccww) {background:var(--surface-1);border:1px solid var(--border-color);border-radius:0.9rem;padding:0.6rem 0.75rem;display:grid;gap:0.15rem;}.stats-grid.svelte-q5ccww span:where(.svelte-q5ccww) {font-size:1.15rem;font-weight:800;}.stats-grid.svelte-q5ccww small:where(.svelte-q5ccww) {color:var(--text-muted);}.board-grid.svelte-q5ccww {display:grid;grid-template-columns:minmax(0, 1fr) minmax(240px, 320px);gap:1rem;}.board-grid.single-column.svelte-q5ccww {grid-template-columns:minmax(0, 1fr);}.main-column.svelte-q5ccww,\n  .side-column.svelte-q5ccww {display:grid;gap:1rem;align-content:start;}.task-list.svelte-q5ccww {display:grid;gap:0.75rem;padding:1rem;border:1px solid var(--border-color);border-radius:1rem;background:var(--surface-1);}.task-list-header.svelte-q5ccww h2:where(.svelte-q5ccww),\n  .panel.svelte-q5ccww h3:where(.svelte-q5ccww) {margin:0;font-size:1rem;}.task-list-header.svelte-q5ccww p:where(.svelte-q5ccww) {margin:0.15rem 0 0;color:var(--text-muted);font-size:0.8rem;}.cards.svelte-q5ccww {display:grid;gap:0.7rem;}.empty-state.svelte-q5ccww {padding:1rem;border:1px dashed var(--border-color);border-radius:0.8rem;color:var(--text-muted);}.panel.svelte-q5ccww {padding:1rem;border:1px solid var(--border-color);border-radius:1rem;background:var(--surface-1);}.panel.svelte-q5ccww ul:where(.svelte-q5ccww) {list-style:none;margin:0.6rem 0 0;padding:0;display:grid;gap:0.45rem;color:var(--text-muted);font-size:0.9rem;}.category-links.svelte-q5ccww button:where(.svelte-q5ccww) {width:100%;text-align:left;font:inherit;color:inherit;background:transparent;border:1px solid transparent;border-radius:0.45rem;padding:0.35rem 0.45rem;cursor:pointer;}.category-links.svelte-q5ccww button:where(.svelte-q5ccww):hover {background:var(--surface-2);color:var(--text-normal);}\n\n  @media (max-width: 980px) {.board-grid.svelte-q5ccww {grid-template-columns:1fr;}\n  }\n\n  @media (max-width: 700px) {.page-header.svelte-q5ccww {flex-direction:column;}.stats-grid.svelte-q5ccww {width:100%;min-width:0;}\n  }"
 };
 function TaskBoard($$anchor, $$props) {
   push($$props, true);
-  append_styles($$anchor, $$css6);
-  let title = prop($$props, "title", 3, "Dashboard");
+  append_styles($$anchor, $$css5);
+  let title = prop($$props, "title", 3, "Dashboard"), filterUncategorized = prop($$props, "filterUncategorized", 3, false), showCategoriesCard = prop($$props, "showCategoriesCard", 3, true);
   let draggingTaskId = state(null);
   const sortedTasks = user_derived(() => [...visibleTasks()].sort((a, b) => a.sortOrder - b.sortOrder));
   const openCount = user_derived(() => get(sortedTasks).filter((task) => !task.completed).length);
   const doneCount = user_derived(() => get(sortedTasks).filter((task) => task.completed).length);
   const recurringCount = user_derived(() => get(sortedTasks).filter((task) => task.recurrence).length);
   const currentCategory = user_derived(() => $$props.filterCategoryId ? getCategory($$props.filterCategoryId) : void 0);
+  const sortedCategories = user_derived(() => [...categories].sort((a, b) => a.sortOrder - b.sortOrder));
   function onDropOn(_targetTaskId) {
     set(draggingTaskId, null);
   }
-  var section = root6();
+  var section = root5();
   var header = child(section);
   var div = child(header);
   var h1 = child(div);
@@ -6900,16 +6818,21 @@ function TaskBoard($$anchor, $$props) {
       append($$anchor2, text_1);
     };
     var consequent_1 = ($$anchor2) => {
-      var text_2 = text("Group-level and category tasks in this section.");
+      var text_2 = text("Tasks without a mapped category, including group-level items.");
       append($$anchor2, text_2);
     };
-    var alternate = ($$anchor2) => {
-      var text_3 = text("All tasks, including uncategorized items.");
+    var consequent_2 = ($$anchor2) => {
+      var text_3 = text("Group-level and category tasks in this section.");
       append($$anchor2, text_3);
+    };
+    var alternate = ($$anchor2) => {
+      var text_4 = text("All tasks, including uncategorized items.");
+      append($$anchor2, text_4);
     };
     if_block(node, ($$render) => {
       if (get(currentCategory)) $$render(consequent);
-      else if ($$props.filterGroupId) $$render(consequent_1, 1);
+      else if (filterUncategorized()) $$render(consequent_1, 1);
+      else if ($$props.filterGroupId) $$render(consequent_2, 2);
       else $$render(alternate, false);
     });
   }
@@ -6918,25 +6841,26 @@ function TaskBoard($$anchor, $$props) {
   var div_1 = sibling(div, 2);
   var div_2 = child(div_1);
   var span = child(div_2);
-  var text_4 = child(span, true);
+  var text_5 = child(span, true);
   reset(span);
   next();
   reset(div_2);
   var div_3 = sibling(div_2, 2);
   var span_1 = child(div_3);
-  var text_5 = child(span_1, true);
+  var text_6 = child(span_1, true);
   reset(span_1);
   next();
   reset(div_3);
   var div_4 = sibling(div_3, 2);
   var span_2 = child(div_4);
-  var text_6 = child(span_2, true);
+  var text_7 = child(span_2, true);
   reset(span_2);
   next();
   reset(div_4);
   reset(div_1);
   reset(header);
   var div_5 = sibling(header, 2);
+  let classes;
   var div_6 = child(div_5);
   var node_1 = child(div_6);
   QuickCapture(node_1, {
@@ -6947,12 +6871,12 @@ function TaskBoard($$anchor, $$props) {
   var section_1 = sibling(node_1, 2);
   var node_2 = sibling(child(section_1), 2);
   {
-    var consequent_2 = ($$anchor2) => {
-      var div_7 = root_43();
+    var consequent_3 = ($$anchor2) => {
+      var div_7 = root_53();
       append($$anchor2, div_7);
     };
     var alternate_1 = ($$anchor2) => {
-      var div_8 = root_53();
+      var div_8 = root_62();
       each(div_8, 21, () => get(sortedTasks), (task) => task.id, ($$anchor3, task) => {
         TaskCard($$anchor3, {
           get task() {
@@ -6966,45 +6890,59 @@ function TaskBoard($$anchor, $$props) {
       append($$anchor2, div_8);
     };
     if_block(node_2, ($$render) => {
-      if (get(sortedTasks).length === 0) $$render(consequent_2);
+      if (get(sortedTasks).length === 0) $$render(consequent_3);
       else $$render(alternate_1, false);
     });
   }
   reset(section_1);
   reset(div_6);
-  var aside = sibling(div_6, 2);
-  var section_2 = child(aside);
-  var ul = sibling(child(section_2), 2);
-  var node_3 = child(ul);
-  each(node_3, 17, () => [...categories].sort((a, b) => a.sortOrder - b.sortOrder), index, ($$anchor2, category) => {
-    var li = root_7();
-    var text_7 = child(li);
-    reset(li);
-    template_effect(() => set_text(text_7, `${get(category).emoji ? `${get(category).emoji} ` : ""}${get(category).name ?? ""}`));
-    append($$anchor2, li);
-  });
-  next(2);
-  reset(ul);
-  reset(section_2);
-  var node_4 = sibling(section_2, 2);
-  FocusMode(node_4, { compact: true });
-  reset(aside);
+  var node_3 = sibling(div_6, 2);
+  {
+    var consequent_4 = ($$anchor2) => {
+      var aside = root_8();
+      var section_2 = child(aside);
+      var ul = sibling(child(section_2), 2);
+      var node_4 = child(ul);
+      each(node_4, 17, () => get(sortedCategories), index, ($$anchor3, category) => {
+        var li = root_9();
+        var button = child(li);
+        var text_8 = child(button);
+        reset(button);
+        reset(li);
+        template_effect(() => set_text(text_8, `${get(category).emoji ? `${get(category).emoji} ` : ""}${get(category).name ?? ""}`));
+        delegated("click", button, () => $$props.onSelectCategory?.(get(category).id));
+        append($$anchor3, li);
+      });
+      var li_1 = sibling(node_4, 2);
+      var button_1 = child(li_1);
+      reset(li_1);
+      reset(ul);
+      reset(section_2);
+      reset(aside);
+      delegated("click", button_1, () => $$props.onSelectUncategorized?.());
+      append($$anchor2, aside);
+    };
+    if_block(node_3, ($$render) => {
+      if (showCategoriesCard()) $$render(consequent_4);
+    });
+  }
   reset(div_5);
   reset(section);
   template_effect(() => {
     set_text(text2, title());
-    set_text(text_4, get(openCount));
-    set_text(text_5, get(doneCount));
-    set_text(text_6, get(recurringCount));
+    set_text(text_5, get(openCount));
+    set_text(text_6, get(doneCount));
+    set_text(text_7, get(recurringCount));
+    classes = set_class(div_5, 1, "board-grid svelte-q5ccww", null, classes, { "single-column": !showCategoriesCard() });
   });
   append($$anchor, section);
   pop();
 }
+delegate(["click"]);
 
 // components/App.svelte
 var root_54 = from_html(`<div class="error-banner"> </div>`);
-var root_62 = from_html(`<div class="focus-layout"><!> <section class="panel"><h3>Plugin Status</h3> <p>Tag prefix: <code> </code></p> <p>Inbox file: <code> </code></p> <p> </p> <p> </p></section></div>`);
-var root7 = from_html(`<div class="adhd-todo-container"><aside class="adhd-todo-sidebar-pane"><!></aside> <main class="adhd-todo-main"><header class="topbar"><div><h1> </h1> <p><!></p></div> <div class="topbar-actions"><button type="button">Board</button> <button type="button">Focus</button> <button type="button"> </button></div></header> <!> <!></main></div>`);
+var root6 = from_html(`<div class="adhd-todo-container"><aside class="adhd-todo-sidebar-pane"><!></aside> <main class="adhd-todo-main"><header class="topbar"><div><h1> </h1> <p><!></p></div> <div class="topbar-actions"><button type="button">Board</button> <button type="button"> </button></div></header> <!> <!></main></div>`);
 function App($$anchor, $$props) {
   push($$props, true);
   user_effect(() => {
@@ -7012,8 +6950,9 @@ function App($$anchor, $$props) {
   });
   const activeGroup = user_derived(() => nav.groupId ? categoryGroups.find((g) => g.id === nav.groupId) : void 0);
   const activeCategory = user_derived(() => nav.categoryId ? getCategory(nav.categoryId) : void 0);
-  const pageTitle = user_derived(() => nav.view === "focus" ? "Focus Mode" : get(activeCategory) ? `${get(activeCategory).emoji ? `${get(activeCategory).emoji} ` : ""}${get(activeCategory).name}` : get(activeGroup) ? get(activeGroup).name : "Dashboard");
-  var div = root7();
+  const isDashboardView = user_derived(() => !nav.groupId && !nav.categoryId && !nav.uncategorizedOnly);
+  const pageTitle = user_derived(() => get(activeCategory) ? `${get(activeCategory).emoji ? `${get(activeCategory).emoji} ` : ""}${get(activeCategory).name}` : nav.uncategorizedOnly ? "Uncategorized / Group-level" : get(activeGroup) ? get(activeGroup).name : "Dashboard");
+  var div = root6();
   var aside = child(div);
   var node = child(aside);
   Sidebar(node, {});
@@ -7028,11 +6967,11 @@ function App($$anchor, $$props) {
   var node_1 = child(p);
   {
     var consequent = ($$anchor2) => {
-      var text_1 = text("Pomodoro timer inside Obsidian.");
+      var text_1 = text("Tasks from this category sourced from `#todo` tags in your vault.");
       append($$anchor2, text_1);
     };
     var consequent_1 = ($$anchor2) => {
-      var text_2 = text("Tasks from this category sourced from `#todo` tags in your vault.");
+      var text_2 = text("Tasks without a mapped category, including group-level items.");
       append($$anchor2, text_2);
     };
     var consequent_2 = ($$anchor2) => {
@@ -7044,8 +6983,8 @@ function App($$anchor, $$props) {
       append($$anchor2, text_4);
     };
     if_block(node_1, ($$render) => {
-      if (nav.view === "focus") $$render(consequent);
-      else if (get(activeCategory)) $$render(consequent_1, 1);
+      if (get(activeCategory)) $$render(consequent);
+      else if (nav.uncategorizedOnly) $$render(consequent_1, 1);
       else if (get(activeGroup)) $$render(consequent_2, 2);
       else $$render(alternate, false);
     });
@@ -7056,10 +6995,8 @@ function App($$anchor, $$props) {
   var button = child(div_2);
   let classes;
   var button_1 = sibling(button, 2);
-  let classes_1;
-  var button_2 = sibling(button_1, 2);
-  var text_5 = child(button_2, true);
-  reset(button_2);
+  var text_5 = child(button_1, true);
+  reset(button_1);
   reset(div_2);
   reset(header);
   var node_2 = sibling(header, 2);
@@ -7076,81 +7013,39 @@ function App($$anchor, $$props) {
     });
   }
   var node_3 = sibling(node_2, 2);
-  {
-    var consequent_4 = ($$anchor2) => {
-      var div_4 = root_62();
-      var node_4 = child(div_4);
-      FocusMode(node_4, {
-        get initialMinutes() {
-          return $$props.plugin.settings.focusDuration;
-        }
-      });
-      var section = sibling(node_4, 2);
-      var p_1 = sibling(child(section), 2);
-      var code = sibling(child(p_1));
-      var text_7 = child(code, true);
-      reset(code);
-      reset(p_1);
-      var p_2 = sibling(p_1, 2);
-      var code_1 = sibling(child(p_2));
-      var text_8 = child(code_1, true);
-      reset(code_1);
-      reset(p_2);
-      var p_3 = sibling(p_2, 2);
-      var text_9 = child(p_3);
-      reset(p_3);
-      var p_4 = sibling(p_3, 2);
-      var text_10 = child(p_4);
-      reset(p_4);
-      reset(section);
-      reset(div_4);
-      template_effect(
-        ($0) => {
-          set_text(text_7, $$props.plugin.settings.tagPrefix);
-          set_text(text_8, $$props.plugin.settings.inboxFile);
-          set_text(text_9, `Categories: ${categories.length ?? ""} \xB7 Groups: ${categoryGroups.length ?? ""}`);
-          set_text(text_10, `Last scan: ${$0 ?? ""}`);
-        },
-        [
-          () => ui.lastScanAt ? new Date(ui.lastScanAt).toLocaleString() : "Never"
-        ]
-      );
-      append($$anchor2, div_4);
-    };
-    var alternate_1 = ($$anchor2) => {
-      TaskBoard($$anchor2, {
-        get title() {
-          return get(pageTitle);
-        },
-        get filterCategoryId() {
-          return nav.categoryId;
-        },
-        get filterGroupId() {
-          return nav.groupId;
-        }
-      });
-    };
-    if_block(node_3, ($$render) => {
-      if (nav.view === "focus") $$render(consequent_4);
-      else $$render(alternate_1, false);
-    });
-  }
+  TaskBoard(node_3, {
+    get title() {
+      return get(pageTitle);
+    },
+    get filterCategoryId() {
+      return nav.categoryId;
+    },
+    get filterGroupId() {
+      return nav.groupId;
+    },
+    get filterUncategorized() {
+      return nav.uncategorizedOnly;
+    },
+    get showCategoriesCard() {
+      return get(isDashboardView);
+    },
+    onSelectCategory: (categoryId) => setNavCategory(categoryId),
+    get onSelectUncategorized() {
+      return setNavUncategorized;
+    }
+  });
   reset(main);
   reset(div);
   template_effect(() => {
     set_text(text2, get(pageTitle));
-    classes = set_class(button, 1, "", null, classes, { active: nav.view !== "focus" });
-    classes_1 = set_class(button_1, 1, "", null, classes_1, { active: nav.view === "focus" });
-    button_2.disabled = ui.loading;
+    classes = set_class(button, 1, "", null, classes, { active: get(isDashboardView) });
+    button_1.disabled = ui.loading;
     set_text(text_5, ui.loading ? "Scanning\u2026" : "Rescan");
   });
   delegated("click", button, function(...$$args) {
     setNavDashboard?.apply(this, $$args);
   });
-  delegated("click", button_1, function(...$$args) {
-    setNavFocus?.apply(this, $$args);
-  });
-  delegated("click", button_2, () => refreshVaultState());
+  delegated("click", button_1, () => refreshVaultState());
   append($$anchor, div);
   pop();
 }
@@ -7197,9 +7092,7 @@ var DEFAULT_SETTINGS = {
   tagPrefix: "#todo",
   inboxFile: "Todo Inbox.md",
   archivedGroups: [],
-  showCompleted: true,
-  focusDuration: 25,
-  breakDuration: 5
+  showCompleted: true
 };
 var TodoSettingTab = class extends import_obsidian4.PluginSettingTab {
   plugin;
@@ -7227,18 +7120,6 @@ var TodoSettingTab = class extends import_obsidian4.PluginSettingTab {
     new import_obsidian4.Setting(containerEl).setName("Show completed").setDesc("Show completed tasks in the task board").addToggle(
       (toggle) => toggle.setValue(this.plugin.settings.showCompleted).onChange(async (value) => {
         this.plugin.settings.showCompleted = value;
-        await this.plugin.saveSettings();
-      })
-    );
-    new import_obsidian4.Setting(containerEl).setName("Focus duration (minutes)").addSlider(
-      (slider) => slider.setLimits(5, 90, 1).setValue(this.plugin.settings.focusDuration).setDynamicTooltip().onChange(async (value) => {
-        this.plugin.settings.focusDuration = value;
-        await this.plugin.saveSettings();
-      })
-    );
-    new import_obsidian4.Setting(containerEl).setName("Break duration (minutes)").addSlider(
-      (slider) => slider.setLimits(1, 30, 1).setValue(this.plugin.settings.breakDuration).setDynamicTooltip().onChange(async (value) => {
-        this.plugin.settings.breakDuration = value;
         await this.plugin.saveSettings();
       })
     );

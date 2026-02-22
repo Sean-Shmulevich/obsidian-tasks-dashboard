@@ -4,7 +4,6 @@
     nav,
     setNavCategory,
     setNavDashboard,
-    setNavFocus,
     setNavGroup,
     toggleGroupCollapsed,
     ungroupedCategories
@@ -17,11 +16,6 @@
 
   function goDashboard() {
     setNavDashboard();
-    onNavigate?.();
-  }
-
-  function goFocus() {
-    setNavFocus();
     onNavigate?.();
   }
 
@@ -45,8 +39,9 @@
     </div>
   </div>
 
-  <button type="button" class:active={nav.view !== 'focus' && !nav.groupId && !nav.categoryId} onclick={goDashboard}>🏡 Dashboard</button>
-  <button type="button" class:active={nav.view === 'focus'} onclick={goFocus}>🍅 Focus Mode</button>
+  <button type="button" class:active={!nav.groupId && !nav.categoryId && !nav.uncategorizedOnly} onclick={goDashboard}>
+    🏡 Dashboard
+  </button>
 
   <div class="group-list">
     {#each grouped as section (section.group.id)}
@@ -153,7 +148,7 @@
   .group-list {
     overflow: auto;
     display: grid;
-    gap: 0.75rem;
+    gap: 0.2rem;
     align-content: start;
     padding: 0.1rem 0.15rem 0.2rem 0.1rem;
   }
@@ -161,13 +156,19 @@
   .group-block {
     display: grid;
     gap: 0.2rem;
+    margin-bottom: 0.875rem;
   }
 
   .group-header-row {
     display: flex;
     gap: 0.25rem;
     align-items: center;
-    padding-inline: 0.15rem;
+    padding-inline: 0.3rem;
+  }
+
+  .group-block + .group-block .group-header-row,
+  .group-block + .group-block .group-header-static {
+    margin-top: 0.3rem;
   }
 
   .group-collapse {
@@ -202,7 +203,7 @@
   .items {
     display: grid;
     gap: 0.12rem;
-    padding-left: 0.85rem;
+    padding-left: 1.15rem;
   }
 
   .category-item {
@@ -210,7 +211,7 @@
     grid-template-columns: 3px 1.1rem 1fr;
     gap: 0.5rem;
     align-items: center;
-    padding: 0.38rem 0.75rem 0.38rem 0.7rem;
+    padding: 0.4rem 0.95rem 0.4rem 0.95rem;
     border-radius: 0.4rem;
     border: 1px solid transparent;
     font-size: 0.85rem;

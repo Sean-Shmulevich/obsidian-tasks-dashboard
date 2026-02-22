@@ -4,12 +4,13 @@ import { combineScanResults, scanSingleFile } from './vault-scanner';
 import { VaultTodoWriter } from './vault-writer';
 import type { Category, CategoryGroup, ScanResult, Task } from './types';
 
-type NavView = 'dashboard' | 'focus';
+type NavView = 'dashboard';
 
 type NavState = {
   view: NavView;
   groupId?: string;
   categoryId?: string;
+  uncategorizedOnly?: boolean;
 };
 
 function makeId() {
@@ -55,7 +56,9 @@ const visibleTasksValue = $derived.by(() => {
   const showCompleted = pluginRef?.settings.showCompleted ?? true;
   let list = [...tasks].sort((a, b) => a.sortOrder - b.sortOrder);
 
-  if (nav.categoryId) list = list.filter((task) => task.categoryId === nav.categoryId);
+  if (nav.uncategorizedOnly) {
+    list = list.filter((task) => !task.categoryId);
+  } else if (nav.categoryId) list = list.filter((task) => task.categoryId === nav.categoryId);
   else if (nav.groupId) {
     const group = categoryGroups.find((g) => g.id === nav.groupId);
     const groupKey = group?.sourceGroupKey?.toLowerCase();
@@ -277,24 +280,28 @@ export function setNavDashboard() {
   nav.view = 'dashboard';
   nav.groupId = undefined;
   nav.categoryId = undefined;
-}
-
-export function setNavFocus() {
-  nav.view = 'focus';
-  nav.groupId = undefined;
-  nav.categoryId = undefined;
+  nav.uncategorizedOnly = undefined;
 }
 
 export function setNavGroup(groupId: string) {
   nav.view = 'dashboard';
   nav.groupId = groupId;
   nav.categoryId = undefined;
+  nav.uncategorizedOnly = undefined;
 }
 
 export function setNavCategory(categoryId: string) {
   nav.view = 'dashboard';
   nav.categoryId = categoryId;
   nav.groupId = undefined;
+  nav.uncategorizedOnly = undefined;
+}
+
+export function setNavUncategorized() {
+  nav.view = 'dashboard';
+  nav.categoryId = undefined;
+  nav.groupId = undefined;
+  nav.uncategorizedOnly = true;
 }
 
 export function getCategory(categoryId: string | undefined) {

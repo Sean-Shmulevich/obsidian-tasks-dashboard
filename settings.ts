@@ -6,17 +6,13 @@ export interface TodoSettings {
   inboxFile: string;
   archivedGroups: string[];
   showCompleted: boolean;
-  focusDuration: number;
-  breakDuration: number;
 }
 
 export const DEFAULT_SETTINGS: TodoSettings = {
   tagPrefix: '#todo',
   inboxFile: 'Todo Inbox.md',
   archivedGroups: [],
-  showCompleted: true,
-  focusDuration: 25,
-  breakDuration: 5
+  showCompleted: true
 };
 
 export class TodoSettingTab extends PluginSettingTab {
@@ -70,30 +66,5 @@ export class TodoSettingTab extends PluginSettingTab {
         })
       );
 
-    new Setting(containerEl)
-      .setName('Focus duration (minutes)')
-      .addSlider((slider) =>
-        slider
-          .setLimits(5, 90, 1)
-          .setValue(this.plugin.settings.focusDuration)
-          .setDynamicTooltip()
-          .onChange(async (value) => {
-            this.plugin.settings.focusDuration = value;
-            await this.plugin.saveSettings();
-          })
-      );
-
-    new Setting(containerEl)
-      .setName('Break duration (minutes)')
-      .addSlider((slider) =>
-        slider
-          .setLimits(1, 30, 1)
-          .setValue(this.plugin.settings.breakDuration)
-          .setDynamicTooltip()
-          .onChange(async (value) => {
-            this.plugin.settings.breakDuration = value;
-            await this.plugin.saveSettings();
-          })
-      );
   }
 }

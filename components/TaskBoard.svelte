@@ -1,17 +1,24 @@
 <script lang="ts">
   import { categories, getCategory, visibleTasks } from '../state.svelte.ts';
-  import FocusMode from './FocusMode.svelte';
   import QuickCapture from './QuickCapture.svelte';
   import TaskCard from './TaskCard.svelte';
 
   let {
     title = 'Dashboard',
     filterCategoryId,
-    filterGroupId
+    filterGroupId,
+    filterUncategorized = false,
+    showCategoriesCard = true,
+    onSelectCategory,
+    onSelectUncategorized
   }: {
     title?: string;
     filterCategoryId?: string;
     filterGroupId?: string;
+    filterUncategorized?: boolean;
+    showCategoriesCard?: boolean;
+    onSelectCategory?: (categoryId: string) => void;
+    onSelectUncategorized?: () => void;
   } = $props();
 
   let draggingTaskId = $state<string | null>(null);
@@ -21,6 +28,7 @@
   const doneCount = $derived(sortedTasks.filter((task) => task.completed).length);
   const recurringCount = $derived(sortedTasks.filter((task) => task.recurrence).length);
   const currentCategory = $derived(filterCategoryId ? getCategory(filterCategoryId) : undefined);
+  const sortedCategories = $derived([...categories].sort((a, b) => a.sortOrder - b.sortOrder));
 
   function onDropOn(_targetTaskId: string) {
     draggingTaskId = null;
@@ -34,6 +42,8 @@
       <p>
         {#if currentCategory}
           {currentCategory.emoji ? `${currentCategory.emoji} ` : ''}{currentCategory.name}
+        {:else if filterUncategorized}
+          Tasks without a mapped category, including group-level items.
         {:else if filterGroupId}
           Group-level and category tasks in this section.
         {:else}
@@ -48,7 +58,7 @@
     </div>
   </header>
 
-  <div class="board-grid">
+  <div class="board-grid" class:single-column={!showCategoriesCard}>
     <div class="main-column">
       <QuickCapture defaultCategoryId={filterCategoryId} />
       <section class="task-list">
@@ -68,18 +78,27 @@
       </section>
     </div>
 
-    <aside class="side-column">
-      <section class="panel">
-        <h3>Categories</h3>
-        <ul>
-          {#each [...categories].sort((a, b) => a.sortOrder - b.sortOrder) as category}
-            <li>{category.emoji ? `${category.emoji} ` : ''}{category.name}</li>
-          {/each}
-          <li>Uncategorized / group-level</li>
-        </ul>
-      </section>
-      <FocusMode compact />
-    </aside>
+    {#if showCategoriesCard}
+      <aside class="side-column">
+        <section class="panel">
+          <h3>Categories</h3>
+          <ul class="category-links">
+            {#each sortedCategories as category}
+              <li>
+                <button type="button" onclick={() => onSelectCategory?.(category.id)}>
+                  {category.emoji ? `${category.emoji} ` : ''}{category.name}
+                </button>
+              </li>
+            {/each}
+            <li>
+              <button type="button" onclick={() => onSelectUncategorized?.()}>
+                Uncategorized / group-level
+              </button>
+            </li>
+          </ul>
+        </section>
+      </aside>
+    {/if}
   </div>
 </section>
 
@@ -137,6 +156,10 @@
     gap: 1rem;
   }
 
+  .board-grid.single-column {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
   .main-column,
   .side-column {
     display: grid;
@@ -192,6 +215,23 @@
     gap: 0.45rem;
     color: var(--text-muted);
     font-size: 0.9rem;
+  }
+
+  .category-links button {
+    width: 100%;
+    text-align: left;
+    font: inherit;
+    color: inherit;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 0.45rem;
+    padding: 0.35rem 0.45rem;
+    cursor: pointer;
+  }
+
+  .category-links button:hover {
+    background: var(--surface-2);
+    color: var(--text-normal);
   }
 
   @media (max-width: 980px) {
