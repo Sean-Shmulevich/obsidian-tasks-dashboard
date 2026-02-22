@@ -25,7 +25,7 @@ export default class TodoPlugin extends Plugin {
     });
 
     this.addCommand({
-      id: 'open-todo-planner',
+      id: 'open-todo-dashboard',
       name: 'Open Todo Planner',
       callback: () => {
         void this.activateView();
@@ -33,7 +33,7 @@ export default class TodoPlugin extends Plugin {
     });
 
     this.addCommand({
-      id: 'rescan-todo-planner-vault',
+      id: 'rescan-todo-dashboard-vault',
       name: 'Rescan Todo Planner tasks',
       callback: () => {
         void this.refreshTodoState();
