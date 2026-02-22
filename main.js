@@ -6565,17 +6565,20 @@ function QuickCapture($$anchor, $$props) {
 delegate(["keydown"]);
 
 // components/TaskCard.svelte
-var root_13 = from_html(`<button type="button" class="ghost icon-btn svelte-1j8piq" title="Open in Obsidian">\u2197</button> <button type="button" class="ghost icon-btn svelte-1j8piq" title="Edit">\u270E</button> <button type="button" class="danger icon-btn svelte-1j8piq" title="Delete">\u{1F5D1}</button>`, 1);
-var root_33 = from_html(`<option> </option>`);
-var root_23 = from_html(`<div class="editor svelte-1j8piq"><input type="text" maxlength="140" class="svelte-1j8piq"/> <div class="grid2 svelte-1j8piq"><select disabled="" class="svelte-1j8piq"><option>Vault category (read from tags)</option><!></select></div> <div class="actions svelte-1j8piq"><button type="button" class="svelte-1j8piq">Save</button> <button type="button" class="ghost svelte-1j8piq">Cancel</button></div></div>`);
-var root3 = from_html(`<article draggable="true"><div class="row top-row svelte-1j8piq"><label class="checkbox-row svelte-1j8piq"><input type="checkbox" class="svelte-1j8piq"/> <span class="title svelte-1j8piq"> </span></label> <div class="right-controls svelte-1j8piq"><!></div></div> <!></article>`);
+var root_13 = from_html(`<button type="button" class="cat-badge svelte-1j8piq"> </button>`);
+var root_23 = from_html(`<button type="button" class="ghost icon-btn svelte-1j8piq" title="Open in Obsidian">\u2197</button> <button type="button" class="ghost icon-btn svelte-1j8piq" title="Edit">\u270E</button> <button type="button" class="danger icon-btn svelte-1j8piq" title="Delete">\u{1F5D1}</button>`, 1);
+var root_42 = from_html(`<option> </option>`);
+var root_33 = from_html(`<div class="editor svelte-1j8piq"><input type="text" maxlength="140" class="svelte-1j8piq"/> <div class="grid2 svelte-1j8piq"><select disabled="" class="svelte-1j8piq"><option>Vault category (read from tags)</option><!></select></div> <div class="actions svelte-1j8piq"><button type="button" class="svelte-1j8piq">Save</button> <button type="button" class="ghost svelte-1j8piq">Cancel</button></div></div>`);
+var root3 = from_html(`<article draggable="true"><div class="row top-row svelte-1j8piq"><label class="checkbox-row svelte-1j8piq"><input type="checkbox" class="svelte-1j8piq"/> <span class="title svelte-1j8piq"> </span></label> <div class="right-controls svelte-1j8piq"><!> <!></div></div> <!></article>`);
 var $$css3 = {
   hash: "svelte-1j8piq",
-  code: ".task-card.svelte-1j8piq {display:grid;gap:0.25rem;padding:0.4rem 0.5rem;border-radius:0.75rem;border:1px solid var(--border-color);background:var(--surface-1);}.task-card.done.svelte-1j8piq {opacity:0.72;}.top-row.svelte-1j8piq {display:flex;justify-content:space-between;gap:0.35rem;align-items:flex-start;min-width:0;}.checkbox-row.svelte-1j8piq {display:flex;flex:1 1 auto;gap:0.45rem;align-items:flex-start;font-weight:600;min-width:0;}.checkbox-row.svelte-1j8piq .title:where(.svelte-1j8piq) {display:block;min-width:0;line-height:1.2;font-size:0.9rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}.checkbox-row.svelte-1j8piq input[type='checkbox']:where(.svelte-1j8piq) {margin-top:0.1rem;inline-size:0.95rem;block-size:0.95rem;}.done.svelte-1j8piq .title:where(.svelte-1j8piq) {text-decoration:line-through;}.right-controls.svelte-1j8piq {display:flex;flex:0 0 auto;gap:0.25rem;align-items:center;}.editor.svelte-1j8piq {display:grid;gap:0.5rem;padding-top:0.1rem;}.editor.svelte-1j8piq input:where(.svelte-1j8piq),\n  .editor.svelte-1j8piq select:where(.svelte-1j8piq),\n  .actions.svelte-1j8piq button:where(.svelte-1j8piq) {background:var(--surface-2);border:1px solid var(--border-color);color:inherit;border-radius:0.55rem;padding:0.45rem 0.6rem;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}.grid2.svelte-1j8piq {display:grid;gap:0.5rem;grid-template-columns:repeat(2, minmax(0, 1fr));}.icon-btn.svelte-1j8piq {display:grid;place-items:center;min-width:1.8rem;min-height:1.8rem;padding:0.2rem;line-height:1;font-size:0.8rem;border-radius:0.45rem;}.actions.svelte-1j8piq .ghost:where(.svelte-1j8piq) {background:transparent;}.danger.svelte-1j8piq {border-color:color-mix(in srgb, #ff6b6b 55%, var(--border-color));}\n\n  @media (max-width: 600px) {.task-card.svelte-1j8piq {padding:0.35rem 0.4rem;}.checkbox-row.svelte-1j8piq {gap:0.35rem;}.grid2.svelte-1j8piq {grid-template-columns:1fr;}.actions.svelte-1j8piq {justify-content:flex-start;}\n  }\n\n  @media (max-width: 400px) {.top-row.svelte-1j8piq {flex-wrap:wrap;}.icon-btn.svelte-1j8piq {min-width:1.65rem;min-height:1.65rem;}\n  }"
+  code: ".task-card.svelte-1j8piq {display:grid;gap:0.25rem;padding:0.4rem 0.5rem;border-radius:0.75rem;border:1px solid var(--border-color);background:var(--surface-1);}.task-card.done.svelte-1j8piq {opacity:0.72;}.top-row.svelte-1j8piq {display:flex;justify-content:space-between;gap:0.35rem;align-items:flex-start;min-width:0;}.checkbox-row.svelte-1j8piq {display:flex;flex:1 1 auto;gap:0.45rem;align-items:flex-start;font-weight:600;min-width:0;}.checkbox-row.svelte-1j8piq .title:where(.svelte-1j8piq) {display:block;min-width:0;line-height:1.2;font-size:0.9rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}.checkbox-row.svelte-1j8piq input[type='checkbox']:where(.svelte-1j8piq) {margin-top:0.1rem;inline-size:0.95rem;block-size:0.95rem;}.done.svelte-1j8piq .title:where(.svelte-1j8piq) {text-decoration:line-through;}.right-controls.svelte-1j8piq {display:flex;flex:0 0 auto;gap:0.25rem;align-items:center;}.editor.svelte-1j8piq {display:grid;gap:0.5rem;padding-top:0.1rem;}.editor.svelte-1j8piq input:where(.svelte-1j8piq),\n  .editor.svelte-1j8piq select:where(.svelte-1j8piq),\n  .actions.svelte-1j8piq button:where(.svelte-1j8piq) {background:var(--surface-2);border:1px solid var(--border-color);color:inherit;border-radius:0.55rem;padding:0.45rem 0.6rem;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}.grid2.svelte-1j8piq {display:grid;gap:0.5rem;grid-template-columns:repeat(2, minmax(0, 1fr));}.cat-badge.svelte-1j8piq {padding:0.15rem 0.5rem;border-radius:999px;font-size:0.65rem;font-weight:600;background:color-mix(in srgb, var(--interactive-accent, #7c3aed) 18%, var(--surface-2, #2a2a3e));border:1px solid var(--border-color);color:var(--text-normal);cursor:pointer;white-space:nowrap;transition:background 120ms ease;}.cat-badge.svelte-1j8piq:hover {background:color-mix(in srgb, var(--interactive-accent, #7c3aed) 35%, var(--surface-2, #2a2a3e));}.icon-btn.svelte-1j8piq {display:grid;place-items:center;min-width:1.8rem;min-height:1.8rem;padding:0.2rem;line-height:1;font-size:0.8rem;border-radius:0.45rem;}.actions.svelte-1j8piq .ghost:where(.svelte-1j8piq) {background:transparent;}.danger.svelte-1j8piq {border-color:color-mix(in srgb, #ff6b6b 55%, var(--border-color));}\n\n  @media (max-width: 600px) {.task-card.svelte-1j8piq {padding:0.35rem 0.4rem;}.checkbox-row.svelte-1j8piq {gap:0.35rem;}.grid2.svelte-1j8piq {grid-template-columns:1fr;}.actions.svelte-1j8piq {justify-content:flex-start;}\n  }\n\n  @media (max-width: 400px) {.top-row.svelte-1j8piq {flex-wrap:wrap;}.icon-btn.svelte-1j8piq {min-width:1.65rem;min-height:1.65rem;}\n  }"
 };
 function TaskCard($$anchor, $$props) {
   push($$props, true);
   append_styles($$anchor, $$css3);
+  let showCategory = prop($$props, "showCategory", 3, false);
+  const catName = user_derived(() => showCategory() ? categoryLabel($$props.task.categoryId) : "");
   let editing = state(false);
   let title = state("");
   let categoryId = state("");
@@ -6604,39 +6607,56 @@ function TaskCard($$anchor, $$props) {
   var node = child(div_1);
   {
     var consequent = ($$anchor2) => {
-      var fragment = root_13();
-      var button = first_child(fragment);
-      var button_1 = sibling(button, 2);
-      var button_2 = sibling(button_1, 2);
-      delegated("click", button, () => openTaskInObsidian($$props.task.id));
-      delegated("click", button_1, () => set(editing, true));
-      delegated("click", button_2, () => deleteTask($$props.task.id));
-      append($$anchor2, fragment);
+      var button = root_13();
+      var text_1 = child(button, true);
+      reset(button);
+      template_effect(() => {
+        set_attribute2(button, "title", `Go to ${get(catName) ?? ""}`);
+        set_text(text_1, get(catName));
+      });
+      delegated("click", button, () => $$props.task.categoryId && $$props.onGoToCategory?.($$props.task.categoryId));
+      append($$anchor2, button);
     };
     if_block(node, ($$render) => {
-      if (!get(editing)) $$render(consequent);
+      if (showCategory() && get(catName) && get(catName) !== "Uncategorized") $$render(consequent);
+    });
+  }
+  var node_1 = sibling(node, 2);
+  {
+    var consequent_1 = ($$anchor2) => {
+      var fragment = root_23();
+      var button_1 = first_child(fragment);
+      var button_2 = sibling(button_1, 2);
+      var button_3 = sibling(button_2, 2);
+      delegated("click", button_1, () => openTaskInObsidian($$props.task.id));
+      delegated("click", button_2, () => set(editing, true));
+      delegated("click", button_3, () => deleteTask($$props.task.id));
+      append($$anchor2, fragment);
+    };
+    if_block(node_1, ($$render) => {
+      if (!get(editing)) $$render(consequent_1);
     });
   }
   reset(div_1);
   reset(div);
-  var node_1 = sibling(div, 2);
+  var node_2 = sibling(div, 2);
   {
-    var consequent_1 = ($$anchor2) => {
-      var div_2 = root_23();
+    var consequent_2 = ($$anchor2) => {
+      var div_2 = root_33();
       var input_1 = child(div_2);
       remove_input_defaults(input_1);
       var div_3 = sibling(input_1, 2);
       var select = child(div_3);
       var option = child(select);
       option.value = option.__value = "";
-      var node_2 = sibling(option);
-      each(node_2, 17, () => [...categories].sort((a, b) => a.sortOrder - b.sortOrder), index, ($$anchor3, category) => {
-        var option_1 = root_33();
-        var text_1 = child(option_1);
+      var node_3 = sibling(option);
+      each(node_3, 17, () => [...categories].sort((a, b) => a.sortOrder - b.sortOrder), index, ($$anchor3, category) => {
+        var option_1 = root_42();
+        var text_2 = child(option_1);
         reset(option_1);
         var option_1_value = {};
         template_effect(() => {
-          set_text(text_1, `${get(category).emoji ? `${get(category).emoji} ` : ""}${get(category).name ?? ""}`);
+          set_text(text_2, `${get(category).emoji ? `${get(category).emoji} ` : ""}${get(category).name ?? ""}`);
           if (option_1_value !== (option_1_value = get(category).id)) {
             option_1.value = (option_1.__value = get(category).id) ?? "";
           }
@@ -6646,19 +6666,19 @@ function TaskCard($$anchor, $$props) {
       reset(select);
       reset(div_3);
       var div_4 = sibling(div_3, 2);
-      var button_3 = child(div_4);
-      var button_4 = sibling(button_3, 2);
+      var button_4 = child(div_4);
+      var button_5 = sibling(button_4, 2);
       reset(div_4);
       reset(div_2);
       delegated("keydown", input_1, (e) => e.stopPropagation());
       bind_value(input_1, () => get(title), ($$value) => set(title, $$value));
       bind_select_value(select, () => get(categoryId), ($$value) => set(categoryId, $$value));
-      delegated("click", button_3, save2);
-      delegated("click", button_4, () => set(editing, false));
+      delegated("click", button_4, save2);
+      delegated("click", button_5, () => set(editing, false));
       append($$anchor2, div_2);
     };
-    if_block(node_1, ($$render) => {
-      if (get(editing)) $$render(consequent_1);
+    if_block(node_2, ($$render) => {
+      if (get(editing)) $$render(consequent_2);
     });
   }
   reset(article);
@@ -6876,7 +6896,9 @@ function TaskBoard($$anchor, $$props) {
                 return get(task);
               },
               onDragStart: (id) => set(draggingTaskId, id, true),
-              onDropOn: (id) => onDropOn(id)
+              onDropOn: (id) => onDropOn(id),
+              showCategory: true,
+              onGoToCategory: (catId) => $$props.onSelectCategory?.(catId)
             });
           });
           reset(div_8);
@@ -6913,7 +6935,9 @@ function TaskBoard($$anchor, $$props) {
                     return get(task);
                   },
                   onDragStart: (id) => set(draggingTaskId, id, true),
-                  onDropOn: (id) => onDropOn(id)
+                  onDropOn: (id) => onDropOn(id),
+                  showCategory: true,
+                  onGoToCategory: (catId) => $$props.onSelectCategory?.(catId)
                 });
               });
               reset(div_10);

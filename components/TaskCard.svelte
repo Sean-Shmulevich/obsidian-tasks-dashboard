@@ -11,12 +11,18 @@
   let {
     task,
     onDragStart,
-    onDropOn
+    onDropOn,
+    showCategory = false,
+    onGoToCategory
   }: {
     task: Task;
     onDragStart?: (id: string) => void;
     onDropOn?: (id: string) => void;
+    showCategory?: boolean;
+    onGoToCategory?: (categoryId: string) => void;
   } = $props();
+
+  const catName = $derived(showCategory ? categoryLabel(task.categoryId) : '');
 
   let editing = $state(false);
   let title = $state('');
@@ -61,6 +67,14 @@
       <span class="title">{task.title}</span>
     </label>
     <div class="right-controls">
+      {#if showCategory && catName && catName !== 'Uncategorized'}
+        <button
+          type="button"
+          class="cat-badge"
+          title="Go to {catName}"
+          onclick={() => task.categoryId && onGoToCategory?.(task.categoryId)}
+        >{catName}</button>
+      {/if}
       {#if !editing}
         <button type="button" class="ghost icon-btn" title="Open in Obsidian" onclick={() => openTaskInObsidian(task.id)}>↗</button>
         <button type="button" class="ghost icon-btn" title="Edit" onclick={() => (editing = true)}>✎</button>
@@ -169,6 +183,23 @@
     display: grid;
     gap: 0.5rem;
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .cat-badge {
+    padding: 0.15rem 0.5rem;
+    border-radius: 999px;
+    font-size: 0.65rem;
+    font-weight: 600;
+    background: color-mix(in srgb, var(--interactive-accent, #7c3aed) 18%, var(--surface-2, #2a2a3e));
+    border: 1px solid var(--border-color);
+    color: var(--text-normal);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 120ms ease;
+  }
+
+  .cat-badge:hover {
+    background: color-mix(in srgb, var(--interactive-accent, #7c3aed) 35%, var(--surface-2, #2a2a3e));
   }
 
   .icon-btn {

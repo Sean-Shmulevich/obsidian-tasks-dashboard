@@ -166,7 +166,8 @@
             {#if openCount > 0}
               <div class="cards">
                 {#each incompleteTasks as task (task.id)}
-                  <TaskCard {task} onDragStart={(id) => (draggingTaskId = id)} onDropOn={(id) => onDropOn(id)} />
+                  <TaskCard {task} onDragStart={(id) => (draggingTaskId = id)} onDropOn={(id) => onDropOn(id)}
+                    showCategory={true} onGoToCategory={(catId) => onSelectCategory?.(catId)} />
                 {/each}
               </div>
             {/if}
@@ -188,7 +189,8 @@
               {:else}
                 <div class="cards">
                   {#each finishedTasks as task (task.id)}
-                    <TaskCard {task} onDragStart={(id) => (draggingTaskId = id)} onDropOn={(id) => onDropOn(id)} />
+                    <TaskCard {task} onDragStart={(id) => (draggingTaskId = id)} onDropOn={(id) => onDropOn(id)}
+                      showCategory={true} onGoToCategory={(catId) => onSelectCategory?.(catId)} />
                   {/each}
                 </div>
               {/if}
