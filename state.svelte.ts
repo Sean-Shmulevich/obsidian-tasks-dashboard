@@ -321,7 +321,7 @@ export function toggleGroupCollapsed(groupId: string) {
   group.collapsed = !group.collapsed;
 }
 
-export async function addTask(input: { title: string; categoryId?: string; priority?: Task['priority']; subTag?: string }) {
+export async function addTask(input: { title: string; categoryId?: string; subTag?: string }) {
   if (!writerRef) return;
   await writerRef.addTask(input);
   await refreshVaultState();

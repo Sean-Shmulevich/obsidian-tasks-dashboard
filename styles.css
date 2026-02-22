@@ -11,7 +11,6 @@
   --sidebar-muted: var(--text-muted);
   --sidebar-border: var(--background-modifier-border);
   --sidebar-active-bg: color-mix(in srgb, var(--interactive-accent) 12%, var(--background-secondary));
-
   display: grid;
   grid-template-columns: clamp(260px, 24vw, 320px) minmax(0, 1fr);
   position: relative;

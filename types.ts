@@ -1,9 +1,6 @@
-export type Priority = 'low' | 'medium' | 'high' | 'urgent';
-
 export type Task = {
   id: string;
   title: string;
-  priority: Priority;
   completed: boolean;
   createdAt: string;
   updatedAt: string;

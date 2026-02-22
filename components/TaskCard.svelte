@@ -1,13 +1,12 @@
 <script lang="ts">
   import {
     categories,
-    categoryLabel,
     deleteTask,
     openTaskInObsidian,
     toggleTaskComplete,
     updateTask
   } from '../state.svelte.ts';
-  import type { Priority, Task } from '../types';
+  import type { Task } from '../types';
 
   let {
     task,
@@ -21,17 +20,15 @@
 
   let editing = $state(false);
   let title = $state('');
-  let priority = $state<Priority>('medium');
   let categoryId = $state('');
 
   $effect(() => {
     title = task.title;
-    priority = task.priority === 'urgent' ? 'high' : task.priority;
     categoryId = task.categoryId ?? '';
   });
 
   async function save() {
-    await updateTask(task.id, { title, priority, categoryId: categoryId || undefined });
+    await updateTask(task.id, { title, categoryId: categoryId || undefined });
     editing = false;
   }
 </script>
@@ -64,7 +61,6 @@
       <span class="title">{task.title}</span>
     </label>
     <div class="right-controls">
-      <span class="badge {task.priority}">{task.priority}</span>
       {#if !editing}
         <button type="button" class="ghost icon-btn" title="Open in Obsidian" onclick={() => openTaskInObsidian(task.id)}>↗</button>
         <button type="button" class="ghost icon-btn" title="Edit" onclick={() => (editing = true)}>✎</button>
@@ -77,11 +73,6 @@
     <div class="editor">
       <input type="text" bind:value={title} maxlength="140" onkeydown={(e) => e.stopPropagation()} />
       <div class="grid2">
-        <select bind:value={priority}>
-          <option value="low">Low</option>
-          <option value="medium">Medium</option>
-          <option value="high">High</option>
-        </select>
         <select bind:value={categoryId} disabled>
           <option value="">Vault category (read from tags)</option>
           {#each [...categories].sort((a, b) => a.sortOrder - b.sortOrder) as category}
@@ -154,22 +145,6 @@
     gap: 0.25rem;
     align-items: center;
   }
-
-  .badge {
-    padding: 0.1rem 0.35rem;
-    border-radius: 999px;
-    font-size: 0.62rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    border: 1px solid var(--border-color);
-    background: var(--surface-2);
-    opacity: 0.9;
-  }
-
-  .badge.low { background: color-mix(in srgb, #58d68d 16%, var(--surface-2)); }
-  .badge.medium { background: color-mix(in srgb, #f4d03f 18%, var(--surface-2)); }
-  .badge.high,
-  .badge.urgent { background: color-mix(in srgb, #ff6b6b 16%, var(--surface-2)); }
   .editor {
     display: grid;
     gap: 0.5rem;
@@ -234,11 +209,6 @@
   @media (max-width: 400px) {
     .top-row {
       flex-wrap: wrap;
-    }
-
-    .badges {
-      width: 100%;
-      justify-content: flex-start;
     }
 
     .icon-btn {

@@ -1,6 +1,6 @@
 import { TFile, type App } from 'obsidian';
 import type { TodoSettings } from './settings';
-import type { Category, CategoryGroup, Priority, ScanResult, Task } from './types';
+import type { Category, CategoryGroup, ScanResult, Task } from './types';
 
 const CHECKBOX_RE = /^\s*[-*+]\s*\[(.)\]\s*/;
 const LIST_ITEM_RE = /^\s*[-*+]\s+/;
@@ -37,13 +37,6 @@ function extractTag(line: string, tagPrefix: string): string | undefined {
 
 function parseTagParts(tag: string, tagPrefix: string): string[] {
   return tag.slice(tagPrefix.length).split('/').filter(Boolean);
-}
-
-function parsePriority(line: string): Priority {
-  if (line.includes('⏫') || line.includes('🔺')) return 'urgent';
-  if (line.includes('🔼')) return 'high';
-  if (line.includes('🔽')) return 'low';
-  return 'medium';
 }
 
 function parseCompleted(line: string): { completed: boolean; completedAt?: string } {
@@ -156,7 +149,6 @@ export async function scanSingleFile(app: App, settings: TodoSettings, file: TFi
     tasks.push({
       id: makeId(),
       title,
-      priority: parsePriority(trimmed),
       completed: completion.completed,
       createdAt,
       updatedAt,

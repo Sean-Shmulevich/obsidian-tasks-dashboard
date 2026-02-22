@@ -1,11 +1,9 @@
 <script lang="ts">
   import { addTask, categories } from '../state.svelte.ts';
-  import type { Priority } from '../types';
 
   let { defaultCategoryId, locked = false }: { defaultCategoryId?: string; locked?: boolean } = $props();
 
   let title = $state('');
-  let priority = $state<Priority>('medium');
   let categoryId = $state<string>('');
   let subTag = $state('');
   let submitting = $state(false);
@@ -18,10 +16,9 @@
     if (!title.trim() || submitting) return;
     submitting = true;
     try {
-      await addTask({ title, priority, categoryId: categoryId || undefined, subTag: subTag.trim() || undefined });
+      await addTask({ title, categoryId: categoryId || undefined, subTag: subTag.trim() || undefined });
       title = '';
       subTag = '';
-      priority = 'medium';
     } finally {
       submitting = false;
     }
@@ -48,14 +45,6 @@
       onfocus={(e) => e.stopPropagation()}
     />
     <div class="row">
-      <label>
-        <span>Priority</span>
-        <select bind:value={priority}>
-          <option value="low">Low</option>
-          <option value="medium">Medium</option>
-          <option value="high">High</option>
-        </select>
-      </label>
       {#if locked}
         <label>
           <span>Subtag (optional)</span>

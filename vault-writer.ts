@@ -103,7 +103,7 @@ export class VaultTodoWriter {
     });
   }
 
-  async addTask(input: { title: string; categoryId?: string; priority?: string; subTag?: string }) {
+  async addTask(input: { title: string; categoryId?: string; subTag?: string }) {
     const title = input.title.trim();
     if (!title) return false;
 
@@ -112,8 +112,7 @@ export class VaultTodoWriter {
     const lines = splitLines(content);
     let tag = buildTagForCategory(input.categoryId, this.getCategories(), this.settings.tagPrefix);
     if (input.subTag) tag = `${tag}/${input.subTag.replace(/\s+/g, '-').toLowerCase()}`;
-    const priorityMarker = input.priority === 'high' ? ' 🔼' : input.priority === 'low' ? ' 🔽' : '';
-    const line = `- [ ] ${tag} ${title}${priorityMarker}`.trim();
+    const line = `- [ ] ${tag} ${title}`.trim();
     lines.push(line);
     await this.app.vault.modify(file, joinLines(lines.filter((_, i) => !(lines.length === 1 && lines[0] === ''))));
     return true;
