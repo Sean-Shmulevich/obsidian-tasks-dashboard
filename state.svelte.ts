@@ -1,5 +1,5 @@
 import { TFile } from 'obsidian';
-import type ADHDTodoPlugin from './main';
+import type TodoPlugin from './main';
 import { combineScanResults, scanSingleFile } from './vault-scanner';
 import { VaultTodoWriter } from './vault-writer';
 import type { Category, CategoryGroup, ScanResult, Task } from './types';
@@ -27,7 +27,7 @@ export const ui = $state({
 });
 export const nav = $state<NavState>({ view: 'dashboard' });
 
-let pluginRef: ADHDTodoPlugin | null = null;
+let pluginRef: TodoPlugin | null = null;
 let writerRef: VaultTodoWriter | null = null;
 let initialized = false;
 let refreshTimer: number | null = null;
@@ -82,7 +82,7 @@ export function visibleTasks() {
   return visibleTasksValue;
 }
 
-export function initializeTodoState(plugin: ADHDTodoPlugin) {
+export function initializeTodoState(plugin: TodoPlugin) {
   pluginRef = plugin;
   writerRef = new VaultTodoWriter(plugin.app, plugin.settings, () => categories);
 

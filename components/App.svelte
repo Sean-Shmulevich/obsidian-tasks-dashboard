@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import type ADHDTodoPlugin from '../main';
+  import type TodoPlugin from '../main';
   import {
     categoryGroups,
     getCategory,
@@ -15,7 +15,7 @@
   import Sidebar from './Sidebar.svelte';
   import TaskBoard from './TaskBoard.svelte';
 
-  let { plugin }: { plugin: ADHDTodoPlugin } = $props();
+  let { plugin }: { plugin: TodoPlugin } = $props();
   let containerEl = $state<HTMLDivElement | null>(null);
   let isNarrowViewport = $state(false);
   let sidebarOpen = $state(true);
@@ -68,29 +68,29 @@
 </script>
 
 <div
-  class="adhd-todo-container"
+  class="todo-planner-container"
   class:is-narrow={isNarrowViewport}
   class:sidebar-open={sidebarOpen}
   bind:this={containerEl}
 >
-  <aside class="adhd-todo-sidebar-pane" id="adhd-todo-sidebar">
+  <aside class="todo-planner-sidebar-pane" id="todo-planner-sidebar">
     <Sidebar mobile={isNarrowViewport} onNavigate={closeSidebarOnMobileNavigate} />
   </aside>
 
   {#if isNarrowViewport && sidebarOpen}
     <button
       type="button"
-      class="adhd-todo-sidebar-backdrop"
+      class="todo-planner-sidebar-backdrop"
       aria-label="Close sidebar"
       onclick={() => (sidebarOpen = false)}
     ></button>
   {/if}
 
-  <main class="adhd-todo-main">
+  <main class="todo-planner-main">
     <button
       type="button"
-      class="adhd-todo-sidebar-toggle"
-      aria-controls="adhd-todo-sidebar"
+      class="todo-planner-sidebar-toggle"
+      aria-controls="todo-planner-sidebar"
       aria-expanded={sidebarOpen}
       onclick={toggleSidebar}
     >

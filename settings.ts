@@ -1,5 +1,5 @@
 import { App, PluginSettingTab, Setting } from 'obsidian';
-import type ADHDTodoPlugin from './main';
+import type TodoPlugin from './main';
 
 export interface TodoSettings {
   tagPrefix: string;
@@ -16,9 +16,9 @@ export const DEFAULT_SETTINGS: TodoSettings = {
 };
 
 export class TodoSettingTab extends PluginSettingTab {
-  plugin: ADHDTodoPlugin;
+  plugin: TodoPlugin;
 
-  constructor(app: App, plugin: ADHDTodoPlugin) {
+  constructor(app: App, plugin: TodoPlugin) {
     super(app, plugin);
     this.plugin = plugin;
   }
@@ -27,7 +27,7 @@ export class TodoSettingTab extends PluginSettingTab {
     const { containerEl } = this;
     containerEl.empty();
 
-    containerEl.createEl('h2', { text: 'ADHD Todo Settings' });
+    containerEl.createEl('h2', { text: 'Todo Planner Settings' });
 
     new Setting(containerEl)
       .setName('Tag prefix')

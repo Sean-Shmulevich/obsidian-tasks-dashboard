@@ -11,7 +11,7 @@ export interface PluginData {
   customSortOrders: SortOrderMap;
 }
 
-export default class ADHDTodoPlugin extends Plugin {
+export default class TodoPlugin extends Plugin {
   settings: TodoSettings = DEFAULT_SETTINGS;
   customSortOrders: SortOrderMap = {};
 
@@ -20,21 +20,21 @@ export default class ADHDTodoPlugin extends Plugin {
 
     this.registerView(VIEW_TYPE_TODO, (leaf: WorkspaceLeaf) => new TodoView(leaf, this));
 
-    this.addRibbonIcon('check-square', 'ADHD Todo', () => {
+    this.addRibbonIcon('check-square', 'Todo Planner', () => {
       void this.activateView();
     });
 
     this.addCommand({
-      id: 'open-adhd-todo',
-      name: 'Open ADHD Todo',
+      id: 'open-todo-planner',
+      name: 'Open Todo Planner',
       callback: () => {
         void this.activateView();
       }
     });
 
     this.addCommand({
-      id: 'rescan-adhd-todo-vault',
-      name: 'Rescan ADHD Todo tasks',
+      id: 'rescan-todo-planner-vault',
+      name: 'Rescan Todo Planner tasks',
       callback: () => {
         void this.refreshTodoState();
       }

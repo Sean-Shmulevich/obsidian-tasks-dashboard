@@ -1,15 +1,15 @@
 import { ItemView, WorkspaceLeaf } from 'obsidian';
 import { mount, unmount } from 'svelte';
 import App from './components/App.svelte';
-import type ADHDTodoPlugin from './main';
+import type TodoPlugin from './main';
 
-export const VIEW_TYPE_TODO = 'adhd-todo-view';
+export const VIEW_TYPE_TODO = 'todo-planner-view';
 
 export class TodoView extends ItemView {
-  plugin: ADHDTodoPlugin;
+  plugin: TodoPlugin;
   component: object | null = null;
 
-  constructor(leaf: WorkspaceLeaf, plugin: ADHDTodoPlugin) {
+  constructor(leaf: WorkspaceLeaf, plugin: TodoPlugin) {
     super(leaf);
     this.plugin = plugin;
   }
@@ -19,7 +19,7 @@ export class TodoView extends ItemView {
   }
 
   getDisplayText() {
-    return 'ADHD Todo';
+    return 'Todo Planner';
   }
 
   getIcon() {
@@ -28,7 +28,7 @@ export class TodoView extends ItemView {
 
   async onOpen() {
     this.contentEl.empty();
-    this.contentEl.addClass('adhd-todo-root');
+    this.contentEl.addClass('todo-planner-root');
     this.component = mount(App, {
       target: this.contentEl,
       props: { plugin: this.plugin }
@@ -40,6 +40,6 @@ export class TodoView extends ItemView {
       unmount(this.component);
       this.component = null;
     }
-    this.contentEl.removeClass('adhd-todo-root');
+    this.contentEl.removeClass('todo-planner-root');
   }
 }

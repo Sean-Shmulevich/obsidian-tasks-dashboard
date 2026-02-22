@@ -36,11 +36,11 @@
   }
 </script>
 
-<nav class="sidebar adhd-todo-sidebar" class:mobile aria-label="Sidebar navigation">
+<nav class="sidebar todo-planner-sidebar" class:mobile aria-label="Sidebar navigation">
   <div class="brand">
     <div class="logo">✓</div>
     <div>
-      <strong>ADHD Todo</strong>
+      <strong>Todo Planner</strong>
       <small>Vault-backed task board</small>
     </div>
   </div>

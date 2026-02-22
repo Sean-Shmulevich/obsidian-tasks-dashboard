@@ -1,6 +1,6 @@
 {
-  "id": "adhd-todo",
-  "name": "ADHD Todo",
+  "id": "todo-planner",
+  "name": "Todo Planner",
   "version": "0.1.0",
   "minAppVersion": "1.5.0",
   "description": "Discord-style task manager that reads #todo tags from your vault",

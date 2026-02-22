@@ -1,4 +1,4 @@
-.adhd-todo-container {
+.todo-planner-container {
   --accent: var(--interactive-accent);
   --accent-hover: var(--interactive-accent-hover, var(--interactive-accent));
   --surface-1: var(--background-primary);
@@ -27,12 +27,12 @@
   color: var(--text-normal);
 }
 
-.adhd-todo-container * {
+.todo-planner-container * {
   box-sizing: border-box;
   min-width: 0;
 }
 
-.adhd-todo-container .adhd-todo-main {
+.todo-planner-container .todo-planner-main {
   min-width: 0;
   min-height: 0;
   overflow-x: hidden;
@@ -43,18 +43,18 @@
   align-content: start;
 }
 
-.adhd-todo-container .adhd-todo-sidebar-pane {
+.todo-planner-container .todo-planner-sidebar-pane {
   min-width: 0;
   min-height: 0;
   overflow: hidden;
   z-index: 3;
 }
 
-.adhd-todo-container .adhd-todo-sidebar {
+.todo-planner-container .todo-planner-sidebar {
   height: 100%;
 }
 
-.adhd-todo-container .adhd-todo-sidebar-toggle {
+.todo-planner-container .todo-planner-sidebar-toggle {
   display: none;
   width: fit-content;
   max-width: 100%;
@@ -66,11 +66,11 @@
   transition: background-color 160ms ease, border-color 160ms ease;
 }
 
-.adhd-todo-container .adhd-todo-sidebar-backdrop {
+.todo-planner-container .todo-planner-sidebar-backdrop {
   display: none;
 }
 
-.adhd-todo-container .topbar {
+.todo-planner-container .topbar {
   display: flex;
   justify-content: space-between;
   gap: 1rem;
@@ -82,30 +82,30 @@
   backdrop-filter: blur(4px);
 }
 
-.adhd-todo-container .topbar h1 {
+.todo-planner-container .topbar h1 {
   margin: 0;
   font-size: 1.1rem;
 }
 
-.adhd-todo-container .topbar p {
+.todo-planner-container .topbar p {
   margin: 0.2rem 0 0;
   color: var(--text-muted);
   font-size: 0.85rem;
 }
 
-.adhd-todo-container .topbar-actions {
+.todo-planner-container .topbar-actions {
   display: flex;
   gap: 0.5rem;
   flex-wrap: wrap;
 }
 
-.adhd-todo-container button,
-.adhd-todo-container input,
-.adhd-todo-container select {
+.todo-planner-container button,
+.todo-planner-container input,
+.todo-planner-container select {
   font: inherit;
 }
 
-.adhd-todo-container .topbar-actions button {
+.todo-planner-container .topbar-actions button {
   border: 1px solid var(--border-color);
   background: var(--surface-2);
   color: inherit;
@@ -113,16 +113,16 @@
   padding: 0.45rem 0.7rem;
 }
 
-.adhd-todo-container .topbar-actions button.active {
+.todo-planner-container .topbar-actions button.active {
   background: color-mix(in srgb, var(--accent) 18%, var(--surface-2));
   border-color: color-mix(in srgb, var(--accent) 35%, var(--border-color));
 }
 
-.adhd-todo-container .topbar-actions button:disabled {
+.todo-planner-container .topbar-actions button:disabled {
   opacity: 0.6;
 }
 
-.adhd-todo-container .error-banner {
+.todo-planner-container .error-banner {
   border: 1px solid color-mix(in srgb, #ff6b6b 40%, var(--border-color));
   background: color-mix(in srgb, #ff6b6b 8%, var(--surface-1));
   color: var(--text-normal);
@@ -130,34 +130,34 @@
   border-radius: 0.8rem;
 }
 
-.adhd-todo-container .focus-layout {
+.todo-planner-container .focus-layout {
   display: grid;
   gap: 1rem;
   grid-template-columns: minmax(0, 1fr) minmax(260px, 340px);
 }
 
-.adhd-todo-container .panel {
+.todo-planner-container .panel {
   padding: 1rem;
   border: 1px solid var(--border-color);
   border-radius: 1rem;
   background: var(--surface-1);
 }
 
-.adhd-todo-container .panel h3 {
+.todo-planner-container .panel h3 {
   margin: 0 0 0.5rem;
 }
 
-.adhd-todo-container .panel p {
+.todo-planner-container .panel p {
   margin: 0.35rem 0;
   color: var(--text-muted);
 }
 
 @media (max-width: 700px) {
-  .adhd-todo-container {
+  .todo-planner-container {
     grid-template-columns: 1fr;
   }
 
-  .adhd-todo-container .adhd-todo-sidebar-pane {
+  .todo-planner-container .todo-planner-sidebar-pane {
     position: absolute;
     inset: 0 auto 0 0;
     width: min(86%, 320px);
@@ -171,19 +171,19 @@
     overflow: visible;
   }
 
-  .adhd-todo-container.sidebar-open .adhd-todo-sidebar-pane {
+  .todo-planner-container.sidebar-open .todo-planner-sidebar-pane {
     transform: translateX(0);
     opacity: 1;
     pointer-events: auto;
   }
 
-  .adhd-todo-container .adhd-todo-sidebar-toggle {
+  .todo-planner-container .todo-planner-sidebar-toggle {
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
   }
 
-  .adhd-todo-container .adhd-todo-sidebar-backdrop {
+  .todo-planner-container .todo-planner-sidebar-backdrop {
     display: block;
     position: absolute;
     inset: 0;
@@ -194,25 +194,25 @@
     cursor: pointer;
   }
 
-  .adhd-todo-container .focus-layout {
+  .todo-planner-container .focus-layout {
     grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 500px) {
-  .adhd-todo-container .adhd-todo-main {
+  .todo-planner-container .todo-planner-main {
     padding: 0.75rem;
     gap: 0.75rem;
   }
 }
 
 @media (max-width: 400px) {
-  .adhd-todo-container .adhd-todo-main {
+  .todo-planner-container .todo-planner-main {
     padding: 0.6rem;
     gap: 0.6rem;
   }
 
-  .adhd-todo-container .adhd-todo-sidebar-pane {
+  .todo-planner-container .todo-planner-sidebar-pane {
     width: calc(100% - 0.4rem);
     max-width: calc(100% - 0.4rem);
   }
