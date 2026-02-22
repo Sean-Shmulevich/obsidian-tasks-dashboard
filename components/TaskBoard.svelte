@@ -32,21 +32,13 @@
 
   let draggingTaskId = $state<string | null>(null);
   let finishedExpanded = $state(false);
+  let categoriesPanelOpen = $state(false);
 
   const sortedTasks = $derived([...visibleTasks()].sort((a, b) => a.sortOrder - b.sortOrder));
   const incompleteTasks = $derived(sortedTasks.filter((task) => !task.completed));
   const finishedTasks = $derived(sortedTasks.filter((task) => task.completed));
 
-  // Dashboard time-based sections
-  const now = Date.now();
-  const oneWeekAgo = now - 7 * 24 * 60 * 60 * 1000;
-  const oneMonthAgo = now - 30 * 24 * 60 * 60 * 1000;
-  const thisWeekTasks = $derived(incompleteTasks.filter(t => new Date(t.createdAt).getTime() >= oneWeekAgo));
-  const thisMonthTasks = $derived(incompleteTasks.filter(t => {
-    const created = new Date(t.createdAt).getTime();
-    return created >= oneMonthAgo && created < oneWeekAgo;
-  }));
-  const olderTasks = $derived(incompleteTasks.filter(t => new Date(t.createdAt).getTime() < oneMonthAgo));
+  // Dashboard: flat list of all tasks (no time-based sections)
   const openCount = $derived(sortedTasks.filter((task) => !task.completed).length);
   const doneCount = $derived(sortedTasks.filter((task) => task.completed).length);
   const sortedCategories = $derived([...categories].sort((a, b) => a.sortOrder - b.sortOrder));
@@ -104,6 +96,12 @@
     });
   }
 
+  $effect(() => {
+    if (!showCategoriesCard) {
+      categoriesPanelOpen = false;
+    }
+  });
+
   function groupBySubtag(list: Task[]) {
     const groups = new Map<string, Task[]>();
     for (const task of list) {
@@ -159,46 +157,20 @@
         {#if sortedTasks.length === 0}
           <div class="empty-state">No tasks here yet.</div>
         {:else if showCategoriesCard}
-          <!-- Dashboard: time-based sections -->
-          {#if thisWeekTasks.length > 0}
-            <section class="task-section">
-              <div class="task-section-head">
-                <h3>This Week</h3>
-                <small>{thisWeekTasks.length}</small>
-              </div>
+          <!-- Dashboard: all incomplete tasks -->
+          <section class="task-section">
+            <div class="task-section-head">
+              <h3>Tasks</h3>
+              <small>{openCount}</small>
+            </div>
+            {#if openCount > 0}
               <div class="cards">
-                {#each thisWeekTasks as task (task.id)}
+                {#each incompleteTasks as task (task.id)}
                   <TaskCard {task} onDragStart={(id) => (draggingTaskId = id)} onDropOn={(id) => onDropOn(id)} />
                 {/each}
               </div>
-            </section>
-          {/if}
-          {#if thisMonthTasks.length > 0}
-            <section class="task-section">
-              <div class="task-section-head">
-                <h3>This Month</h3>
-                <small>{thisMonthTasks.length}</small>
-              </div>
-              <div class="cards">
-                {#each thisMonthTasks as task (task.id)}
-                  <TaskCard {task} onDragStart={(id) => (draggingTaskId = id)} onDropOn={(id) => onDropOn(id)} />
-                {/each}
-              </div>
-            </section>
-          {/if}
-          {#if olderTasks.length > 0}
-            <section class="task-section">
-              <div class="task-section-head">
-                <h3>All Tasks</h3>
-                <small>{olderTasks.length}</small>
-              </div>
-              <div class="cards">
-                {#each olderTasks as task (task.id)}
-                  <TaskCard {task} onDragStart={(id) => (draggingTaskId = id)} onDropOn={(id) => onDropOn(id)} />
-                {/each}
-              </div>
-            </section>
-          {/if}
+            {/if}
+          </section>
 
           <section class="task-section finished-block">
             <button
@@ -347,7 +319,23 @@
     </div>
 
     {#if showCategoriesCard}
-      <aside class="side-column">
+      <div class="categories-overlay-shell" class:open={categoriesPanelOpen}>
+        <button
+          type="button"
+          class="categories-tab"
+          aria-controls="dashboard-categories-panel"
+          aria-expanded={categoriesPanelOpen}
+          onclick={() => (categoriesPanelOpen = !categoriesPanelOpen)}
+        >
+          Categories
+        </button>
+        <button
+          type="button"
+          class="categories-overlay-backdrop"
+          aria-label="Close categories"
+          onclick={() => (categoriesPanelOpen = false)}
+        ></button>
+      <aside class="side-column" id="dashboard-categories-panel">
         <section class="panel">
           <h3>Categories</h3>
           <ul class="category-links">
@@ -366,6 +354,7 @@
           </ul>
         </section>
       </aside>
+      </div>
     {/if}
   </div>
 </section>
@@ -398,6 +387,8 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 0.5rem;
     min-width: min(14rem, 100%);
+    flex: 1 1 14rem;
+    max-width: 100%;
   }
 
   .stats-grid > div {
@@ -446,6 +437,7 @@
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(240px, 320px);
     gap: 1rem;
+    position: relative;
   }
 
   .board-grid.single-column {
@@ -457,6 +449,15 @@
     display: grid;
     gap: 1rem;
     align-content: start;
+  }
+
+  .categories-overlay-shell {
+    display: contents;
+  }
+
+  .categories-tab,
+  .categories-overlay-backdrop {
+    display: none;
   }
 
   .task-list {
@@ -677,13 +678,83 @@
     color: var(--text-normal);
   }
 
-  @media (max-width: 700px) {
+  @media (max-width: 900px) {
     .board-grid {
       grid-template-columns: 1fr;
     }
-  }
 
-  @media (max-width: 700px) {
+    .categories-overlay-shell {
+      display: block;
+      position: absolute;
+      inset: 0 0 auto auto;
+      z-index: 5;
+      pointer-events: none;
+    }
+
+    .categories-tab {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      top: 0.5rem;
+      right: 0;
+      transform: translateX(calc(100% - 0.75rem));
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+      letter-spacing: 0.03em;
+      padding: 0.55rem 0.35rem;
+      border-radius: 0.7rem 0 0 0.7rem;
+      border: 1px solid var(--border-color);
+      border-right: 0;
+      background: var(--surface-1);
+      color: inherit;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+      cursor: pointer;
+      pointer-events: auto;
+      transition: transform 180ms ease, background-color 160ms ease;
+    }
+
+    .categories-overlay-shell:hover .categories-tab,
+    .categories-overlay-shell.open .categories-tab {
+      transform: translateX(0);
+      background: var(--surface-2);
+    }
+
+    .categories-overlay-backdrop {
+      display: block;
+      position: fixed;
+      inset: 0;
+      border: 0;
+      padding: 0;
+      background: transparent;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .categories-overlay-shell.open .categories-overlay-backdrop {
+      pointer-events: auto;
+    }
+
+    .side-column {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: min(78vw, 320px);
+      max-width: calc(100vw - 1rem);
+      transform: translateX(calc(100% + 0.75rem));
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 220ms ease, opacity 220ms ease;
+      z-index: 6;
+    }
+
+    .categories-overlay-shell:hover .side-column,
+    .categories-overlay-shell.open .side-column {
+      transform: translateX(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+
     .stats-grid {
       width: 100%;
       min-width: 0;
@@ -691,19 +762,27 @@
     .header-actions {
       width: 100%;
       margin-left: 0;
+      flex-wrap: wrap;
     }
     .header-actions button {
       flex: 1 1 0;
     }
   }
 
-  @media (max-width: 500px) {
+  @media (max-width: 600px) {
     .page-header {
       gap: 0.7rem;
     }
 
+    h1 {
+      width: 100%;
+      white-space: normal;
+      line-height: 1.15;
+    }
+
     .stats-grid {
       gap: 0.4rem;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .stats-grid > div {
@@ -717,6 +796,17 @@
 
     .stats-grid small {
       font-size: 0.72rem;
+    }
+
+    .task-list,
+    .panel {
+      padding: 0.8rem;
+    }
+
+    .categories-tab {
+      top: 0.35rem;
+      padding: 0.45rem 0.3rem;
+      font-size: 0.8rem;
     }
   }
 
@@ -741,6 +831,11 @@
 
     .header-actions {
       gap: 0.35rem;
+    }
+
+    .side-column {
+      width: calc(100vw - 0.8rem);
+      max-width: calc(100vw - 0.8rem);
     }
   }
 </style>

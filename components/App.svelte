@@ -38,7 +38,7 @@
   );
 
   function applyResponsiveLayout(width?: number) {
-    const nextIsNarrow = (width ?? containerEl?.clientWidth ?? 0) <= 700;
+    const nextIsNarrow = (width ?? containerEl?.clientWidth ?? 0) <= 900;
     if (nextIsNarrow !== isNarrowViewport) {
       isNarrowViewport = nextIsNarrow;
       sidebarOpen = !nextIsNarrow;

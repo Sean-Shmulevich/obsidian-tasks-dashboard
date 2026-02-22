@@ -6469,7 +6469,7 @@ var root_22 = from_html(`<label class="svelte-149ph0u"><span>Category</span> <se
 var root2 = from_html(`<section class="quick-capture svelte-149ph0u"><div class="header svelte-149ph0u"><h2 class="svelte-149ph0u">Quick Capture</h2> <p class="svelte-149ph0u">Fast task entry into your vault inbox file.</p></div> <form class="svelte-149ph0u"><input type="text" placeholder="What needs to happen next?" maxlength="140" class="svelte-149ph0u"/> <div class="row svelte-149ph0u"><!> <button type="submit" class="svelte-149ph0u"> </button></div></form></section>`);
 var $$css2 = {
   hash: "svelte-149ph0u",
-  code: ".quick-capture.svelte-149ph0u {display:grid;gap:0.75rem;padding:1rem;border-radius:1rem;border:1px solid var(--border-color);background:var(--surface-1);}.header.svelte-149ph0u h2:where(.svelte-149ph0u) {margin:0;font-size:1.05rem;}.header.svelte-149ph0u p:where(.svelte-149ph0u) {margin:0.2rem 0 0;font-size:0.85rem;color:var(--text-muted);}form.svelte-149ph0u {display:grid;gap:0.75rem;}input[type='text'].svelte-149ph0u {width:100%;background:var(--surface-2);border:1px solid var(--border-color);border-radius:0.7rem;padding:0.7rem 0.85rem;color:inherit;min-width:0;}.row.svelte-149ph0u {display:flex;flex-wrap:wrap;gap:0.75rem;align-items:end;}label.svelte-149ph0u {display:grid;gap:0.25rem;font-size:0.8rem;}select.svelte-149ph0u,\n  button.svelte-149ph0u {background:var(--surface-2);border:1px solid var(--border-color);color:inherit;border-radius:0.6rem;padding:0.5rem 0.65rem;max-width:100%;}button[type='submit'].svelte-149ph0u {background:var(--accent);border-color:var(--accent);color:white;font-weight:700;}\n\n  @media (max-width: 500px) {.row.svelte-149ph0u > :where(.svelte-149ph0u) {flex:1 1 100%;}\n  }\n\n  @media (max-width: 400px) {.quick-capture.svelte-149ph0u {padding:0.8rem;gap:0.6rem;}form.svelte-149ph0u {gap:0.6rem;}input[type='text'].svelte-149ph0u {padding:0.6rem 0.7rem;}select.svelte-149ph0u,\n    button.svelte-149ph0u {padding:0.45rem 0.55rem;}\n  }"
+  code: ".quick-capture.svelte-149ph0u {display:grid;gap:0.75rem;padding:1rem;border-radius:1rem;border:1px solid var(--border-color);background:var(--surface-1);}.header.svelte-149ph0u h2:where(.svelte-149ph0u) {margin:0;font-size:1.05rem;}.header.svelte-149ph0u p:where(.svelte-149ph0u) {margin:0.2rem 0 0;font-size:0.85rem;color:var(--text-muted);}form.svelte-149ph0u {display:grid;gap:0.75rem;}input[type='text'].svelte-149ph0u {width:100%;background:var(--surface-2);border:1px solid var(--border-color);border-radius:0.7rem;padding:0.7rem 0.85rem;color:inherit;min-width:0;}.row.svelte-149ph0u {display:flex;flex-wrap:wrap;gap:0.75rem;align-items:end;}label.svelte-149ph0u {display:grid;gap:0.25rem;font-size:0.8rem;}select.svelte-149ph0u,\n  button.svelte-149ph0u {background:var(--surface-2);border:1px solid var(--border-color);color:inherit;border-radius:0.6rem;padding:0.5rem 0.65rem;max-width:100%;}button[type='submit'].svelte-149ph0u {background:var(--accent);border-color:var(--accent);color:white;font-weight:700;}\n\n  @media (max-width: 600px) {.quick-capture.svelte-149ph0u {padding:0.85rem;gap:0.65rem;}form.svelte-149ph0u {gap:0.6rem;}.row.svelte-149ph0u > :where(.svelte-149ph0u) {flex:1 1 100%;}.row.svelte-149ph0u {align-items:stretch;}button[type='submit'].svelte-149ph0u {width:100%;}\n  }\n\n  @media (max-width: 400px) {.quick-capture.svelte-149ph0u {padding:0.8rem;gap:0.6rem;}form.svelte-149ph0u {gap:0.6rem;}input[type='text'].svelte-149ph0u {padding:0.6rem 0.7rem;}select.svelte-149ph0u,\n    button.svelte-149ph0u {padding:0.45rem 0.55rem;}\n  }"
 };
 function QuickCapture($$anchor, $$props) {
   push($$props, true);
@@ -6571,7 +6571,7 @@ var root_23 = from_html(`<div class="editor svelte-1j8piq"><input type="text" ma
 var root3 = from_html(`<article draggable="true"><div class="row top-row svelte-1j8piq"><label class="checkbox-row svelte-1j8piq"><input type="checkbox" class="svelte-1j8piq"/> <span class="title svelte-1j8piq"> </span></label> <div class="right-controls svelte-1j8piq"><!></div></div> <!></article>`);
 var $$css3 = {
   hash: "svelte-1j8piq",
-  code: ".task-card.svelte-1j8piq {display:grid;gap:0.25rem;padding:0.4rem 0.5rem;border-radius:0.75rem;border:1px solid var(--border-color);background:var(--surface-1);}.task-card.done.svelte-1j8piq {opacity:0.72;}.top-row.svelte-1j8piq {display:flex;justify-content:space-between;gap:0.35rem;align-items:flex-start;min-width:0;}.checkbox-row.svelte-1j8piq {display:flex;flex:1 1 auto;gap:0.45rem;align-items:flex-start;font-weight:600;min-width:0;}.checkbox-row.svelte-1j8piq .title:where(.svelte-1j8piq) {display:block;min-width:0;line-height:1.2;font-size:0.9rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}.checkbox-row.svelte-1j8piq input[type='checkbox']:where(.svelte-1j8piq) {margin-top:0.1rem;inline-size:0.95rem;block-size:0.95rem;}.done.svelte-1j8piq .title:where(.svelte-1j8piq) {text-decoration:line-through;}.right-controls.svelte-1j8piq {display:flex;flex:0 0 auto;gap:0.25rem;align-items:center;}.editor.svelte-1j8piq {display:grid;gap:0.5rem;padding-top:0.1rem;}.editor.svelte-1j8piq input:where(.svelte-1j8piq),\n  .editor.svelte-1j8piq select:where(.svelte-1j8piq),\n  .actions.svelte-1j8piq button:where(.svelte-1j8piq) {background:var(--surface-2);border:1px solid var(--border-color);color:inherit;border-radius:0.55rem;padding:0.45rem 0.6rem;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}.grid2.svelte-1j8piq {display:grid;gap:0.5rem;grid-template-columns:repeat(2, minmax(0, 1fr));}.icon-btn.svelte-1j8piq {display:grid;place-items:center;min-width:1.8rem;min-height:1.8rem;padding:0.2rem;line-height:1;font-size:0.8rem;border-radius:0.45rem;}.actions.svelte-1j8piq .ghost:where(.svelte-1j8piq) {background:transparent;}.danger.svelte-1j8piq {border-color:color-mix(in srgb, #ff6b6b 55%, var(--border-color));}\n\n  @media (max-width: 600px) {.grid2.svelte-1j8piq {grid-template-columns:1fr;}\n  }\n\n  @media (max-width: 500px) {.actions.svelte-1j8piq {justify-content:flex-start;}\n  }\n\n  @media (max-width: 400px) {.top-row.svelte-1j8piq {flex-wrap:wrap;}.icon-btn.svelte-1j8piq {min-width:1.65rem;min-height:1.65rem;}\n  }"
+  code: ".task-card.svelte-1j8piq {display:grid;gap:0.25rem;padding:0.4rem 0.5rem;border-radius:0.75rem;border:1px solid var(--border-color);background:var(--surface-1);}.task-card.done.svelte-1j8piq {opacity:0.72;}.top-row.svelte-1j8piq {display:flex;justify-content:space-between;gap:0.35rem;align-items:flex-start;min-width:0;}.checkbox-row.svelte-1j8piq {display:flex;flex:1 1 auto;gap:0.45rem;align-items:flex-start;font-weight:600;min-width:0;}.checkbox-row.svelte-1j8piq .title:where(.svelte-1j8piq) {display:block;min-width:0;line-height:1.2;font-size:0.9rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}.checkbox-row.svelte-1j8piq input[type='checkbox']:where(.svelte-1j8piq) {margin-top:0.1rem;inline-size:0.95rem;block-size:0.95rem;}.done.svelte-1j8piq .title:where(.svelte-1j8piq) {text-decoration:line-through;}.right-controls.svelte-1j8piq {display:flex;flex:0 0 auto;gap:0.25rem;align-items:center;}.editor.svelte-1j8piq {display:grid;gap:0.5rem;padding-top:0.1rem;}.editor.svelte-1j8piq input:where(.svelte-1j8piq),\n  .editor.svelte-1j8piq select:where(.svelte-1j8piq),\n  .actions.svelte-1j8piq button:where(.svelte-1j8piq) {background:var(--surface-2);border:1px solid var(--border-color);color:inherit;border-radius:0.55rem;padding:0.45rem 0.6rem;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}.grid2.svelte-1j8piq {display:grid;gap:0.5rem;grid-template-columns:repeat(2, minmax(0, 1fr));}.icon-btn.svelte-1j8piq {display:grid;place-items:center;min-width:1.8rem;min-height:1.8rem;padding:0.2rem;line-height:1;font-size:0.8rem;border-radius:0.45rem;}.actions.svelte-1j8piq .ghost:where(.svelte-1j8piq) {background:transparent;}.danger.svelte-1j8piq {border-color:color-mix(in srgb, #ff6b6b 55%, var(--border-color));}\n\n  @media (max-width: 600px) {.task-card.svelte-1j8piq {padding:0.35rem 0.4rem;}.checkbox-row.svelte-1j8piq {gap:0.35rem;}.grid2.svelte-1j8piq {grid-template-columns:1fr;}.actions.svelte-1j8piq {justify-content:flex-start;}\n  }\n\n  @media (max-width: 400px) {.top-row.svelte-1j8piq {flex-wrap:wrap;}.icon-btn.svelte-1j8piq {min-width:1.65rem;min-height:1.65rem;}\n  }"
 };
 function TaskCard($$anchor, $$props) {
   push($$props, true);
@@ -6692,34 +6692,32 @@ delegate(["change", "click", "keydown"]);
 
 // components/TaskBoard.svelte
 var root_14 = from_html(`<div class="empty-state svelte-q5ccww">No tasks here yet.</div>`);
-var root_34 = from_html(`<section class="task-section svelte-q5ccww"><div class="task-section-head svelte-q5ccww"><h3 class="svelte-q5ccww">This Week</h3> <small class="svelte-q5ccww"> </small></div> <div class="cards svelte-q5ccww"></div></section>`);
-var root_52 = from_html(`<section class="task-section svelte-q5ccww"><div class="task-section-head svelte-q5ccww"><h3 class="svelte-q5ccww">This Month</h3> <small class="svelte-q5ccww"> </small></div> <div class="cards svelte-q5ccww"></div></section>`);
-var root_7 = from_html(`<section class="task-section svelte-q5ccww"><div class="task-section-head svelte-q5ccww"><h3 class="svelte-q5ccww">All Tasks</h3> <small class="svelte-q5ccww"> </small></div> <div class="cards svelte-q5ccww"></div></section>`);
-var root_10 = from_html(`<div class="empty-state compact svelte-q5ccww">No finished tasks.</div>`);
-var root_11 = from_html(`<div class="cards svelte-q5ccww"></div>`);
-var root_24 = from_html(`<!> <!> <!> <section class="task-section finished-block svelte-q5ccww"><button type="button" class="finished-toggle svelte-q5ccww"><span> </span> <span>\u25BE</span></button> <!></section>`, 1);
-var root_15 = from_html(`<section class="subtag-group svelte-q5ccww"><div class="subtag-header svelte-q5ccww">Root / Uncategorized</div> <div class="cards svelte-q5ccww"></div></section>`);
-var root_17 = from_html(`<section class="subtag-group svelte-q5ccww"><div class="subtag-header svelte-q5ccww"> </div> <div class="cards svelte-q5ccww"></div></section>`);
-var root_142 = from_html(`<!> <!>`, 1);
+var root_34 = from_html(`<div class="cards svelte-q5ccww"></div>`);
+var root_6 = from_html(`<div class="empty-state compact svelte-q5ccww">No finished tasks.</div>`);
+var root_7 = from_html(`<div class="cards svelte-q5ccww"></div>`);
+var root_24 = from_html(`<section class="task-section svelte-q5ccww"><div class="task-section-head svelte-q5ccww"><h3 class="svelte-q5ccww">Tasks</h3> <small class="svelte-q5ccww"> </small></div> <!></section> <section class="task-section finished-block svelte-q5ccww"><button type="button" class="finished-toggle svelte-q5ccww"><span> </span> <span>\u25BE</span></button> <!></section>`, 1);
+var root_11 = from_html(`<section class="subtag-group svelte-q5ccww"><div class="subtag-header svelte-q5ccww">Root / Uncategorized</div> <div class="cards svelte-q5ccww"></div></section>`);
+var root_132 = from_html(`<section class="subtag-group svelte-q5ccww"><div class="subtag-header svelte-q5ccww"> </div> <div class="cards svelte-q5ccww"></div></section>`);
+var root_10 = from_html(`<!> <!>`, 1);
+var root_16 = from_html(`<div class="cards svelte-q5ccww"></div>`);
+var root_18 = from_html(`<section class="subtag-group svelte-q5ccww"><div class="subtag-header svelte-q5ccww"> </div> <div class="cards svelte-q5ccww"></div></section>`);
+var root_15 = from_html(`<!> <!>`, 1);
 var root_20 = from_html(`<div class="cards svelte-q5ccww"></div>`);
-var root_222 = from_html(`<section class="subtag-group svelte-q5ccww"><div class="subtag-header svelte-q5ccww"> </div> <div class="cards svelte-q5ccww"></div></section>`);
-var root_19 = from_html(`<!> <!>`, 1);
-var root_242 = from_html(`<div class="cards svelte-q5ccww"></div>`);
-var root_27 = from_html(`<div class="empty-state compact svelte-q5ccww">No finished tasks.</div>`);
-var root_29 = from_html(`<section class="subtag-group svelte-q5ccww"><div class="subtag-header svelte-q5ccww">Root / Uncategorized</div> <div class="cards svelte-q5ccww"></div></section>`);
-var root_31 = from_html(`<section class="subtag-group svelte-q5ccww"><div class="subtag-header svelte-q5ccww"> </div> <div class="cards svelte-q5ccww"></div></section>`);
-var root_28 = from_html(`<!> <!>`, 1);
+var root_232 = from_html(`<div class="empty-state compact svelte-q5ccww">No finished tasks.</div>`);
+var root_25 = from_html(`<section class="subtag-group svelte-q5ccww"><div class="subtag-header svelte-q5ccww">Root / Uncategorized</div> <div class="cards svelte-q5ccww"></div></section>`);
+var root_27 = from_html(`<section class="subtag-group svelte-q5ccww"><div class="subtag-header svelte-q5ccww"> </div> <div class="cards svelte-q5ccww"></div></section>`);
+var root_242 = from_html(`<!> <!>`, 1);
+var root_30 = from_html(`<div class="cards svelte-q5ccww"></div>`);
+var root_322 = from_html(`<section class="subtag-group svelte-q5ccww"><div class="subtag-header svelte-q5ccww"> </div> <div class="cards svelte-q5ccww"></div></section>`);
+var root_29 = from_html(`<!> <!>`, 1);
 var root_342 = from_html(`<div class="cards svelte-q5ccww"></div>`);
-var root_36 = from_html(`<section class="subtag-group svelte-q5ccww"><div class="subtag-header svelte-q5ccww"> </div> <div class="cards svelte-q5ccww"></div></section>`);
-var root_332 = from_html(`<!> <!>`, 1);
-var root_38 = from_html(`<div class="cards svelte-q5ccww"></div>`);
-var root_132 = from_html(`<section class="task-section svelte-q5ccww"><div class="task-section-head svelte-q5ccww"><h3 class="svelte-q5ccww">Tasks</h3> <small class="svelte-q5ccww"> </small></div> <!></section> <section class="task-section finished-block svelte-q5ccww"><button type="button" class="finished-toggle svelte-q5ccww"><span> </span> <span>\u25BE</span></button> <!></section>`, 1);
-var root_41 = from_html(`<li><button type="button" class="svelte-q5ccww"> </button></li>`);
-var root_40 = from_html(`<aside class="side-column svelte-q5ccww"><section class="panel svelte-q5ccww"><h3 class="svelte-q5ccww">Categories</h3> <ul class="category-links svelte-q5ccww"><!> <li><button type="button" class="svelte-q5ccww">Uncategorized / group-level</button></li></ul></section></aside>`);
+var root_9 = from_html(`<section class="task-section svelte-q5ccww"><div class="task-section-head svelte-q5ccww"><h3 class="svelte-q5ccww">Tasks</h3> <small class="svelte-q5ccww"> </small></div> <!></section> <section class="task-section finished-block svelte-q5ccww"><button type="button" class="finished-toggle svelte-q5ccww"><span> </span> <span>\u25BE</span></button> <!></section>`, 1);
+var root_37 = from_html(`<li><button type="button" class="svelte-q5ccww"> </button></li>`);
+var root_36 = from_html(`<div><button type="button" class="categories-tab svelte-q5ccww" aria-controls="dashboard-categories-panel">Categories</button> <button type="button" class="categories-overlay-backdrop svelte-q5ccww" aria-label="Close categories"></button> <aside class="side-column svelte-q5ccww" id="dashboard-categories-panel"><section class="panel svelte-q5ccww"><h3 class="svelte-q5ccww">Categories</h3> <ul class="category-links svelte-q5ccww"><!> <li><button type="button" class="svelte-q5ccww">Uncategorized / group-level</button></li></ul></section></aside></div>`);
 var root4 = from_html(`<section class="task-board svelte-q5ccww"><header class="page-header svelte-q5ccww"><h1 class="svelte-q5ccww"> </h1> <div class="stats-grid svelte-q5ccww"><div class="svelte-q5ccww"><span class="svelte-q5ccww"> </span><small class="svelte-q5ccww">Open</small></div> <div class="svelte-q5ccww"><span class="svelte-q5ccww"> </span><small class="svelte-q5ccww">Done</small></div></div> <div class="header-actions svelte-q5ccww"><button type="button">Board</button> <button type="button" class="svelte-q5ccww"> </button></div></header> <div><div class="main-column svelte-q5ccww"><!> <section class="task-list svelte-q5ccww"><!></section></div> <!></div></section>`);
 var $$css4 = {
   hash: "svelte-q5ccww",
-  code: ".task-board.svelte-q5ccww {display:grid;gap:1rem;}.page-header.svelte-q5ccww {display:flex;justify-content:space-between;gap:1rem;align-items:center;flex-wrap:wrap;}h1.svelte-q5ccww {margin:0;font-size:clamp(1.2rem, 2.3vw, 1.7rem);max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}.stats-grid.svelte-q5ccww {display:grid;grid-template-columns:repeat(2, minmax(0, 1fr));gap:0.5rem;min-width:min(14rem, 100%);}.stats-grid.svelte-q5ccww > div:where(.svelte-q5ccww) {background:var(--surface-1);border:1px solid var(--border-color);border-radius:0.9rem;padding:0.6rem 0.75rem;display:grid;gap:0.15rem;}.stats-grid.svelte-q5ccww span:where(.svelte-q5ccww) {font-size:1.15rem;font-weight:800;}.stats-grid.svelte-q5ccww small:where(.svelte-q5ccww) {color:var(--text-muted);}.header-actions.svelte-q5ccww {display:flex;gap:0.5rem;margin-left:auto;min-width:0;}.header-actions.svelte-q5ccww button:where(.svelte-q5ccww) {background:var(--surface-1);border:1px solid var(--border-color);color:inherit;border-radius:0.65rem;padding:0.45rem 0.75rem;font:inherit;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}.header-actions.svelte-q5ccww button.active:where(.svelte-q5ccww) {background:var(--surface-2);}.board-grid.svelte-q5ccww {display:grid;grid-template-columns:minmax(0, 1fr) minmax(240px, 320px);gap:1rem;}.board-grid.single-column.svelte-q5ccww {grid-template-columns:minmax(0, 1fr);}.main-column.svelte-q5ccww,\n  .side-column.svelte-q5ccww {display:grid;gap:1rem;align-content:start;}.task-list.svelte-q5ccww {display:grid;gap:0.65rem;padding:1rem;border:1px solid var(--border-color);border-radius:1rem;background:var(--surface-1);}\n  .category-links.svelte-q5ccww button:where(.svelte-q5ccww) {overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}.empty-state.compact.svelte-q5ccww {padding:0;border:none;font-size:0.85rem;}\n  .panel.svelte-q5ccww h3:where(.svelte-q5ccww) {margin:0;font-size:1rem;}.task-section.svelte-q5ccww {display:grid;gap:0.25rem;}.task-section.svelte-q5ccww + .task-section:where(.svelte-q5ccww) {margin-top:0.2rem;}.task-section-head.svelte-q5ccww {display:flex;align-items:center;justify-content:space-between;gap:0.5rem;}.task-section-head.svelte-q5ccww h3:where(.svelte-q5ccww) {margin:0;font-size:0.9rem;}.task-section-head.svelte-q5ccww small:where(.svelte-q5ccww) {color:var(--text-muted);font-size:0.75rem;font-weight:600;}.finished-block.svelte-q5ccww {gap:0.55rem;padding-top:0.15rem;border-top:1px solid color-mix(in srgb, var(--border-color) 70%, transparent);}.finished-toggle.svelte-q5ccww {display:flex;align-items:center;justify-content:space-between;gap:0.5rem;width:100%;text-align:left;background:transparent;border:1px solid var(--border-color);color:inherit;border-radius:0.65rem;padding:0.4rem 0.55rem;font:inherit;cursor:pointer;}.finished-toggle.svelte-q5ccww .chevron:where(.svelte-q5ccww) {color:var(--text-muted);transition:transform 120ms ease;}.finished-toggle.svelte-q5ccww .chevron.expanded:where(.svelte-q5ccww) {transform:rotate(180deg);}.cards.svelte-q5ccww {display:grid;gap:0.45rem;}.subtag-group.svelte-q5ccww {display:grid;gap:0.55rem;margin-top:0.4rem;}.subtag-header.svelte-q5ccww {padding:0.35rem 0.55rem;border-radius:0.6rem;border:1px solid var(--border-color);background:var(--surface-2);font-size:0.8rem;font-weight:800;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-muted);}.empty-state.svelte-q5ccww {padding:1rem;border:1px dashed var(--border-color);border-radius:0.8rem;color:var(--text-muted);text-align:left;}.panel.svelte-q5ccww {padding:1rem;border:1px solid var(--border-color);border-radius:1rem;background:var(--surface-1);}.panel.svelte-q5ccww ul:where(.svelte-q5ccww) {list-style:none;margin:0.6rem 0 0;padding:0;display:grid;gap:0.45rem;color:var(--text-muted);font-size:0.9rem;}.category-links.svelte-q5ccww button:where(.svelte-q5ccww) {width:100%;text-align:left;font:inherit;color:inherit;background:transparent;border:1px solid transparent;border-radius:0.45rem;padding:0.35rem 0.45rem;cursor:pointer;max-width:100%;}.category-links.svelte-q5ccww button:where(.svelte-q5ccww):hover {background:var(--surface-2);color:var(--text-normal);}\n\n  @media (max-width: 700px) {.board-grid.svelte-q5ccww {grid-template-columns:1fr;}\n  }\n\n  @media (max-width: 700px) {.stats-grid.svelte-q5ccww {width:100%;min-width:0;}.header-actions.svelte-q5ccww {width:100%;margin-left:0;}.header-actions.svelte-q5ccww button:where(.svelte-q5ccww) {flex:1 1 0;}\n  }\n\n  @media (max-width: 500px) {.page-header.svelte-q5ccww {gap:0.7rem;}.stats-grid.svelte-q5ccww {gap:0.4rem;}.stats-grid.svelte-q5ccww > div:where(.svelte-q5ccww) {padding:0.45rem 0.55rem;border-radius:0.75rem;}.stats-grid.svelte-q5ccww span:where(.svelte-q5ccww) {font-size:1rem;}.stats-grid.svelte-q5ccww small:where(.svelte-q5ccww) {font-size:0.72rem;}\n  }\n\n  @media (max-width: 400px) {.page-header.svelte-q5ccww {align-items:stretch;}.stats-grid.svelte-q5ccww > div:where(.svelte-q5ccww) {padding:0.35rem 0.45rem;border-radius:0.65rem;gap:0.05rem;}.stats-grid.svelte-q5ccww span:where(.svelte-q5ccww) {font-size:0.9rem;}.stats-grid.svelte-q5ccww small:where(.svelte-q5ccww) {font-size:0.65rem;}.header-actions.svelte-q5ccww {gap:0.35rem;}\n  }"
+  code: ".task-board.svelte-q5ccww {display:grid;gap:1rem;}.page-header.svelte-q5ccww {display:flex;justify-content:space-between;gap:1rem;align-items:center;flex-wrap:wrap;}h1.svelte-q5ccww {margin:0;font-size:clamp(1.2rem, 2.3vw, 1.7rem);max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}.stats-grid.svelte-q5ccww {display:grid;grid-template-columns:repeat(2, minmax(0, 1fr));gap:0.5rem;min-width:min(14rem, 100%);flex:1 1 14rem;max-width:100%;}.stats-grid.svelte-q5ccww > div:where(.svelte-q5ccww) {background:var(--surface-1);border:1px solid var(--border-color);border-radius:0.9rem;padding:0.6rem 0.75rem;display:grid;gap:0.15rem;}.stats-grid.svelte-q5ccww span:where(.svelte-q5ccww) {font-size:1.15rem;font-weight:800;}.stats-grid.svelte-q5ccww small:where(.svelte-q5ccww) {color:var(--text-muted);}.header-actions.svelte-q5ccww {display:flex;gap:0.5rem;margin-left:auto;min-width:0;}.header-actions.svelte-q5ccww button:where(.svelte-q5ccww) {background:var(--surface-1);border:1px solid var(--border-color);color:inherit;border-radius:0.65rem;padding:0.45rem 0.75rem;font:inherit;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}.header-actions.svelte-q5ccww button.active:where(.svelte-q5ccww) {background:var(--surface-2);}.board-grid.svelte-q5ccww {display:grid;grid-template-columns:minmax(0, 1fr) minmax(240px, 320px);gap:1rem;position:relative;}.board-grid.single-column.svelte-q5ccww {grid-template-columns:minmax(0, 1fr);}.main-column.svelte-q5ccww,\n  .side-column.svelte-q5ccww {display:grid;gap:1rem;align-content:start;}.categories-overlay-shell.svelte-q5ccww {display:contents;}.categories-tab.svelte-q5ccww,\n  .categories-overlay-backdrop.svelte-q5ccww {display:none;}.task-list.svelte-q5ccww {display:grid;gap:0.65rem;padding:1rem;border:1px solid var(--border-color);border-radius:1rem;background:var(--surface-1);}\n  .category-links.svelte-q5ccww button:where(.svelte-q5ccww) {overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}.empty-state.compact.svelte-q5ccww {padding:0;border:none;font-size:0.85rem;}\n  .panel.svelte-q5ccww h3:where(.svelte-q5ccww) {margin:0;font-size:1rem;}.task-section.svelte-q5ccww {display:grid;gap:0.25rem;}.task-section.svelte-q5ccww + .task-section:where(.svelte-q5ccww) {margin-top:0.2rem;}.task-section-head.svelte-q5ccww {display:flex;align-items:center;justify-content:space-between;gap:0.5rem;}.task-section-head.svelte-q5ccww h3:where(.svelte-q5ccww) {margin:0;font-size:0.9rem;}.task-section-head.svelte-q5ccww small:where(.svelte-q5ccww) {color:var(--text-muted);font-size:0.75rem;font-weight:600;}.finished-block.svelte-q5ccww {gap:0.55rem;padding-top:0.15rem;border-top:1px solid color-mix(in srgb, var(--border-color) 70%, transparent);}.finished-toggle.svelte-q5ccww {display:flex;align-items:center;justify-content:space-between;gap:0.5rem;width:100%;text-align:left;background:transparent;border:1px solid var(--border-color);color:inherit;border-radius:0.65rem;padding:0.4rem 0.55rem;font:inherit;cursor:pointer;}.finished-toggle.svelte-q5ccww .chevron:where(.svelte-q5ccww) {color:var(--text-muted);transition:transform 120ms ease;}.finished-toggle.svelte-q5ccww .chevron.expanded:where(.svelte-q5ccww) {transform:rotate(180deg);}.cards.svelte-q5ccww {display:grid;gap:0.45rem;}.subtag-group.svelte-q5ccww {display:grid;gap:0.55rem;margin-top:0.4rem;}.subtag-header.svelte-q5ccww {padding:0.35rem 0.55rem;border-radius:0.6rem;border:1px solid var(--border-color);background:var(--surface-2);font-size:0.8rem;font-weight:800;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-muted);}.empty-state.svelte-q5ccww {padding:1rem;border:1px dashed var(--border-color);border-radius:0.8rem;color:var(--text-muted);text-align:left;}.panel.svelte-q5ccww {padding:1rem;border:1px solid var(--border-color);border-radius:1rem;background:var(--surface-1);}.panel.svelte-q5ccww ul:where(.svelte-q5ccww) {list-style:none;margin:0.6rem 0 0;padding:0;display:grid;gap:0.45rem;color:var(--text-muted);font-size:0.9rem;}.category-links.svelte-q5ccww button:where(.svelte-q5ccww) {width:100%;text-align:left;font:inherit;color:inherit;background:transparent;border:1px solid transparent;border-radius:0.45rem;padding:0.35rem 0.45rem;cursor:pointer;max-width:100%;}.category-links.svelte-q5ccww button:where(.svelte-q5ccww):hover {background:var(--surface-2);color:var(--text-normal);}\n\n  @media (max-width: 900px) {.board-grid.svelte-q5ccww {grid-template-columns:1fr;}.categories-overlay-shell.svelte-q5ccww {display:block;position:absolute;inset:0 0 auto auto;z-index:5;pointer-events:none;}.categories-tab.svelte-q5ccww {display:inline-flex;align-items:center;justify-content:center;position:absolute;top:0.5rem;right:0;transform:translateX(calc(100% - 0.75rem));writing-mode:vertical-rl;text-orientation:mixed;letter-spacing:0.03em;padding:0.55rem 0.35rem;border-radius:0.7rem 0 0 0.7rem;border:1px solid var(--border-color);border-right:0;background:var(--surface-1);color:inherit;box-shadow:0 8px 20px rgba(0, 0, 0, 0.12);cursor:pointer;pointer-events:auto;transition:transform 180ms ease, background-color 160ms ease;}.categories-overlay-shell.svelte-q5ccww:hover .categories-tab:where(.svelte-q5ccww),\n    .categories-overlay-shell.open.svelte-q5ccww .categories-tab:where(.svelte-q5ccww) {transform:translateX(0);background:var(--surface-2);}.categories-overlay-backdrop.svelte-q5ccww {display:block;position:fixed;inset:0;border:0;padding:0;background:transparent;opacity:0;pointer-events:none;}.categories-overlay-shell.open.svelte-q5ccww .categories-overlay-backdrop:where(.svelte-q5ccww) {pointer-events:auto;}.side-column.svelte-q5ccww {position:absolute;top:0;right:0;width:min(78vw, 320px);max-width:calc(100vw - 1rem);transform:translateX(calc(100% + 0.75rem));opacity:0;pointer-events:none;transition:transform 220ms ease, opacity 220ms ease;z-index:6;}.categories-overlay-shell.svelte-q5ccww:hover .side-column:where(.svelte-q5ccww),\n    .categories-overlay-shell.open.svelte-q5ccww .side-column:where(.svelte-q5ccww) {transform:translateX(0);opacity:1;pointer-events:auto;}.stats-grid.svelte-q5ccww {width:100%;min-width:0;}.header-actions.svelte-q5ccww {width:100%;margin-left:0;flex-wrap:wrap;}.header-actions.svelte-q5ccww button:where(.svelte-q5ccww) {flex:1 1 0;}\n  }\n\n  @media (max-width: 600px) {.page-header.svelte-q5ccww {gap:0.7rem;}h1.svelte-q5ccww {width:100%;white-space:normal;line-height:1.15;}.stats-grid.svelte-q5ccww {gap:0.4rem;grid-template-columns:repeat(2, minmax(0, 1fr));}.stats-grid.svelte-q5ccww > div:where(.svelte-q5ccww) {padding:0.45rem 0.55rem;border-radius:0.75rem;}.stats-grid.svelte-q5ccww span:where(.svelte-q5ccww) {font-size:1rem;}.stats-grid.svelte-q5ccww small:where(.svelte-q5ccww) {font-size:0.72rem;}.task-list.svelte-q5ccww,\n    .panel.svelte-q5ccww {padding:0.8rem;}.categories-tab.svelte-q5ccww {top:0.35rem;padding:0.45rem 0.3rem;font-size:0.8rem;}\n  }\n\n  @media (max-width: 400px) {.page-header.svelte-q5ccww {align-items:stretch;}.stats-grid.svelte-q5ccww > div:where(.svelte-q5ccww) {padding:0.35rem 0.45rem;border-radius:0.65rem;gap:0.05rem;}.stats-grid.svelte-q5ccww span:where(.svelte-q5ccww) {font-size:0.9rem;}.stats-grid.svelte-q5ccww small:where(.svelte-q5ccww) {font-size:0.65rem;}.header-actions.svelte-q5ccww {gap:0.35rem;}.side-column.svelte-q5ccww {width:calc(100vw - 0.8rem);max-width:calc(100vw - 0.8rem);}\n  }"
 };
 function TaskBoard($$anchor, $$props) {
   push($$props, true);
@@ -6727,18 +6725,10 @@ function TaskBoard($$anchor, $$props) {
   let title = prop($$props, "title", 3, "Dashboard"), filterUncategorized = prop($$props, "filterUncategorized", 3, false), showCategoriesCard = prop($$props, "showCategoriesCard", 3, true), boardActive = prop($$props, "boardActive", 3, true), rescanLoading = prop($$props, "rescanLoading", 3, false);
   let draggingTaskId = state(null);
   let finishedExpanded = state(false);
+  let categoriesPanelOpen = state(false);
   const sortedTasks = user_derived(() => [...visibleTasks()].sort((a, b) => a.sortOrder - b.sortOrder));
   const incompleteTasks = user_derived(() => get(sortedTasks).filter((task) => !task.completed));
   const finishedTasks = user_derived(() => get(sortedTasks).filter((task) => task.completed));
-  const now = Date.now();
-  const oneWeekAgo = now - 7 * 24 * 60 * 60 * 1e3;
-  const oneMonthAgo = now - 30 * 24 * 60 * 60 * 1e3;
-  const thisWeekTasks = user_derived(() => get(incompleteTasks).filter((t) => new Date(t.createdAt).getTime() >= oneWeekAgo));
-  const thisMonthTasks = user_derived(() => get(incompleteTasks).filter((t) => {
-    const created = new Date(t.createdAt).getTime();
-    return created >= oneMonthAgo && created < oneWeekAgo;
-  }));
-  const olderTasks = user_derived(() => get(incompleteTasks).filter((t) => new Date(t.createdAt).getTime() < oneMonthAgo));
   const openCount = user_derived(() => get(sortedTasks).filter((task) => !task.completed).length);
   const doneCount = user_derived(() => get(sortedTasks).filter((task) => task.completed).length);
   const sortedCategories = user_derived(() => [...categories].sort((a, b) => a.sortOrder - b.sortOrder));
@@ -6787,6 +6777,11 @@ function TaskBoard($$anchor, $$props) {
       lastFilterKey = key2;
     });
   }
+  user_effect(() => {
+    if (!showCategoriesCard()) {
+      set(categoriesPanelOpen, false);
+    }
+  });
   function groupBySubtag(list) {
     const groups = /* @__PURE__ */ new Map();
     for (const task of list) {
@@ -6863,19 +6858,19 @@ function TaskBoard($$anchor, $$props) {
       var div_6 = root_14();
       append($$anchor2, div_6);
     };
-    var consequent_6 = ($$anchor2) => {
+    var consequent_4 = ($$anchor2) => {
       var fragment = root_24();
-      var node_2 = first_child(fragment);
+      var section_2 = first_child(fragment);
+      var div_7 = child(section_2);
+      var small = sibling(child(div_7), 2);
+      var text_4 = child(small, true);
+      reset(small);
+      reset(div_7);
+      var node_2 = sibling(div_7, 2);
       {
         var consequent_1 = ($$anchor3) => {
-          var section_2 = root_34();
-          var div_7 = child(section_2);
-          var small = sibling(child(div_7), 2);
-          var text_4 = child(small, true);
-          reset(small);
-          reset(div_7);
-          var div_8 = sibling(div_7, 2);
-          each(div_8, 21, () => get(thisWeekTasks), (task) => task.id, ($$anchor4, task) => {
+          var div_8 = root_34();
+          each(div_8, 21, () => get(incompleteTasks), (task) => task.id, ($$anchor4, task) => {
             TaskCard($$anchor4, {
               get task() {
                 return get(task);
@@ -6885,91 +6880,34 @@ function TaskBoard($$anchor, $$props) {
             });
           });
           reset(div_8);
-          reset(section_2);
-          template_effect(() => set_text(text_4, get(thisWeekTasks).length));
-          append($$anchor3, section_2);
+          append($$anchor3, div_8);
         };
         if_block(node_2, ($$render) => {
-          if (get(thisWeekTasks).length > 0) $$render(consequent_1);
+          if (get(openCount) > 0) $$render(consequent_1);
         });
       }
-      var node_3 = sibling(node_2, 2);
-      {
-        var consequent_2 = ($$anchor3) => {
-          var section_3 = root_52();
-          var div_9 = child(section_3);
-          var small_1 = sibling(child(div_9), 2);
-          var text_5 = child(small_1, true);
-          reset(small_1);
-          reset(div_9);
-          var div_10 = sibling(div_9, 2);
-          each(div_10, 21, () => get(thisMonthTasks), (task) => task.id, ($$anchor4, task) => {
-            TaskCard($$anchor4, {
-              get task() {
-                return get(task);
-              },
-              onDragStart: (id) => set(draggingTaskId, id, true),
-              onDropOn: (id) => onDropOn(id)
-            });
-          });
-          reset(div_10);
-          reset(section_3);
-          template_effect(() => set_text(text_5, get(thisMonthTasks).length));
-          append($$anchor3, section_3);
-        };
-        if_block(node_3, ($$render) => {
-          if (get(thisMonthTasks).length > 0) $$render(consequent_2);
-        });
-      }
-      var node_4 = sibling(node_3, 2);
-      {
-        var consequent_3 = ($$anchor3) => {
-          var section_4 = root_7();
-          var div_11 = child(section_4);
-          var small_2 = sibling(child(div_11), 2);
-          var text_6 = child(small_2, true);
-          reset(small_2);
-          reset(div_11);
-          var div_12 = sibling(div_11, 2);
-          each(div_12, 21, () => get(olderTasks), (task) => task.id, ($$anchor4, task) => {
-            TaskCard($$anchor4, {
-              get task() {
-                return get(task);
-              },
-              onDragStart: (id) => set(draggingTaskId, id, true),
-              onDropOn: (id) => onDropOn(id)
-            });
-          });
-          reset(div_12);
-          reset(section_4);
-          template_effect(() => set_text(text_6, get(olderTasks).length));
-          append($$anchor3, section_4);
-        };
-        if_block(node_4, ($$render) => {
-          if (get(olderTasks).length > 0) $$render(consequent_3);
-        });
-      }
-      var section_5 = sibling(node_4, 2);
-      var button_2 = child(section_5);
+      reset(section_2);
+      var section_3 = sibling(section_2, 2);
+      var button_2 = child(section_3);
       var span_2 = child(button_2);
-      var text_7 = child(span_2);
+      var text_5 = child(span_2);
       reset(span_2);
       var span_3 = sibling(span_2, 2);
       let classes_2;
       reset(button_2);
-      var node_5 = sibling(button_2, 2);
+      var node_3 = sibling(button_2, 2);
       {
-        var consequent_5 = ($$anchor3) => {
-          var fragment_4 = comment();
-          var node_6 = first_child(fragment_4);
+        var consequent_3 = ($$anchor3) => {
+          var fragment_2 = comment();
+          var node_4 = first_child(fragment_2);
           {
-            var consequent_4 = ($$anchor4) => {
-              var div_13 = root_10();
-              append($$anchor4, div_13);
+            var consequent_2 = ($$anchor4) => {
+              var div_9 = root_6();
+              append($$anchor4, div_9);
             };
             var alternate = ($$anchor4) => {
-              var div_14 = root_11();
-              each(div_14, 21, () => get(finishedTasks), (task) => task.id, ($$anchor5, task) => {
+              var div_10 = root_7();
+              each(div_10, 21, () => get(finishedTasks), (task) => task.id, ($$anchor5, task) => {
                 TaskCard($$anchor5, {
                   get task() {
                     return get(task);
@@ -6978,49 +6916,50 @@ function TaskBoard($$anchor, $$props) {
                   onDropOn: (id) => onDropOn(id)
                 });
               });
-              reset(div_14);
-              append($$anchor4, div_14);
+              reset(div_10);
+              append($$anchor4, div_10);
             };
-            if_block(node_6, ($$render) => {
-              if (get(doneCount) === 0) $$render(consequent_4);
+            if_block(node_4, ($$render) => {
+              if (get(doneCount) === 0) $$render(consequent_2);
               else $$render(alternate, false);
             });
           }
-          append($$anchor3, fragment_4);
+          append($$anchor3, fragment_2);
         };
-        if_block(node_5, ($$render) => {
-          if (get(finishedExpanded)) $$render(consequent_5);
+        if_block(node_3, ($$render) => {
+          if (get(finishedExpanded)) $$render(consequent_3);
         });
       }
-      reset(section_5);
+      reset(section_3);
       template_effect(() => {
+        set_text(text_4, get(openCount));
         set_attribute2(button_2, "aria-expanded", get(finishedExpanded));
-        set_text(text_7, `Finished Tasks (${get(doneCount) ?? ""})`);
+        set_text(text_5, `Finished Tasks (${get(doneCount) ?? ""})`);
         classes_2 = set_class(span_3, 1, "chevron svelte-q5ccww", null, classes_2, { expanded: get(finishedExpanded) });
       });
       delegated("click", button_2, () => set(finishedExpanded, !get(finishedExpanded)));
       append($$anchor2, fragment);
     };
     var alternate_3 = ($$anchor2) => {
-      var fragment_6 = root_132();
-      var section_6 = first_child(fragment_6);
-      var div_15 = child(section_6);
-      var small_3 = sibling(child(div_15), 2);
-      var text_8 = child(small_3, true);
-      reset(small_3);
-      reset(div_15);
-      var node_7 = sibling(div_15, 2);
+      var fragment_4 = root_9();
+      var section_4 = first_child(fragment_4);
+      var div_11 = child(section_4);
+      var small_1 = sibling(child(div_11), 2);
+      var text_6 = child(small_1, true);
+      reset(small_1);
+      reset(div_11);
+      var node_5 = sibling(div_11, 2);
       {
-        var consequent_7 = ($$anchor3) => {
+        var consequent_5 = ($$anchor3) => {
         };
-        var consequent_9 = ($$anchor3) => {
-          var fragment_7 = root_142();
-          var node_8 = first_child(fragment_7);
+        var consequent_7 = ($$anchor3) => {
+          var fragment_5 = root_10();
+          var node_6 = first_child(fragment_5);
           {
-            var consequent_8 = ($$anchor4) => {
-              var section_7 = root_15();
-              var div_16 = sibling(child(section_7), 2);
-              each(div_16, 21, () => get(openByCategory).rootTasks, (task) => task.id, ($$anchor5, task) => {
+            var consequent_6 = ($$anchor4) => {
+              var section_5 = root_11();
+              var div_12 = sibling(child(section_5), 2);
+              each(div_12, 21, () => get(openByCategory).rootTasks, (task) => task.id, ($$anchor5, task) => {
                 TaskCard($$anchor5, {
                   get task() {
                     return get(task);
@@ -7029,22 +6968,22 @@ function TaskBoard($$anchor, $$props) {
                   onDropOn
                 });
               });
-              reset(div_16);
-              reset(section_7);
-              append($$anchor4, section_7);
+              reset(div_12);
+              reset(section_5);
+              append($$anchor4, section_5);
             };
-            if_block(node_8, ($$render) => {
-              if (get(openByCategory).rootTasks.length) $$render(consequent_8);
+            if_block(node_6, ($$render) => {
+              if (get(openByCategory).rootTasks.length) $$render(consequent_6);
             });
           }
-          var node_9 = sibling(node_8, 2);
-          each(node_9, 17, () => get(openByCategory).categoryGroups, (group) => group.categoryId, ($$anchor4, group) => {
-            var section_8 = root_17();
-            var div_17 = child(section_8);
-            var text_9 = child(div_17, true);
-            reset(div_17);
-            var div_18 = sibling(div_17, 2);
-            each(div_18, 21, () => get(group).tasks, (task) => task.id, ($$anchor5, task) => {
+          var node_7 = sibling(node_6, 2);
+          each(node_7, 17, () => get(openByCategory).categoryGroups, (group) => group.categoryId, ($$anchor4, group) => {
+            var section_6 = root_132();
+            var div_13 = child(section_6);
+            var text_7 = child(div_13, true);
+            reset(div_13);
+            var div_14 = sibling(div_13, 2);
+            each(div_14, 21, () => get(group).tasks, (task) => task.id, ($$anchor5, task) => {
               TaskCard($$anchor5, {
                 get task() {
                   return get(task);
@@ -7053,20 +6992,20 @@ function TaskBoard($$anchor, $$props) {
                 onDropOn
               });
             });
-            reset(div_18);
-            reset(section_8);
-            template_effect(() => set_text(text_9, get(group).name));
-            append($$anchor4, section_8);
+            reset(div_14);
+            reset(section_6);
+            template_effect(() => set_text(text_7, get(group).name));
+            append($$anchor4, section_6);
           });
-          append($$anchor3, fragment_7);
+          append($$anchor3, fragment_5);
         };
-        var consequent_11 = ($$anchor3) => {
-          var fragment_10 = root_19();
-          var node_10 = first_child(fragment_10);
+        var consequent_9 = ($$anchor3) => {
+          var fragment_8 = root_15();
+          var node_8 = first_child(fragment_8);
           {
-            var consequent_10 = ($$anchor4) => {
-              var div_19 = root_20();
-              each(div_19, 21, () => get(openUntaggedCategoryTasks), (task) => task.id, ($$anchor5, task) => {
+            var consequent_8 = ($$anchor4) => {
+              var div_15 = root_16();
+              each(div_15, 21, () => get(openUntaggedCategoryTasks), (task) => task.id, ($$anchor5, task) => {
                 TaskCard($$anchor5, {
                   get task() {
                     return get(task);
@@ -7075,21 +7014,21 @@ function TaskBoard($$anchor, $$props) {
                   onDropOn: (id) => onDropOn(id, "")
                 });
               });
-              reset(div_19);
-              append($$anchor4, div_19);
+              reset(div_15);
+              append($$anchor4, div_15);
             };
-            if_block(node_10, ($$render) => {
-              if (get(openUntaggedCategoryTasks).length) $$render(consequent_10);
+            if_block(node_8, ($$render) => {
+              if (get(openUntaggedCategoryTasks).length) $$render(consequent_8);
             });
           }
-          var node_11 = sibling(node_10, 2);
-          each(node_11, 17, () => get(openSubtagGroups), (group) => group.subTag, ($$anchor4, group) => {
-            var section_9 = root_222();
-            var div_20 = child(section_9);
-            var text_10 = child(div_20, true);
-            reset(div_20);
-            var div_21 = sibling(div_20, 2);
-            each(div_21, 21, () => get(group).tasks, (task) => task.id, ($$anchor5, task) => {
+          var node_9 = sibling(node_8, 2);
+          each(node_9, 17, () => get(openSubtagGroups), (group) => group.subTag, ($$anchor4, group) => {
+            var section_7 = root_18();
+            var div_16 = child(section_7);
+            var text_8 = child(div_16, true);
+            reset(div_16);
+            var div_17 = sibling(div_16, 2);
+            each(div_17, 21, () => get(group).tasks, (task) => task.id, ($$anchor5, task) => {
               TaskCard($$anchor5, {
                 get task() {
                   return get(task);
@@ -7098,16 +7037,16 @@ function TaskBoard($$anchor, $$props) {
                 onDropOn: (id) => onDropOn(id, get(group).subTag)
               });
             });
-            reset(div_21);
-            reset(section_9);
-            template_effect(() => set_text(text_10, get(group).subTag));
-            append($$anchor4, section_9);
+            reset(div_17);
+            reset(section_7);
+            template_effect(() => set_text(text_8, get(group).subTag));
+            append($$anchor4, section_7);
           });
-          append($$anchor3, fragment_10);
+          append($$anchor3, fragment_8);
         };
         var alternate_1 = ($$anchor3) => {
-          var div_22 = root_242();
-          each(div_22, 21, () => get(incompleteTasks), (task) => task.id, ($$anchor4, task) => {
+          var div_18 = root_20();
+          each(div_18, 21, () => get(incompleteTasks), (task) => task.id, ($$anchor4, task) => {
             TaskCard($$anchor4, {
               get task() {
                 return get(task);
@@ -7116,43 +7055,43 @@ function TaskBoard($$anchor, $$props) {
               onDropOn
             });
           });
-          reset(div_22);
-          append($$anchor3, div_22);
+          reset(div_18);
+          append($$anchor3, div_18);
         };
-        if_block(node_7, ($$render) => {
-          if (get(openCount) === 0) $$render(consequent_7);
-          else if (get(showCategorySections)) $$render(consequent_9, 1);
-          else if (get(showSubtagSections)) $$render(consequent_11, 2);
+        if_block(node_5, ($$render) => {
+          if (get(openCount) === 0) $$render(consequent_5);
+          else if (get(showCategorySections)) $$render(consequent_7, 1);
+          else if (get(showSubtagSections)) $$render(consequent_9, 2);
           else $$render(alternate_1, false);
         });
       }
-      reset(section_6);
-      var section_10 = sibling(section_6, 2);
-      var button_3 = child(section_10);
+      reset(section_4);
+      var section_8 = sibling(section_4, 2);
+      var button_3 = child(section_8);
       var span_4 = child(button_3);
-      var text_11 = child(span_4);
+      var text_9 = child(span_4);
       reset(span_4);
       var span_5 = sibling(span_4, 2);
       let classes_3;
       reset(button_3);
-      var node_12 = sibling(button_3, 2);
+      var node_10 = sibling(button_3, 2);
       {
-        var consequent_17 = ($$anchor3) => {
-          var fragment_14 = comment();
-          var node_13 = first_child(fragment_14);
+        var consequent_15 = ($$anchor3) => {
+          var fragment_12 = comment();
+          var node_11 = first_child(fragment_12);
           {
-            var consequent_12 = ($$anchor4) => {
-              var div_23 = root_27();
-              append($$anchor4, div_23);
+            var consequent_10 = ($$anchor4) => {
+              var div_19 = root_232();
+              append($$anchor4, div_19);
             };
-            var consequent_14 = ($$anchor4) => {
-              var fragment_15 = root_28();
-              var node_14 = first_child(fragment_15);
+            var consequent_12 = ($$anchor4) => {
+              var fragment_13 = root_242();
+              var node_12 = first_child(fragment_13);
               {
-                var consequent_13 = ($$anchor5) => {
-                  var section_11 = root_29();
-                  var div_24 = sibling(child(section_11), 2);
-                  each(div_24, 21, () => get(finishedByCategory).rootTasks, (task) => task.id, ($$anchor6, task) => {
+                var consequent_11 = ($$anchor5) => {
+                  var section_9 = root_25();
+                  var div_20 = sibling(child(section_9), 2);
+                  each(div_20, 21, () => get(finishedByCategory).rootTasks, (task) => task.id, ($$anchor6, task) => {
                     TaskCard($$anchor6, {
                       get task() {
                         return get(task);
@@ -7161,22 +7100,22 @@ function TaskBoard($$anchor, $$props) {
                       onDropOn
                     });
                   });
-                  reset(div_24);
-                  reset(section_11);
-                  append($$anchor5, section_11);
+                  reset(div_20);
+                  reset(section_9);
+                  append($$anchor5, section_9);
                 };
-                if_block(node_14, ($$render) => {
-                  if (get(finishedByCategory).rootTasks.length) $$render(consequent_13);
+                if_block(node_12, ($$render) => {
+                  if (get(finishedByCategory).rootTasks.length) $$render(consequent_11);
                 });
               }
-              var node_15 = sibling(node_14, 2);
-              each(node_15, 17, () => get(finishedByCategory).categoryGroups, (group) => group.categoryId, ($$anchor5, group) => {
-                var section_12 = root_31();
-                var div_25 = child(section_12);
-                var text_12 = child(div_25, true);
-                reset(div_25);
-                var div_26 = sibling(div_25, 2);
-                each(div_26, 21, () => get(group).tasks, (task) => task.id, ($$anchor6, task) => {
+              var node_13 = sibling(node_12, 2);
+              each(node_13, 17, () => get(finishedByCategory).categoryGroups, (group) => group.categoryId, ($$anchor5, group) => {
+                var section_10 = root_27();
+                var div_21 = child(section_10);
+                var text_10 = child(div_21, true);
+                reset(div_21);
+                var div_22 = sibling(div_21, 2);
+                each(div_22, 21, () => get(group).tasks, (task) => task.id, ($$anchor6, task) => {
                   TaskCard($$anchor6, {
                     get task() {
                       return get(task);
@@ -7185,20 +7124,20 @@ function TaskBoard($$anchor, $$props) {
                     onDropOn
                   });
                 });
-                reset(div_26);
-                reset(section_12);
-                template_effect(() => set_text(text_12, get(group).name));
-                append($$anchor5, section_12);
+                reset(div_22);
+                reset(section_10);
+                template_effect(() => set_text(text_10, get(group).name));
+                append($$anchor5, section_10);
               });
-              append($$anchor4, fragment_15);
+              append($$anchor4, fragment_13);
             };
-            var consequent_16 = ($$anchor4) => {
-              var fragment_18 = root_332();
-              var node_16 = first_child(fragment_18);
+            var consequent_14 = ($$anchor4) => {
+              var fragment_16 = root_29();
+              var node_14 = first_child(fragment_16);
               {
-                var consequent_15 = ($$anchor5) => {
-                  var div_27 = root_342();
-                  each(div_27, 21, () => get(finishedUntaggedCategoryTasks), (task) => task.id, ($$anchor6, task) => {
+                var consequent_13 = ($$anchor5) => {
+                  var div_23 = root_30();
+                  each(div_23, 21, () => get(finishedUntaggedCategoryTasks), (task) => task.id, ($$anchor6, task) => {
                     TaskCard($$anchor6, {
                       get task() {
                         return get(task);
@@ -7207,21 +7146,21 @@ function TaskBoard($$anchor, $$props) {
                       onDropOn: (id) => onDropOn(id, "")
                     });
                   });
-                  reset(div_27);
-                  append($$anchor5, div_27);
+                  reset(div_23);
+                  append($$anchor5, div_23);
                 };
-                if_block(node_16, ($$render) => {
-                  if (get(finishedUntaggedCategoryTasks).length) $$render(consequent_15);
+                if_block(node_14, ($$render) => {
+                  if (get(finishedUntaggedCategoryTasks).length) $$render(consequent_13);
                 });
               }
-              var node_17 = sibling(node_16, 2);
-              each(node_17, 17, () => get(finishedSubtagGroups), (group) => group.subTag, ($$anchor5, group) => {
-                var section_13 = root_36();
-                var div_28 = child(section_13);
-                var text_13 = child(div_28, true);
-                reset(div_28);
-                var div_29 = sibling(div_28, 2);
-                each(div_29, 21, () => get(group).tasks, (task) => task.id, ($$anchor6, task) => {
+              var node_15 = sibling(node_14, 2);
+              each(node_15, 17, () => get(finishedSubtagGroups), (group) => group.subTag, ($$anchor5, group) => {
+                var section_11 = root_322();
+                var div_24 = child(section_11);
+                var text_11 = child(div_24, true);
+                reset(div_24);
+                var div_25 = sibling(div_24, 2);
+                each(div_25, 21, () => get(group).tasks, (task) => task.id, ($$anchor6, task) => {
                   TaskCard($$anchor6, {
                     get task() {
                       return get(task);
@@ -7230,16 +7169,16 @@ function TaskBoard($$anchor, $$props) {
                     onDropOn: (id) => onDropOn(id, get(group).subTag)
                   });
                 });
-                reset(div_29);
-                reset(section_13);
-                template_effect(() => set_text(text_13, get(group).subTag));
-                append($$anchor5, section_13);
+                reset(div_25);
+                reset(section_11);
+                template_effect(() => set_text(text_11, get(group).subTag));
+                append($$anchor5, section_11);
               });
-              append($$anchor4, fragment_18);
+              append($$anchor4, fragment_16);
             };
             var alternate_2 = ($$anchor4) => {
-              var div_30 = root_38();
-              each(div_30, 21, () => get(finishedTasks), (task) => task.id, ($$anchor5, task) => {
+              var div_26 = root_342();
+              each(div_26, 21, () => get(finishedTasks), (task) => task.id, ($$anchor5, task) => {
                 TaskCard($$anchor5, {
                   get task() {
                     return get(task);
@@ -7248,68 +7187,79 @@ function TaskBoard($$anchor, $$props) {
                   onDropOn
                 });
               });
-              reset(div_30);
-              append($$anchor4, div_30);
+              reset(div_26);
+              append($$anchor4, div_26);
             };
-            if_block(node_13, ($$render) => {
-              if (get(doneCount) === 0) $$render(consequent_12);
-              else if (get(showCategorySections)) $$render(consequent_14, 1);
-              else if (get(showSubtagSections)) $$render(consequent_16, 2);
+            if_block(node_11, ($$render) => {
+              if (get(doneCount) === 0) $$render(consequent_10);
+              else if (get(showCategorySections)) $$render(consequent_12, 1);
+              else if (get(showSubtagSections)) $$render(consequent_14, 2);
               else $$render(alternate_2, false);
             });
           }
-          append($$anchor3, fragment_14);
+          append($$anchor3, fragment_12);
         };
-        if_block(node_12, ($$render) => {
-          if (get(finishedExpanded)) $$render(consequent_17);
+        if_block(node_10, ($$render) => {
+          if (get(finishedExpanded)) $$render(consequent_15);
         });
       }
-      reset(section_10);
+      reset(section_8);
       template_effect(() => {
-        set_text(text_8, get(openCount));
+        set_text(text_6, get(openCount));
         set_attribute2(button_3, "aria-expanded", get(finishedExpanded));
-        set_text(text_11, `Finished Tasks (${get(doneCount) ?? ""})`);
+        set_text(text_9, `Finished Tasks (${get(doneCount) ?? ""})`);
         classes_3 = set_class(span_5, 1, "chevron svelte-q5ccww", null, classes_3, { expanded: get(finishedExpanded) });
       });
       delegated("click", button_3, () => set(finishedExpanded, !get(finishedExpanded)));
-      append($$anchor2, fragment_6);
+      append($$anchor2, fragment_4);
     };
     if_block(node_1, ($$render) => {
       if (get(sortedTasks).length === 0) $$render(consequent);
-      else if (showCategoriesCard()) $$render(consequent_6, 1);
+      else if (showCategoriesCard()) $$render(consequent_4, 1);
       else $$render(alternate_3, false);
     });
   }
   reset(section_1);
   reset(div_5);
-  var node_18 = sibling(div_5, 2);
+  var node_16 = sibling(div_5, 2);
   {
-    var consequent_18 = ($$anchor2) => {
-      var aside = root_40();
-      var section_14 = child(aside);
-      var ul = sibling(child(section_14), 2);
-      var node_19 = child(ul);
-      each(node_19, 17, () => get(sortedCategories), index, ($$anchor3, category) => {
-        var li = root_41();
-        var button_4 = child(li);
-        var text_14 = child(button_4);
-        reset(button_4);
+    var consequent_16 = ($$anchor2) => {
+      var div_27 = root_36();
+      let classes_4;
+      var button_4 = child(div_27);
+      var button_5 = sibling(button_4, 2);
+      var aside = sibling(button_5, 2);
+      var section_12 = child(aside);
+      var ul = sibling(child(section_12), 2);
+      var node_17 = child(ul);
+      each(node_17, 17, () => get(sortedCategories), index, ($$anchor3, category) => {
+        var li = root_37();
+        var button_6 = child(li);
+        var text_12 = child(button_6);
+        reset(button_6);
         reset(li);
-        template_effect(() => set_text(text_14, `${get(category).emoji ? `${get(category).emoji} ` : ""}${get(category).name ?? ""}`));
-        delegated("click", button_4, () => $$props.onSelectCategory?.(get(category).id));
+        template_effect(() => set_text(text_12, `${get(category).emoji ? `${get(category).emoji} ` : ""}${get(category).name ?? ""}`));
+        delegated("click", button_6, () => $$props.onSelectCategory?.(get(category).id));
         append($$anchor3, li);
       });
-      var li_1 = sibling(node_19, 2);
-      var button_5 = child(li_1);
+      var li_1 = sibling(node_17, 2);
+      var button_7 = child(li_1);
       reset(li_1);
       reset(ul);
-      reset(section_14);
+      reset(section_12);
       reset(aside);
-      delegated("click", button_5, () => $$props.onSelectUncategorized?.());
-      append($$anchor2, aside);
+      reset(div_27);
+      template_effect(() => {
+        classes_4 = set_class(div_27, 1, "categories-overlay-shell svelte-q5ccww", null, classes_4, { open: get(categoriesPanelOpen) });
+        set_attribute2(button_4, "aria-expanded", get(categoriesPanelOpen));
+      });
+      delegated("click", button_4, () => set(categoriesPanelOpen, !get(categoriesPanelOpen)));
+      delegated("click", button_5, () => set(categoriesPanelOpen, false));
+      delegated("click", button_7, () => $$props.onSelectUncategorized?.());
+      append($$anchor2, div_27);
     };
-    if_block(node_18, ($$render) => {
-      if (showCategoriesCard()) $$render(consequent_18);
+    if_block(node_16, ($$render) => {
+      if (showCategoriesCard()) $$render(consequent_16);
     });
   }
   reset(div_4);
@@ -7331,8 +7281,8 @@ function TaskBoard($$anchor, $$props) {
 delegate(["click"]);
 
 // components/App.svelte
-var root_16 = from_html(`<button type="button" class="todo-planner-sidebar-backdrop" aria-label="Close sidebar"></button>`);
-var root_25 = from_html(`<div class="error-banner"> </div>`);
+var root_17 = from_html(`<button type="button" class="todo-planner-sidebar-backdrop" aria-label="Close sidebar"></button>`);
+var root_26 = from_html(`<div class="error-banner"> </div>`);
 var root5 = from_html(`<div><aside class="todo-planner-sidebar-pane" id="todo-planner-sidebar"><!></aside> <!> <main class="todo-planner-main"><button type="button" class="todo-planner-sidebar-toggle" aria-controls="todo-planner-sidebar">\u2630 Menu</button> <!> <!></main></div>`);
 function App($$anchor, $$props) {
   push($$props, true);
@@ -7347,7 +7297,7 @@ function App($$anchor, $$props) {
   const isDashboardView = user_derived(() => !nav.groupId && !nav.categoryId && !nav.uncategorizedOnly);
   const pageTitle = user_derived(() => get(activeCategory) ? `${get(activeCategory).emoji ? `${get(activeCategory).emoji} ` : ""}${get(activeCategory).name}` : nav.uncategorizedOnly ? "Uncategorized / Group-level" : get(activeGroup) ? get(activeGroup).name : "Dashboard");
   function applyResponsiveLayout(width) {
-    const nextIsNarrow = (width ?? get(containerEl)?.clientWidth ?? 0) <= 700;
+    const nextIsNarrow = (width ?? get(containerEl)?.clientWidth ?? 0) <= 900;
     if (nextIsNarrow !== get(isNarrowViewport)) {
       set(isNarrowViewport, nextIsNarrow);
       set(sidebarOpen, !nextIsNarrow);
@@ -7384,7 +7334,7 @@ function App($$anchor, $$props) {
   var node_1 = sibling(aside, 2);
   {
     var consequent = ($$anchor2) => {
-      var button = root_16();
+      var button = root_17();
       delegated("click", button, () => set(sidebarOpen, false));
       append($$anchor2, button);
     };
@@ -7397,7 +7347,7 @@ function App($$anchor, $$props) {
   var node_2 = sibling(button_1, 2);
   {
     var consequent_1 = ($$anchor2) => {
-      var div_1 = root_25();
+      var div_1 = root_26();
       var text2 = child(div_1);
       reset(div_1);
       template_effect(() => set_text(text2, `Scan failed: ${ui.errorMessage ?? ""}`));

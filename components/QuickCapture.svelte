@@ -133,9 +133,26 @@
     font-weight: 700;
   }
 
-  @media (max-width: 500px) {
+  @media (max-width: 600px) {
+    .quick-capture {
+      padding: 0.85rem;
+      gap: 0.65rem;
+    }
+
+    form {
+      gap: 0.6rem;
+    }
+
     .row > * {
       flex: 1 1 100%;
+    }
+
+    .row {
+      align-items: stretch;
+    }
+
+    button[type='submit'] {
+      width: 100%;
     }
   }
 

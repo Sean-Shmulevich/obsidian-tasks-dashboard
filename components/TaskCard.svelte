@@ -197,10 +197,16 @@
   }
 
   @media (max-width: 600px) {
-    .grid2 { grid-template-columns: 1fr; }
-  }
+    .task-card {
+      padding: 0.35rem 0.4rem;
+    }
 
-  @media (max-width: 500px) {
+    .checkbox-row {
+      gap: 0.35rem;
+    }
+
+    .grid2 { grid-template-columns: 1fr; }
+
     .actions {
       justify-content: flex-start;
     }
