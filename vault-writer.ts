@@ -118,6 +118,17 @@ export class VaultTodoWriter {
     return true;
   }
 
+  /** Change a task's category. Rewrites the #todo tag to include the new category's group/category path */
+  async changeCategory(task: Task, newCategoryId: string | undefined) {
+    return this.updateLine(task, (line) => {
+      const tagMatch = line.match(/#todo(?:\/[\w-]+)*/);
+      if (!tagMatch) return line;
+      const oldTag = tagMatch[0];
+      const newTag = buildTagForCategory(newCategoryId, this.getCategories(), this.settings.tagPrefix);
+      return line.replace(oldTag, newTag);
+    });
+  }
+
   /** Change a task's subtag within its category. e.g., blog → ebook rewrites #todo/personal/social/blog → #todo/personal/social/ebook */
   async changeSubTag(task: Task, newSubTag: string | undefined) {
     return this.updateLine(task, (line) => {

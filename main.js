@@ -6030,6 +6030,16 @@ var VaultTodoWriter = class {
     await this.app.vault.modify(file, joinLines(lines.filter((_, i) => !(lines.length === 1 && lines[0] === ""))));
     return true;
   }
+  /** Change a task's category. Rewrites the #todo tag to include the new category's group/category path */
+  async changeCategory(task, newCategoryId) {
+    return this.updateLine(task, (line) => {
+      const tagMatch = line.match(/#todo(?:\/[\w-]+)*/);
+      if (!tagMatch) return line;
+      const oldTag = tagMatch[0];
+      const newTag = buildTagForCategory(newCategoryId, this.getCategories(), this.settings.tagPrefix);
+      return line.replace(oldTag, newTag);
+    });
+  }
   /** Change a task's subtag within its category. e.g., blog → ebook rewrites #todo/personal/social/blog → #todo/personal/social/ebook */
   async changeSubTag(task, newSubTag) {
     return this.updateLine(task, (line) => {
@@ -6386,6 +6396,13 @@ function taskSortKey(task) {
   }
   return void 0;
 }
+async function changeTaskCategory(taskId, newCategoryId) {
+  if (!writerRef) return;
+  const task = tasks.find((t) => t.id === taskId);
+  if (!task) return;
+  await writerRef.changeCategory(task, newCategoryId);
+  await refreshVaultState();
+}
 async function changeTaskSubTag(taskId, newSubTag) {
   if (!writerRef) return;
   const task = tasks.find((t) => t.id === taskId);
@@ -6731,43 +6748,82 @@ delegate(["keydown"]);
 var root_13 = from_html(`<button type="button" class="cat-badge svelte-1j8piq"> </button>`);
 var root_23 = from_html(`<button type="button" class="ghost icon-btn svelte-1j8piq" title="Enlarge">\u29C9</button> <button type="button" class="ghost icon-btn svelte-1j8piq" title="Open in Obsidian">\u2197</button> <button type="button" class="ghost icon-btn svelte-1j8piq" title="Edit">\u270E</button> <button type="button" class="danger icon-btn svelte-1j8piq" title="Delete">\u{1F5D1}</button>`, 1);
 var root_42 = from_html(`<option> </option>`);
-var root_33 = from_html(`<div class="editor svelte-1j8piq"><input type="text" maxlength="140" class="svelte-1j8piq"/> <div class="grid2 svelte-1j8piq"><select disabled="" class="svelte-1j8piq"><option>Vault category (read from tags)</option><!></select></div> <div class="actions svelte-1j8piq"><button type="button" class="svelte-1j8piq">Save</button> <button type="button" class="ghost svelte-1j8piq">Cancel</button></div></div>`);
-var root3 = from_html(`<article draggable="true"><div class="row top-row svelte-1j8piq"><label class="checkbox-row svelte-1j8piq"><input type="checkbox" class="svelte-1j8piq"/> <span class="title svelte-1j8piq"> </span></label> <div class="right-controls svelte-1j8piq"><!> <!></div></div> <!></article>`);
+var root_33 = from_html(`<div class="inline-picker-row svelte-1j8piq"><select class="inline-picker-select svelte-1j8piq"><option>Category\u2026</option><!></select> <input class="inline-picker-input svelte-1j8piq" type="text" placeholder="subtag"/> <button type="button" class="inline-picker-save svelte-1j8piq" title="Save">&#10003;</button></div>`);
+var root_6 = from_html(`<option> </option>`);
+var root_52 = from_html(`<div class="editor svelte-1j8piq"><input type="text" maxlength="140" class="svelte-1j8piq"/> <div class="grid2 svelte-1j8piq"><select class="svelte-1j8piq"><option>Uncategorized</option><!></select></div> <div class="actions svelte-1j8piq"><button type="button" class="svelte-1j8piq">Save</button> <button type="button" class="ghost svelte-1j8piq">Cancel</button></div></div>`);
+var root3 = from_html(`<article draggable="true"><div class="row top-row svelte-1j8piq"><div class="checkbox-row svelte-1j8piq" role="checkbox" tabindex="0"><input type="checkbox" tabindex="-1" style="pointer-events: none;" class="svelte-1j8piq"/> <span class="title svelte-1j8piq"> </span></div> <div class="right-controls svelte-1j8piq"><!> <!></div></div> <!> <!></article>`);
 var $$css3 = {
   hash: "svelte-1j8piq",
-  code: ".task-card.svelte-1j8piq {display:grid;gap:0.25rem;padding:0.4rem 0.5rem;border-radius:0.75rem;border:1px solid var(--border-color);background:var(--surface-1);cursor:grab;position:relative;}.task-card.drag-over.svelte-1j8piq::after,\n  .task-card.drag-over-top.svelte-1j8piq::before {content:'';position:absolute;left:0.5rem;right:0.5rem;height:2px;background:var(--interactive-accent, #7c3aed);border-radius:1px;pointer-events:none;}.task-card.drag-over.svelte-1j8piq::after {bottom:-0.3rem;}.task-card.drag-over-top.svelte-1j8piq::before {top:-0.3rem;}.task-card.done.svelte-1j8piq {opacity:0.72;}.top-row.svelte-1j8piq {display:flex;justify-content:space-between;gap:0.35rem;align-items:flex-start;min-width:0;}.checkbox-row.svelte-1j8piq {display:flex;flex:1 1 auto;gap:0.45rem;align-items:flex-start;font-weight:600;min-width:0;}.checkbox-row.svelte-1j8piq .title:where(.svelte-1j8piq) {display:block;min-width:0;line-height:1.2;font-size:0.9rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}.checkbox-row.svelte-1j8piq input[type='checkbox']:where(.svelte-1j8piq) {margin-top:0.1rem;inline-size:0.95rem;block-size:0.95rem;}.done.svelte-1j8piq .title:where(.svelte-1j8piq) {text-decoration:line-through;}.right-controls.svelte-1j8piq {display:flex;flex:0 0 auto;gap:0.25rem;align-items:center;}.editor.svelte-1j8piq {display:grid;gap:0.5rem;padding-top:0.1rem;}.editor.svelte-1j8piq input:where(.svelte-1j8piq),\n  .editor.svelte-1j8piq select:where(.svelte-1j8piq),\n  .actions.svelte-1j8piq button:where(.svelte-1j8piq) {background:var(--surface-2);border:1px solid var(--border-color);color:inherit;border-radius:0.55rem;padding:0.45rem 0.6rem;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}.grid2.svelte-1j8piq {display:grid;gap:0.5rem;grid-template-columns:repeat(2, minmax(0, 1fr));}.cat-badge.svelte-1j8piq {padding:0.15rem 0.5rem;border-radius:999px;font-size:0.65rem;font-weight:600;background:color-mix(in srgb, var(--interactive-accent, #7c3aed) 18%, var(--surface-2, #2a2a3e));border:1px solid var(--border-color);color:var(--text-normal);cursor:pointer;white-space:nowrap;transition:background 120ms ease;}.cat-badge.svelte-1j8piq:hover {background:color-mix(in srgb, var(--interactive-accent, #7c3aed) 35%, var(--surface-2, #2a2a3e));}.icon-btn.svelte-1j8piq {all:unset;display:grid;place-items:center;min-width:1.2rem;min-height:1.2rem;padding:0;line-height:1;font-size:0.8rem;cursor:pointer;opacity:0.6;}.icon-btn.svelte-1j8piq:hover {opacity:1;}.actions.svelte-1j8piq .ghost:where(.svelte-1j8piq) {background:transparent;}.danger.svelte-1j8piq {color:#ff6b6b;}\n\n  @media (max-width: 600px) {.task-card.svelte-1j8piq {padding:0.35rem 0.4rem;}.checkbox-row.svelte-1j8piq {gap:0.35rem;}.grid2.svelte-1j8piq {grid-template-columns:1fr;}.actions.svelte-1j8piq {justify-content:flex-start;}\n  }\n\n  @media (max-width: 400px) {.top-row.svelte-1j8piq {flex-wrap:wrap;}.icon-btn.svelte-1j8piq {min-width:1.65rem;min-height:1.65rem;}\n  }"
+  code: ".task-card.svelte-1j8piq {display:grid;gap:0.25rem;padding:0.4rem 0.5rem;border-radius:0.75rem;border:1px solid var(--border-color);background:var(--surface-1);cursor:grab;position:relative;}.task-card.drag-over.svelte-1j8piq::after,\n  .task-card.drag-over-top.svelte-1j8piq::before {content:'';position:absolute;left:0.5rem;right:0.5rem;height:2px;background:var(--interactive-accent, #7c3aed);border-radius:1px;pointer-events:none;}.task-card.drag-over.svelte-1j8piq::after {bottom:-0.3rem;}.task-card.drag-over-top.svelte-1j8piq::before {top:-0.3rem;}.task-card.done.svelte-1j8piq {opacity:0.72;}.top-row.svelte-1j8piq {display:flex;justify-content:space-between;gap:0.35rem;align-items:flex-start;min-width:0;}.checkbox-row.svelte-1j8piq {display:flex;flex:1 1 auto;gap:0.45rem;align-items:flex-start;font-weight:600;min-width:0;}.checkbox-row.svelte-1j8piq .title:where(.svelte-1j8piq) {display:block;min-width:0;line-height:1.2;font-size:0.9rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}.checkbox-row.svelte-1j8piq input[type='checkbox']:where(.svelte-1j8piq) {margin-top:0.1rem;inline-size:0.95rem;block-size:0.95rem;}.done.svelte-1j8piq .title:where(.svelte-1j8piq) {text-decoration:line-through;}.right-controls.svelte-1j8piq {display:flex;flex:0 0 auto;gap:0.25rem;align-items:center;}.editor.svelte-1j8piq {display:grid;gap:0.5rem;padding-top:0.1rem;}.editor.svelte-1j8piq input:where(.svelte-1j8piq),\n  .editor.svelte-1j8piq select:where(.svelte-1j8piq),\n  .actions.svelte-1j8piq button:where(.svelte-1j8piq) {background:var(--surface-2);border:1px solid var(--border-color);color:inherit;border-radius:0.55rem;padding:0.45rem 0.6rem;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}.grid2.svelte-1j8piq {display:grid;gap:0.5rem;grid-template-columns:repeat(2, minmax(0, 1fr));}.inline-picker-row.svelte-1j8piq {display:grid;grid-template-columns:1fr 1fr auto;gap:0.35rem;align-items:center;}.inline-picker-select.svelte-1j8piq,\n  .inline-picker-input.svelte-1j8piq {background:var(--surface-2);border:1px solid var(--border-color);color:inherit;border-radius:0.55rem;padding:0.3rem 0.5rem;font-size:0.8rem;min-width:0;}.inline-picker-save.svelte-1j8piq {all:unset;display:grid;place-items:center;min-width:1.4rem;min-height:1.4rem;border-radius:0.45rem;background:var(--interactive-accent, #7c3aed);color:var(--text-on-accent, #fff);font-size:0.75rem;cursor:pointer;opacity:0.85;}.inline-picker-save.svelte-1j8piq:hover {opacity:1;}.cat-badge.svelte-1j8piq {padding:0.15rem 0.5rem;border-radius:999px;font-size:0.65rem;font-weight:600;background:color-mix(in srgb, var(--interactive-accent, #7c3aed) 18%, var(--surface-2, #2a2a3e));border:1px solid var(--border-color);color:var(--text-normal);cursor:pointer;white-space:nowrap;transition:background 120ms ease;}.cat-badge.svelte-1j8piq:hover {background:color-mix(in srgb, var(--interactive-accent, #7c3aed) 35%, var(--surface-2, #2a2a3e));}.icon-btn.svelte-1j8piq {all:unset;display:grid;place-items:center;min-width:1.2rem;min-height:1.2rem;padding:0;line-height:1;font-size:0.8rem;cursor:pointer;opacity:0.6;}.icon-btn.svelte-1j8piq:hover {opacity:1;}.actions.svelte-1j8piq .ghost:where(.svelte-1j8piq) {background:transparent;}.danger.svelte-1j8piq {color:#ff6b6b;}\n\n  @media (max-width: 600px) {.task-card.svelte-1j8piq {padding:0.35rem 0.4rem;}.checkbox-row.svelte-1j8piq {gap:0.35rem;}.grid2.svelte-1j8piq {grid-template-columns:1fr;}.actions.svelte-1j8piq {justify-content:flex-start;}\n  }\n\n  @media (max-width: 400px) {.top-row.svelte-1j8piq {flex-wrap:wrap;}.icon-btn.svelte-1j8piq {min-width:1.65rem;min-height:1.65rem;}\n  }"
 };
 function TaskCard($$anchor, $$props) {
   push($$props, true);
   append_styles($$anchor, $$css3);
-  let isDragOver = prop($$props, "isDragOver", 3, false), isDragAbove = prop($$props, "isDragAbove", 3, false), showCategory = prop($$props, "showCategory", 3, false);
+  let isDragOver = prop($$props, "isDragOver", 3, false), isDragAbove = prop($$props, "isDragAbove", 3, false), showCategory = prop($$props, "showCategory", 3, false), showInlineCategoryPicker = prop($$props, "showInlineCategoryPicker", 3, false);
   const catName = user_derived(() => showCategory() ? categoryLabel($$props.task.categoryId) : "");
   let editing = state(false);
   let title = state("");
   let categoryId = state("");
+  let holdReady = state(false);
+  let holdTimer = null;
+  function startHold() {
+    if (holdTimer) clearTimeout(holdTimer);
+    holdTimer = setTimeout(
+      () => {
+        set(holdReady, true);
+        holdTimer = null;
+      },
+      10
+    );
+  }
+  function cancelHold() {
+    if (holdTimer) {
+      clearTimeout(holdTimer);
+      holdTimer = null;
+    }
+  }
+  function endHold() {
+    cancelHold();
+    set(holdReady, false);
+  }
+  let inlineCategoryId = state("");
+  let inlineSubTag = state("");
   user_effect(() => {
     set(title, $$props.task.title, true);
     set(categoryId, $$props.task.categoryId ?? "", true);
+    set(inlineCategoryId, $$props.task.categoryId ?? "", true);
+    set(inlineSubTag, $$props.task.subTag ?? "", true);
   });
+  async function saveInline() {
+    const newCatId = get(inlineCategoryId) || void 0;
+    const newSubTag = get(inlineSubTag).trim().replace(/\s+/g, "-").toLowerCase() || void 0;
+    if (newCatId !== $$props.task.categoryId) {
+      await changeTaskCategory($$props.task.id, newCatId);
+    }
+    if (newSubTag !== ($$props.task.subTag ?? void 0)) {
+      await changeTaskSubTag($$props.task.id, newSubTag);
+    }
+  }
   async function save2() {
-    await updateTask($$props.task.id, {
-      title: get(title),
-      categoryId: get(categoryId) || void 0
-    });
+    const newCategoryId = get(categoryId) || void 0;
+    if (newCategoryId !== $$props.task.categoryId) {
+      await changeTaskCategory($$props.task.id, newCategoryId);
+    }
+    await updateTask($$props.task.id, { title: get(title), categoryId: newCategoryId });
     set(editing, false);
   }
   var article = root3();
   let classes;
   var div = child(article);
-  var label = child(div);
-  var input = child(label);
+  var div_1 = child(div);
+  var input = child(div_1);
   remove_input_defaults(input);
   var span = sibling(input, 2);
   var text2 = child(span, true);
   reset(span);
-  reset(label);
-  var div_1 = sibling(label, 2);
-  var node = child(div_1);
+  reset(div_1);
+  var div_2 = sibling(div_1, 2);
+  var node = child(div_2);
   {
     var consequent = ($$anchor2) => {
       var button = root_13();
@@ -6802,48 +6858,84 @@ function TaskCard($$anchor, $$props) {
       if (!get(editing)) $$render(consequent_1);
     });
   }
-  reset(div_1);
+  reset(div_2);
   reset(div);
   var node_2 = sibling(div, 2);
   {
     var consequent_2 = ($$anchor2) => {
-      var div_2 = root_33();
-      var input_1 = child(div_2);
-      remove_input_defaults(input_1);
-      var div_3 = sibling(input_1, 2);
+      var div_3 = root_33();
       var select = child(div_3);
       var option = child(select);
       option.value = option.__value = "";
       var node_3 = sibling(option);
-      each(node_3, 17, () => [...categories].sort((a, b) => a.sortOrder - b.sortOrder), index, ($$anchor3, category) => {
+      each(node_3, 17, () => [...categories].sort((a, b) => a.sortOrder - b.sortOrder), index, ($$anchor3, cat) => {
         var option_1 = root_42();
         var text_2 = child(option_1);
         reset(option_1);
         var option_1_value = {};
         template_effect(() => {
-          set_text(text_2, `${get(category).emoji ? `${get(category).emoji} ` : ""}${get(category).name ?? ""}`);
-          if (option_1_value !== (option_1_value = get(category).id)) {
-            option_1.value = (option_1.__value = get(category).id) ?? "";
+          set_text(text_2, `${get(cat).emoji ? `${get(cat).emoji} ` : ""}${get(cat).name ?? ""}`);
+          if (option_1_value !== (option_1_value = get(cat).id)) {
+            option_1.value = (option_1.__value = get(cat).id) ?? "";
           }
         });
         append($$anchor3, option_1);
       });
       reset(select);
+      var input_1 = sibling(select, 2);
+      remove_input_defaults(input_1);
+      var button_5 = sibling(input_1, 2);
       reset(div_3);
-      var div_4 = sibling(div_3, 2);
-      var button_5 = child(div_4);
-      var button_6 = sibling(button_5, 2);
-      reset(div_4);
-      reset(div_2);
+      bind_select_value(select, () => get(inlineCategoryId), ($$value) => set(inlineCategoryId, $$value));
       delegated("keydown", input_1, (e) => e.stopPropagation());
-      bind_value(input_1, () => get(title), ($$value) => set(title, $$value));
-      bind_select_value(select, () => get(categoryId), ($$value) => set(categoryId, $$value));
-      delegated("click", button_5, save2);
-      delegated("click", button_6, () => set(editing, false));
-      append($$anchor2, div_2);
+      bind_value(input_1, () => get(inlineSubTag), ($$value) => set(inlineSubTag, $$value));
+      delegated("click", button_5, saveInline);
+      append($$anchor2, div_3);
     };
     if_block(node_2, ($$render) => {
-      if (get(editing)) $$render(consequent_2);
+      if (showInlineCategoryPicker()) $$render(consequent_2);
+    });
+  }
+  var node_4 = sibling(node_2, 2);
+  {
+    var consequent_3 = ($$anchor2) => {
+      var div_4 = root_52();
+      var input_2 = child(div_4);
+      remove_input_defaults(input_2);
+      var div_5 = sibling(input_2, 2);
+      var select_1 = child(div_5);
+      var option_2 = child(select_1);
+      option_2.value = option_2.__value = "";
+      var node_5 = sibling(option_2);
+      each(node_5, 17, () => [...categories].sort((a, b) => a.sortOrder - b.sortOrder), index, ($$anchor3, category) => {
+        var option_3 = root_6();
+        var text_3 = child(option_3);
+        reset(option_3);
+        var option_3_value = {};
+        template_effect(() => {
+          set_text(text_3, `${get(category).emoji ? `${get(category).emoji} ` : ""}${get(category).name ?? ""}`);
+          if (option_3_value !== (option_3_value = get(category).id)) {
+            option_3.value = (option_3.__value = get(category).id) ?? "";
+          }
+        });
+        append($$anchor3, option_3);
+      });
+      reset(select_1);
+      reset(div_5);
+      var div_6 = sibling(div_5, 2);
+      var button_6 = child(div_6);
+      var button_7 = sibling(button_6, 2);
+      reset(div_6);
+      reset(div_4);
+      delegated("keydown", input_2, (e) => e.stopPropagation());
+      bind_value(input_2, () => get(title), ($$value) => set(title, $$value));
+      bind_select_value(select_1, () => get(categoryId), ($$value) => set(categoryId, $$value));
+      delegated("click", button_6, save2);
+      delegated("click", button_7, () => set(editing, false));
+      append($$anchor2, div_4);
+    };
+    if_block(node_4, ($$render) => {
+      if (get(editing)) $$render(consequent_3);
     });
   }
   reset(article);
@@ -6853,10 +6945,18 @@ function TaskCard($$anchor, $$props) {
       "drag-over": isDragOver() && !isDragAbove(),
       "drag-over-top": isDragOver() && isDragAbove()
     });
+    set_attribute2(div_1, "aria-checked", $$props.task.completed);
     set_checked(input, $$props.task.completed);
     set_text(text2, $$props.task.title);
   });
+  delegated("pointerdown", article, startHold);
+  delegated("pointerup", article, endHold);
+  event("pointercancel", article, cancelHold);
   event("dragstart", article, (event2) => {
+    if (!get(holdReady)) {
+      event2.preventDefault();
+      return;
+    }
     event2.dataTransfer?.setData("text/plain", $$props.task.id);
     event2.dataTransfer.effectAllowed = "move";
     event2.stopPropagation();
@@ -6877,17 +6977,26 @@ function TaskCard($$anchor, $$props) {
     event2.stopPropagation();
     $$props.onDropOn?.($$props.task.id);
   });
-  event("dragend", article, (event2) => event2.stopPropagation());
-  delegated("change", input, () => toggleTaskComplete($$props.task.id));
+  event("dragend", article, (event2) => {
+    event2.stopPropagation();
+    endHold();
+  });
+  delegated("click", div_1, () => toggleTaskComplete($$props.task.id));
+  delegated("keydown", div_1, (e) => {
+    if (e.key === " " || e.key === "Enter") {
+      e.preventDefault();
+      toggleTaskComplete($$props.task.id);
+    }
+  });
   append($$anchor, article);
   pop();
 }
-delegate(["change", "click", "keydown"]);
+delegate(["pointerdown", "pointerup", "click", "keydown"]);
 
 // components/TaskBoard.svelte
 var root_14 = from_html(`<div class="empty-state svelte-q5ccww">No tasks here yet.</div>`);
 var root_34 = from_html(`<div class="cards svelte-q5ccww"></div>`);
-var root_6 = from_html(`<div class="empty-state compact svelte-q5ccww">No finished tasks.</div>`);
+var root_62 = from_html(`<div class="empty-state compact svelte-q5ccww">No finished tasks.</div>`);
 var root_7 = from_html(`<div class="cards svelte-q5ccww"></div>`);
 var root_24 = from_html(`<section class="task-section svelte-q5ccww"><div class="task-section-head svelte-q5ccww"><h3 class="svelte-q5ccww">Tasks</h3> <small class="svelte-q5ccww"> </small></div> <!></section> <section class="task-section finished-block svelte-q5ccww"><button type="button" class="finished-toggle svelte-q5ccww"><span> </span> <span>\u25BE</span></button> <!></section>`, 1);
 var root_11 = from_html(`<section class="subtag-group svelte-q5ccww"><div class="subtag-header svelte-q5ccww">Root / Uncategorized</div> <div class="cards svelte-q5ccww"></div></section>`);
@@ -6911,7 +7020,7 @@ var root_36 = from_html(`<div><button type="button" class="categories-tab svelte
 var root4 = from_html(`<section role="list"><header class="page-header svelte-q5ccww"><h1 class="svelte-q5ccww"> </h1> <div class="stats-grid svelte-q5ccww"><div class="svelte-q5ccww"><span class="svelte-q5ccww"> </span><small class="svelte-q5ccww">Open</small></div> <div class="svelte-q5ccww"><span class="svelte-q5ccww"> </span><small class="svelte-q5ccww">Done</small></div></div> <div class="header-actions svelte-q5ccww"><button type="button">Board</button> <button type="button" class="svelte-q5ccww"> </button></div></header> <div><div class="main-column svelte-q5ccww"><!> <section class="task-list svelte-q5ccww"><!></section></div> <!></div></section>`);
 var $$css4 = {
   hash: "svelte-q5ccww",
-  code: ".task-board.svelte-q5ccww {display:grid;gap:1rem;}.task-board.dragging .task-card {cursor:crosshair;}.page-header.svelte-q5ccww {display:flex;justify-content:space-between;gap:1rem;align-items:center;flex-wrap:wrap;}h1.svelte-q5ccww {margin:0;font-size:clamp(1.2rem, 2.3vw, 1.7rem);max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}.stats-grid.svelte-q5ccww {display:grid;grid-template-columns:repeat(2, minmax(0, 1fr));gap:0.5rem;min-width:min(14rem, 100%);flex:1 1 14rem;max-width:100%;}.stats-grid.svelte-q5ccww > div:where(.svelte-q5ccww) {background:var(--surface-1);border:1px solid var(--border-color);border-radius:0.9rem;padding:0.6rem 0.75rem;display:grid;gap:0.15rem;}.stats-grid.svelte-q5ccww span:where(.svelte-q5ccww) {font-size:1.15rem;font-weight:800;}.stats-grid.svelte-q5ccww small:where(.svelte-q5ccww) {color:var(--text-muted);}.header-actions.svelte-q5ccww {display:flex;gap:0.5rem;margin-left:auto;min-width:0;}.header-actions.svelte-q5ccww button:where(.svelte-q5ccww) {background:var(--surface-1);border:1px solid var(--border-color);color:inherit;border-radius:0.65rem;padding:0.45rem 0.75rem;font:inherit;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}.header-actions.svelte-q5ccww button.active:where(.svelte-q5ccww) {background:var(--surface-2);}.board-grid.svelte-q5ccww {display:grid;grid-template-columns:minmax(0, 1fr) minmax(240px, 320px);gap:1rem;position:relative;}.board-grid.single-column.svelte-q5ccww {grid-template-columns:minmax(0, 1fr);}.main-column.svelte-q5ccww,\n  .side-column.svelte-q5ccww {display:grid;gap:1rem;align-content:start;}.categories-overlay-shell.svelte-q5ccww {display:contents;}.categories-tab.svelte-q5ccww,\n  .categories-overlay-backdrop.svelte-q5ccww {display:none;}.task-list.svelte-q5ccww {display:grid;gap:0.65rem;padding:1rem;border:1px solid var(--border-color);border-radius:1rem;background:var(--surface-1);}\n  .category-links.svelte-q5ccww button:where(.svelte-q5ccww) {overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}.empty-state.compact.svelte-q5ccww {padding:0;border:none;font-size:0.85rem;}\n  .panel.svelte-q5ccww h3:where(.svelte-q5ccww) {margin:0;font-size:1rem;}.task-section.svelte-q5ccww {display:grid;gap:0.25rem;}.task-section.svelte-q5ccww + .task-section:where(.svelte-q5ccww) {margin-top:0.2rem;}.task-section-head.svelte-q5ccww {display:flex;align-items:center;justify-content:space-between;gap:0.5rem;}.task-section-head.svelte-q5ccww h3:where(.svelte-q5ccww) {margin:0;font-size:0.9rem;}.task-section-head.svelte-q5ccww small:where(.svelte-q5ccww) {color:var(--text-muted);font-size:0.75rem;font-weight:600;}.finished-block.svelte-q5ccww {gap:0.55rem;padding-top:0.15rem;border-top:1px solid color-mix(in srgb, var(--border-color) 70%, transparent);}.finished-toggle.svelte-q5ccww {display:flex;align-items:center;justify-content:space-between;gap:0.5rem;width:100%;text-align:left;background:transparent;border:1px solid var(--border-color);color:inherit;border-radius:0.65rem;padding:0.4rem 0.55rem;font:inherit;cursor:pointer;}.finished-toggle.svelte-q5ccww .chevron:where(.svelte-q5ccww) {color:var(--text-muted);transition:transform 120ms ease;}.finished-toggle.svelte-q5ccww .chevron.expanded:where(.svelte-q5ccww) {transform:rotate(180deg);}.cards.svelte-q5ccww {display:grid;gap:0.45rem;}.subtag-group.svelte-q5ccww {display:grid;gap:0.55rem;margin-top:0.4rem;}.subtag-header.svelte-q5ccww {padding:0.35rem 0.55rem;border-radius:0.6rem;border:1px solid var(--border-color);background:var(--surface-2);font-size:0.8rem;font-weight:800;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-muted);}.empty-state.svelte-q5ccww {padding:1rem;border:1px dashed var(--border-color);border-radius:0.8rem;color:var(--text-muted);text-align:left;}.panel.svelte-q5ccww {padding:1rem;border:1px solid var(--border-color);border-radius:1rem;background:var(--surface-1);}.panel.svelte-q5ccww ul:where(.svelte-q5ccww) {list-style:none;margin:0.6rem 0 0;padding:0;display:grid;gap:0.45rem;color:var(--text-muted);font-size:0.9rem;}.category-links.svelte-q5ccww button:where(.svelte-q5ccww) {width:100%;text-align:left;font:inherit;color:inherit;background:transparent;border:1px solid transparent;border-radius:0.45rem;padding:0.35rem 0.45rem;cursor:pointer;max-width:100%;}.category-links.svelte-q5ccww button:where(.svelte-q5ccww):hover {background:var(--surface-2);color:var(--text-normal);}\n\n  @media (max-width: 900px) {.board-grid.svelte-q5ccww {grid-template-columns:1fr;}.categories-overlay-shell.svelte-q5ccww {display:block;position:absolute;inset:0 0 auto auto;z-index:5;pointer-events:none;}.categories-tab.svelte-q5ccww {display:inline-flex;align-items:center;justify-content:center;position:absolute;top:0.5rem;right:0;transform:translateX(calc(100% - 0.75rem));writing-mode:vertical-rl;text-orientation:mixed;letter-spacing:0.03em;padding:0.55rem 0.35rem;border-radius:0.7rem 0 0 0.7rem;border:1px solid var(--border-color);border-right:0;background:var(--surface-1);color:inherit;box-shadow:0 8px 20px rgba(0, 0, 0, 0.12);cursor:pointer;pointer-events:auto;transition:transform 180ms ease, background-color 160ms ease;}.categories-overlay-shell.svelte-q5ccww:hover .categories-tab:where(.svelte-q5ccww),\n    .categories-overlay-shell.open.svelte-q5ccww .categories-tab:where(.svelte-q5ccww) {transform:translateX(0);background:var(--surface-2);}.categories-overlay-backdrop.svelte-q5ccww {display:block;position:fixed;inset:0;border:0;padding:0;background:transparent;opacity:0;pointer-events:none;}.categories-overlay-shell.open.svelte-q5ccww .categories-overlay-backdrop:where(.svelte-q5ccww) {pointer-events:auto;}.side-column.svelte-q5ccww {position:absolute;top:0;right:0;width:min(78vw, 320px);max-width:calc(100vw - 1rem);transform:translateX(calc(100% + 0.75rem));opacity:0;pointer-events:none;transition:transform 220ms ease, opacity 220ms ease;z-index:6;}.categories-overlay-shell.svelte-q5ccww:hover .side-column:where(.svelte-q5ccww),\n    .categories-overlay-shell.open.svelte-q5ccww .side-column:where(.svelte-q5ccww) {transform:translateX(0);opacity:1;pointer-events:auto;}.stats-grid.svelte-q5ccww {width:100%;min-width:0;}.header-actions.svelte-q5ccww {width:100%;margin-left:0;flex-wrap:wrap;}.header-actions.svelte-q5ccww button:where(.svelte-q5ccww) {flex:1 1 0;}\n  }\n\n  @media (max-width: 600px) {.page-header.svelte-q5ccww {gap:0.7rem;}h1.svelte-q5ccww {width:100%;white-space:normal;line-height:1.15;}.stats-grid.svelte-q5ccww {gap:0.4rem;grid-template-columns:repeat(2, minmax(0, 1fr));}.stats-grid.svelte-q5ccww > div:where(.svelte-q5ccww) {padding:0.45rem 0.55rem;border-radius:0.75rem;}.stats-grid.svelte-q5ccww span:where(.svelte-q5ccww) {font-size:1rem;}.stats-grid.svelte-q5ccww small:where(.svelte-q5ccww) {font-size:0.72rem;}.task-list.svelte-q5ccww,\n    .panel.svelte-q5ccww {padding:0.8rem;}.categories-tab.svelte-q5ccww {top:0.35rem;padding:0.45rem 0.3rem;font-size:0.8rem;}\n  }\n\n  @media (max-width: 400px) {.page-header.svelte-q5ccww {align-items:stretch;}.stats-grid.svelte-q5ccww > div:where(.svelte-q5ccww) {padding:0.35rem 0.45rem;border-radius:0.65rem;gap:0.05rem;}.stats-grid.svelte-q5ccww span:where(.svelte-q5ccww) {font-size:0.9rem;}.stats-grid.svelte-q5ccww small:where(.svelte-q5ccww) {font-size:0.65rem;}.header-actions.svelte-q5ccww {gap:0.35rem;}.side-column.svelte-q5ccww {width:calc(100vw - 0.8rem);max-width:calc(100vw - 0.8rem);}\n  }"
+  code: ".task-board.svelte-q5ccww {display:grid;gap:1rem;}.task-board.dragging .task-card {cursor:crosshair;}.page-header.svelte-q5ccww {display:flex;justify-content:space-between;gap:1rem;align-items:center;flex-wrap:wrap;}h1.svelte-q5ccww {margin:0;font-size:clamp(1.2rem, 2.3vw, 1.7rem);max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}.stats-grid.svelte-q5ccww {display:grid;grid-template-columns:repeat(2, minmax(0, 1fr));gap:0.5rem;min-width:min(14rem, 100%);flex:1 1 14rem;max-width:100%;}.stats-grid.svelte-q5ccww > div:where(.svelte-q5ccww) {background:var(--surface-1);border:1px solid var(--border-color);border-radius:0.9rem;padding:0.6rem 0.75rem;display:grid;gap:0.15rem;}.stats-grid.svelte-q5ccww span:where(.svelte-q5ccww) {font-size:1.15rem;font-weight:800;}.stats-grid.svelte-q5ccww small:where(.svelte-q5ccww) {color:var(--text-muted);}.header-actions.svelte-q5ccww {display:flex;gap:0.5rem;margin-left:auto;min-width:0;}.header-actions.svelte-q5ccww button:where(.svelte-q5ccww) {background:var(--surface-1);border:1px solid var(--border-color);color:inherit;border-radius:0.65rem;padding:0.45rem 0.75rem;font:inherit;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}.header-actions.svelte-q5ccww button.active:where(.svelte-q5ccww) {background:var(--surface-2);}.board-grid.svelte-q5ccww {display:grid;grid-template-columns:minmax(0, 1fr) minmax(240px, 320px);gap:1rem;position:relative;}.board-grid.single-column.svelte-q5ccww {grid-template-columns:minmax(0, 1fr);}.main-column.svelte-q5ccww,\n  .side-column.svelte-q5ccww {display:grid;gap:1rem;align-content:start;}.categories-overlay-shell.svelte-q5ccww {display:contents;}.categories-tab.svelte-q5ccww,\n  .categories-overlay-backdrop.svelte-q5ccww {display:none;}.task-list.svelte-q5ccww {display:grid;gap:0.65rem;padding:1rem;border:1px solid var(--border-color);border-radius:1rem;background:var(--surface-1);}\n  .category-links.svelte-q5ccww button:where(.svelte-q5ccww) {overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}.empty-state.compact.svelte-q5ccww {padding:0;border:none;font-size:0.85rem;}\n  .panel.svelte-q5ccww h3:where(.svelte-q5ccww) {margin:0;font-size:1rem;}.task-section.svelte-q5ccww {display:grid;gap:0.25rem;}.task-section.svelte-q5ccww + .task-section:where(.svelte-q5ccww) {margin-top:0.2rem;}.task-section-head.svelte-q5ccww {display:flex;align-items:center;justify-content:space-between;gap:0.5rem;}.task-section-head.svelte-q5ccww h3:where(.svelte-q5ccww) {margin:0;font-size:0.9rem;}.task-section-head.svelte-q5ccww small:where(.svelte-q5ccww) {color:var(--text-muted);font-size:0.75rem;font-weight:600;}.finished-block.svelte-q5ccww {gap:0.55rem;padding-top:0.15rem;border-top:1px solid color-mix(in srgb, var(--border-color) 70%, transparent);}.finished-toggle.svelte-q5ccww {display:flex;align-items:center;justify-content:space-between;gap:0.5rem;width:100%;text-align:left;background:transparent;border:1px solid var(--border-color);color:inherit;border-radius:0.65rem;padding:0.4rem 0.55rem;font:inherit;cursor:pointer;}.finished-toggle.svelte-q5ccww .chevron:where(.svelte-q5ccww) {color:var(--text-muted);transition:transform 120ms ease;}.finished-toggle.svelte-q5ccww .chevron.expanded:where(.svelte-q5ccww) {transform:rotate(180deg);}.cards.svelte-q5ccww {display:grid;gap:0.45rem;}.subtag-group.svelte-q5ccww {display:grid;gap:0.55rem;margin-top:0.4rem;}.subtag-header.svelte-q5ccww {padding:0.35rem 0.55rem;border-radius:0.6rem;border:1px solid var(--border-color);background:var(--surface-2);font-size:0.8rem;font-weight:800;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-muted);}.empty-state.svelte-q5ccww {padding:1rem;border:1px dashed var(--border-color);border-radius:0.8rem;color:var(--text-muted);text-align:left;}.panel.svelte-q5ccww {padding:1rem;border:1px solid var(--border-color);border-radius:1rem;background:var(--surface-1);}.panel.svelte-q5ccww ul:where(.svelte-q5ccww) {list-style:none;margin:0.6rem 0 0;padding:0;display:grid;gap:0.45rem;color:var(--text-muted);font-size:0.9rem;max-height:60vh;overflow-y:auto;}.category-links.svelte-q5ccww button:where(.svelte-q5ccww) {width:100%;text-align:left;font:inherit;color:inherit;background:transparent;border:1px solid transparent;border-radius:0.45rem;padding:0.35rem 0.45rem;cursor:pointer;max-width:100%;}.category-links.svelte-q5ccww button:where(.svelte-q5ccww):hover {background:var(--surface-2);color:var(--text-normal);}\n\n  @media (max-width: 900px) {.board-grid.svelte-q5ccww {grid-template-columns:1fr;}.categories-overlay-shell.svelte-q5ccww {display:block;position:absolute;inset:0 0 auto auto;z-index:5;pointer-events:none;}.categories-tab.svelte-q5ccww {display:inline-flex;align-items:center;justify-content:center;position:absolute;top:0.5rem;right:0;transform:translateX(calc(100% - 0.75rem));writing-mode:vertical-rl;text-orientation:mixed;letter-spacing:0.03em;padding:0.55rem 0.35rem;border-radius:0.7rem 0 0 0.7rem;border:1px solid var(--border-color);border-right:0;background:var(--surface-1);color:inherit;box-shadow:0 8px 20px rgba(0, 0, 0, 0.12);cursor:pointer;pointer-events:auto;transition:transform 180ms ease, background-color 160ms ease;}.categories-overlay-shell.svelte-q5ccww:hover .categories-tab:where(.svelte-q5ccww),\n    .categories-overlay-shell.open.svelte-q5ccww .categories-tab:where(.svelte-q5ccww) {transform:translateX(0);background:var(--surface-2);}.categories-overlay-backdrop.svelte-q5ccww {display:block;position:fixed;inset:0;border:0;padding:0;background:transparent;opacity:0;pointer-events:none;}.categories-overlay-shell.open.svelte-q5ccww .categories-overlay-backdrop:where(.svelte-q5ccww) {pointer-events:auto;}.side-column.svelte-q5ccww {position:absolute;top:0;right:0;width:min(78vw, 320px);max-width:calc(100vw - 1rem);transform:translateX(calc(100% + 0.75rem));opacity:0;pointer-events:none;transition:transform 220ms ease, opacity 220ms ease;z-index:6;}.categories-overlay-shell.svelte-q5ccww:hover .side-column:where(.svelte-q5ccww),\n    .categories-overlay-shell.open.svelte-q5ccww .side-column:where(.svelte-q5ccww) {transform:translateX(0);opacity:1;pointer-events:auto;}.stats-grid.svelte-q5ccww {width:100%;min-width:0;}.header-actions.svelte-q5ccww {width:100%;margin-left:0;flex-wrap:wrap;}.header-actions.svelte-q5ccww button:where(.svelte-q5ccww) {flex:1 1 0;}\n  }\n\n  @media (max-width: 600px) {.page-header.svelte-q5ccww {gap:0.7rem;}h1.svelte-q5ccww {width:100%;white-space:normal;line-height:1.15;}.stats-grid.svelte-q5ccww {gap:0.4rem;grid-template-columns:repeat(2, minmax(0, 1fr));}.stats-grid.svelte-q5ccww > div:where(.svelte-q5ccww) {padding:0.45rem 0.55rem;border-radius:0.75rem;}.stats-grid.svelte-q5ccww span:where(.svelte-q5ccww) {font-size:1rem;}.stats-grid.svelte-q5ccww small:where(.svelte-q5ccww) {font-size:0.72rem;}.task-list.svelte-q5ccww,\n    .panel.svelte-q5ccww {padding:0.8rem;}.categories-tab.svelte-q5ccww {top:0.35rem;padding:0.45rem 0.3rem;font-size:0.8rem;}\n  }\n\n  @media (max-width: 400px) {.page-header.svelte-q5ccww {align-items:stretch;}.stats-grid.svelte-q5ccww > div:where(.svelte-q5ccww) {padding:0.35rem 0.45rem;border-radius:0.65rem;gap:0.05rem;}.stats-grid.svelte-q5ccww span:where(.svelte-q5ccww) {font-size:0.9rem;}.stats-grid.svelte-q5ccww small:where(.svelte-q5ccww) {font-size:0.65rem;}.header-actions.svelte-q5ccww {gap:0.35rem;}.side-column.svelte-q5ccww {width:calc(100vw - 0.8rem);max-width:calc(100vw - 0.8rem);}\n  }"
 };
 function TaskBoard($$anchor, $$props) {
   push($$props, true);
@@ -7125,7 +7234,7 @@ function TaskBoard($$anchor, $$props) {
           var node_4 = first_child(fragment_2);
           {
             var consequent_2 = ($$anchor4) => {
-              var div_9 = root_6();
+              var div_9 = root_62();
               append($$anchor4, div_9);
             };
             var alternate = ($$anchor4) => {
@@ -7337,6 +7446,9 @@ function TaskBoard($$anchor, $$props) {
                 get isDragAbove() {
                   return get($1);
                 },
+                get showInlineCategoryPicker() {
+                  return filterUncategorized();
+                },
                 onEnlarge
               });
             }
@@ -7528,6 +7640,9 @@ function TaskBoard($$anchor, $$props) {
                     },
                     get isDragAbove() {
                       return get($1);
+                    },
+                    get showInlineCategoryPicker() {
+                      return filterUncategorized();
                     },
                     onEnlarge
                   });

@@ -2,6 +2,8 @@
   import {
     categories,
     categoryLabel,
+    changeTaskCategory,
+    changeTaskSubTag,
     deleteTask,
     openTaskInObsidian,
     toggleTaskComplete,
@@ -17,6 +19,7 @@
     isDragOver = false,
     isDragAbove = false,
     showCategory = false,
+    showInlineCategoryPicker = false,
     onGoToCategory,
     onEnlarge
   }: {
@@ -27,6 +30,7 @@
     isDragOver?: boolean;
     isDragAbove?: boolean;
     showCategory?: boolean;
+    showInlineCategoryPicker?: boolean;
     onGoToCategory?: (categoryId: string) => void;
     onEnlarge?: (task: Task) => void;
   } = $props();
@@ -36,14 +40,56 @@
   let editing = $state(false);
   let title = $state('');
   let categoryId = $state('');
+  let holdReady = $state(false);
+  let holdTimer: ReturnType<typeof setTimeout> | null = null;
+
+  function startHold() {
+    if (holdTimer) clearTimeout(holdTimer);
+    holdTimer = setTimeout(() => {
+      holdReady = true;
+      holdTimer = null;
+    }, 10);
+  }
+
+  function cancelHold() {
+    if (holdTimer) {
+      clearTimeout(holdTimer);
+      holdTimer = null;
+    }
+  }
+
+  function endHold() {
+    cancelHold();
+    holdReady = false;
+  }
+
+  let inlineCategoryId = $state('');
+  let inlineSubTag = $state('');
 
   $effect(() => {
     title = task.title;
     categoryId = task.categoryId ?? '';
+    inlineCategoryId = task.categoryId ?? '';
+    inlineSubTag = task.subTag ?? '';
   });
 
+  async function saveInline() {
+    const newCatId = inlineCategoryId || undefined;
+    const newSubTag = inlineSubTag.trim().replace(/\s+/g, '-').toLowerCase() || undefined;
+    if (newCatId !== task.categoryId) {
+      await changeTaskCategory(task.id, newCatId);
+    }
+    if (newSubTag !== (task.subTag ?? undefined)) {
+      await changeTaskSubTag(task.id, newSubTag);
+    }
+  }
+
   async function save() {
-    await updateTask(task.id, { title, categoryId: categoryId || undefined });
+    const newCategoryId = categoryId || undefined;
+    if (newCategoryId !== task.categoryId) {
+      await changeTaskCategory(task.id, newCategoryId);
+    }
+    await updateTask(task.id, { title, categoryId: newCategoryId });
     editing = false;
   }
 </script>
@@ -54,7 +100,14 @@
   class:drag-over={isDragOver && !isDragAbove}
   class:drag-over-top={isDragOver && isDragAbove}
   draggable="true"
+  onpointerdown={startHold}
+  onpointerup={endHold}
+  onpointercancel={cancelHold}
   ondragstart={(event) => {
+    if (!holdReady) {
+      event.preventDefault();
+      return;
+    }
     event.dataTransfer?.setData('text/plain', task.id);
     event.dataTransfer!.effectAllowed = 'move';
     event.stopPropagation();
@@ -75,13 +128,16 @@
     event.stopPropagation();
     onDropOn?.(task.id);
   }}
-  ondragend={(event) => event.stopPropagation()}
+  ondragend={(event) => {
+    event.stopPropagation();
+    endHold();
+  }}
 >
   <div class="row top-row">
-    <label class="checkbox-row">
-      <input type="checkbox" checked={task.completed} onchange={() => toggleTaskComplete(task.id)} />
+    <div class="checkbox-row" onclick={() => toggleTaskComplete(task.id)} onkeydown={(e) => { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); toggleTaskComplete(task.id); }}} role="checkbox" aria-checked={task.completed} tabindex="0">
+      <input type="checkbox" checked={task.completed} tabindex="-1" style="pointer-events: none;" />
       <span class="title">{task.title}</span>
-    </label>
+    </div>
     <div class="right-controls">
       {#if showCategory && catName && catName !== 'Uncategorized'}
         <button
@@ -100,12 +156,25 @@
     </div>
   </div>
 
+  {#if showInlineCategoryPicker}
+    <div class="inline-picker-row">
+      <select class="inline-picker-select" bind:value={inlineCategoryId}>
+        <option value="">Category…</option>
+        {#each [...categories].sort((a, b) => a.sortOrder - b.sortOrder) as cat}
+          <option value={cat.id}>{cat.emoji ? `${cat.emoji} ` : ''}{cat.name}</option>
+        {/each}
+      </select>
+      <input class="inline-picker-input" type="text" bind:value={inlineSubTag} placeholder="subtag" onkeydown={(e) => e.stopPropagation()} />
+      <button type="button" class="inline-picker-save" title="Save" onclick={saveInline}>&#10003;</button>
+    </div>
+  {/if}
+
   {#if editing}
     <div class="editor">
       <input type="text" bind:value={title} maxlength="140" onkeydown={(e) => e.stopPropagation()} />
       <div class="grid2">
-        <select bind:value={categoryId} disabled>
-          <option value="">Vault category (read from tags)</option>
+        <select bind:value={categoryId}>
+          <option value="">Uncategorized</option>
           {#each [...categories].sort((a, b) => a.sortOrder - b.sortOrder) as category}
             <option value={category.id}>{category.emoji ? `${category.emoji} ` : ''}{category.name}</option>
           {/each}
@@ -222,6 +291,42 @@
     display: grid;
     gap: 0.5rem;
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .inline-picker-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    gap: 0.35rem;
+    align-items: center;
+  }
+
+  .inline-picker-select,
+  .inline-picker-input {
+    background: var(--surface-2);
+    border: 1px solid var(--border-color);
+    color: inherit;
+    border-radius: 0.55rem;
+    padding: 0.3rem 0.5rem;
+    font-size: 0.8rem;
+    min-width: 0;
+  }
+
+  .inline-picker-save {
+    all: unset;
+    display: grid;
+    place-items: center;
+    min-width: 1.4rem;
+    min-height: 1.4rem;
+    border-radius: 0.45rem;
+    background: var(--interactive-accent, #7c3aed);
+    color: var(--text-on-accent, #fff);
+    font-size: 0.75rem;
+    cursor: pointer;
+    opacity: 0.85;
+  }
+
+  .inline-picker-save:hover {
+    opacity: 1;
   }
 
   .cat-badge {

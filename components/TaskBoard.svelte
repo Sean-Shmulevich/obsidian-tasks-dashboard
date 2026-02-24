@@ -275,7 +275,7 @@
               <div class="cards">
                 {#each incompleteTasks as task (task.id)}
                   <TaskCard {task} onDragStart={(id) => (draggingTaskId = id)} {onDropOn}
-                      onDragEnter={(id) => (dragOverTaskId = id)} isDragOver={draggingTaskId !== null && dragOverTaskId === task.id && draggingTaskId !== task.id} isDragAbove={isDragAbove(task.id)} {onEnlarge} />
+                      onDragEnter={(id) => (dragOverTaskId = id)} isDragOver={draggingTaskId !== null && dragOverTaskId === task.id && draggingTaskId !== task.id} isDragAbove={isDragAbove(task.id)} showInlineCategoryPicker={filterUncategorized} {onEnlarge} />
                 {/each}
               </div>
             {/if}
@@ -342,7 +342,7 @@
                 <div class="cards">
                   {#each finishedTasks as task (task.id)}
                     <TaskCard {task} onDragStart={(id) => (draggingTaskId = id)} {onDropOn}
-                      onDragEnter={(id) => (dragOverTaskId = id)} isDragOver={draggingTaskId !== null && dragOverTaskId === task.id && draggingTaskId !== task.id} isDragAbove={isDragAbove(task.id)} {onEnlarge} />
+                      onDragEnter={(id) => (dragOverTaskId = id)} isDragOver={draggingTaskId !== null && dragOverTaskId === task.id && draggingTaskId !== task.id} isDragAbove={isDragAbove(task.id)} showInlineCategoryPicker={filterUncategorized} {onEnlarge} />
                   {/each}
                 </div>
               {/if}
@@ -696,6 +696,8 @@
     gap: 0.45rem;
     color: var(--text-muted);
     font-size: 0.9rem;
+    max-height: 60vh;
+    overflow-y: auto;
   }
 
   .category-links button {

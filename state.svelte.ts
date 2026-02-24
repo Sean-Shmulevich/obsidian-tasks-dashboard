@@ -398,6 +398,15 @@ function taskSortKey(task: Task): string | undefined {
   return undefined;
 }
 
+/** Change a task's category (rewrites the #todo tag in vault to include the new category path) */
+export async function changeTaskCategory(taskId: string, newCategoryId: string | undefined) {
+  if (!writerRef) return;
+  const task = tasks.find(t => t.id === taskId);
+  if (!task) return;
+  await writerRef.changeCategory(task, newCategoryId);
+  await refreshVaultState();
+}
+
 /** Move a task to a different subtag within its category (rewrites the #todo tag in vault) */
 export async function changeTaskSubTag(taskId: string, newSubTag: string | undefined) {
   if (!writerRef) return;
